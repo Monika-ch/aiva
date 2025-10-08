@@ -1,73 +1,182 @@
-# React + TypeScript + Vite
+# 🤖 AIVA — AI-Powered Portfolio Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> An AI co-pilot for your professional story.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/Frontend-React-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript)
+![Python](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
+![TailwindCSS](https://img.shields.io/badge/UI-TailwindCSS-38B2AC?logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/Animation-Framer%20Motion-0055FF)
+![OpenAI](https://img.shields.io/badge/AI-OpenAI-412991)
+![React Query](https://img.shields.io/badge/Data-ReactQuery-FF4154)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+<!-- ## 🎬 Preview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+![AIVA Demo Placeholder](https://via.placeholder.com/800x400.png?text=AIVA+Portfolio+Assistant)
 
-## Expanding the ESLint configuration
+> **Try AIVA** and see your portfolio come alive with interactive AI conversations! 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+--- -->
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🧠 Overview
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**AIVA** isn’t just another chatbot — she’s your personal **AI guide** trained on your projects, experience, and achievements.
+She helps recruiters, collaborators, and hiring teams *discover your work intuitively* through real conversations.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Detailed tagline for context:**
+
+> *An AI-powered portfolio that explains your work better than any résumé.*
+
+**Goal:** Build a modern, real-time AI portfolio assistant that demonstrates full-stack expertise across **React**, **TypeScript**, **Python**, and **modern AI integration**.
+
+---
+
+## 🚀 Key Features
+
+### 💬 AI-Powered Portfolio Chat
+
+* Visitors can ask natural questions:
+  *“What’s your strongest project?”* or *“Tell me about Monika’s work with React.”*
+* Context-aware responses based on your portfolio data.
+* Typing indicator + chat history for smooth UX.
+
+### 🧩 Smart Project Insights
+
+* AI-generated summaries for each project.
+* Automatic tech highlight extraction and tagging.
+* Modular design to scale with new projects.
+
+### 🧠 Knowledge Base Context
+
+* Responses powered by structured context: bio, skills, experience, achievements.
+* Ensures accurate, personalized AI answers.
+
+### 🎨 Modern UI/UX
+
+* TailwindCSS v4 + HeroUI components for sleek design.
+* Framer Motion animations for smooth interactions.
+* Fully responsive and accessible across devices.
+
+---
+
+## 🤖 AI Assistant Capabilities
+
+| Capability                    | Description                                                                |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| **AI Summary Generator**      | Creates crisp project summaries from README or raw descriptions.           |
+| **Auto “About Me” Generator** | Produces multiple tone variants for your bio.                              |
+| **Skill Extractor**           | Scans projects to categorize your tech stack and expertise.                |
+| **Portfolio Chat Assistant**  | Answers recruiter-style questions naturally, using context injection.      |
+| **Smart Recommendations**     | Suggests projects or sections to highlight based on portfolio analysis.    |
+| **AI Content Optimizer**      | Scores clarity, relevance, and recruiter readability of portfolio content. |
+| **Optional Dev Copilot Mode** | Assists in writing or refactoring portfolio components with AI guidance.   |
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer               | Technology                                                          |
+| ------------------- | ------------------------------------------------------------------- |
+| **Frontend**        | React 19 + TypeScript + Vite + TailwindCSS + HeroUI + Framer Motion |
+| **State & Data**    | React Query v5 + Axios                                              |
+| **Backend**         | FastAPI (Python 3.12) + OpenAI API                                  |
+| **Build & Deploy**  | Vercel (Frontend) + Render/Azure (Backend)                          |
+| **Version Control** | Git + GitHub Actions (CI/CD optional)                               |
+
+---
+
+## 🏗️ Architecture
+
+```plaintext
+Frontend (React + Vite + Tailwind)
+        │
+        ▼
+Backend API (FastAPI - /chat endpoint)
+        │
+        ▼
+OpenAI API / Local LLM (Context + Responses)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Setup & Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/monikalnu/aiva.git
+cd aiva
 ```
+
+### 2️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Configure environment variables
+
+Create `.env`:
+
+```env
+VITE_API_URL=http://localhost:8000
+OPENAI_API_KEY=your_api_key_here
+```
+
+### 4️⃣ Run the development servers
+
+```bash
+# Frontend
+npm run dev
+
+# Backend
+cd backend
+uvicorn main:app --reload
+```
+
+### 5️⃣ Build for production
+
+```bash
+npm run build
+```
+
+---
+
+## 🧭 Roadmap
+
+| Phase                                    | Focus                 | Features                                         |
+| ---------------------------------------- | --------------------- | ------------------------------------------------ |
+| **Phase 1: Core (MVP)**                  | Personal AI portfolio | Chat assistant, project summaries, recruiter Q&A |
+| **Phase 2: Enhanced UX**                 | Smart recommendations | AI resume builder, project scoring, analytics    |
+| **Phase 3: Open Source Template**        | Public starter        | Customizable AI portfolio template for devs      |
+| **Phase 4: SaaS / Platform (NaviFolio)** | Multi-user builder    | AI-powered portfolio generation platform         |
+
+---
+
+## 💡 Why AIVA?
+
+Because recruiters don’t just want *lists* —
+they want *insights*.
+AIVA turns your portfolio into a **conversation**, not a static page.
+
+---
+
+## 👩‍💻 Author
+
+**Monika Lnu**
+
+> Self-coached Web Developer | AI Prompt Engineer @ Remotasks
+> Skilled in React, TypeScript, Python, Cloud (Azure + AWS)
+
+🌐 [Portfolio Website](https://monika-ch.github.io/Monika_Portfolio) 💼 [LinkedIn](https://www.linkedin.com/in/monika12b/) 📧 [Email](mailto:monika12b@gmail.com)
+
+---
+
+## 🪶 License
+
+MIT License — open for learning, inspiration, and contribution.
+
+---
