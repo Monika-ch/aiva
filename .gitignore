@@ -7,18 +7,48 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+dist-ssr/
+build/
+.cache/
+vite.config.timestamp*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Temporary or generated files
+temp/
+tmp/
+
+# Coverage reports
+coverage/
+
+# Deployment/platform configs
+.vercel/
+.netlify/
+firebase-debug.log
+
+# OS files
+Thumbs.db
