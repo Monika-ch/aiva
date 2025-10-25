@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="100" height="100" role="img" aria-labelledby="title-roboFace">
+  <title id="title-roboFace">Robo Face</title>
+
+  <!-- internal robot face block (teal) -->
+  <g transform="translate(20,28)">
+    <rect x="5" y="2" width="120" height="180" rx="600" fill="#06b6d4"/>
+    <!-- eyes -->
+    <circle cx="38" cy="36" r="6" fill="#071423"/>
+    <circle cx="84" cy="36" r="6" fill="#071423"/>
+    <!-- mouth -->
+    <rect x="58" y="56" width="20" height="6" rx="3" fill="#071423"/>
+    <!-- subtle antenna -->
+    <path d="M60 8 L78 -8" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="80" cy="-12" r="5" fill="#06b6d4"/>
+    <!-- feet -->
+    <rect x="78" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
+    <rect x="8" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
+  </g>
+</svg>

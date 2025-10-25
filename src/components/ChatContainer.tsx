@@ -4,7 +4,7 @@ const ChatContainer: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <div className='flex flex-col w-full h-[90vh] max-w-2xl mx-auto mt-6 bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-100'>
+    <div className="flex flex-col w-full min-h-[70vh] bg-white shadow-md rounded-xl overflow-hidden border border-gray-100">
       {children}
     </div>
   );
