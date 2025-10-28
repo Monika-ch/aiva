@@ -23,7 +23,7 @@
 
 ## 🧠 Overview
 
-**AIVA** isn’t just another chatbot — she’s your personal **AI guide** trained on your projects, experience, and achievements.
+**AIVA** isn’t just another chatbot — she’s your personal **AI guide** trained on your projects, experiences, and achievements.
 She helps recruiters, collaborators, and hiring teams *discover your work intuitively* through real conversations.
 
 **Detailed tagline for context:**
