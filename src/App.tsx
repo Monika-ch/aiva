@@ -115,6 +115,13 @@ function App() {
     }, 1000);
   };
 
+  // allow adding assistant messages from widgets (greeting, suggestions)
+  const addAssistantMessage = (text: string) => {
+    if (!text) return;
+    const aiMessage: Message = { role: "assistant", content: text };
+    setMessages((prev) => [...prev, aiMessage]);
+  };
+
   return (
     <div className='min-h-screen bg-gray-50 py-10 relative'>
       <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4'>
@@ -132,8 +139,8 @@ function App() {
           <Hero />
         </div>
 
-        {/* Right column */}
-        <div className='md:col-span-2'>
+        {/* Right column (hidden on small screens — mobile uses only ChatWidget) */}
+        <div className='hidden md:col-span-2 md:block'>
           <ChatContainer>
             <ChatHeader />
             <div className='flex-1 overflow-y-auto p-6 space-y-4 bg-white rounded-xl shadow'>
@@ -169,8 +176,12 @@ function App() {
         </div>
       </div>
 
-      {/* Floating Chat Widget */}
-      <ChatWidget messages={messages} onSend={handleSend} />
+      {/* Floating Chat Widget (mobile-only) */}
+      <ChatWidget
+        messages={messages}
+        onSend={handleSend}
+        onAssistantMessage={addAssistantMessage}
+      />
     </div>
   );
 }
