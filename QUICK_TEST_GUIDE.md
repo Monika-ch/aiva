@@ -1,6 +1,7 @@
 # 🚀 AIVA Quick Test Guide
 
 ## Server Running
+
 ✅ **http://localhost:5175/**
 
 ---
@@ -8,28 +9,33 @@
 ## ⚡ Quick Test Checklist (2 Minutes)
 
 ### 1. Open Chat (5 seconds)
+
 - [ ] Click floating AIVA button (bottom right)
 - [ ] Widget opens smoothly
 - [ ] See 4 quick action buttons
 
 ### 2. Test Quick Actions (10 seconds)
+
 - [ ] Click "View Projects" button
 - [ ] Message sends automatically
 - [ ] Quick actions disappear
 
 ### 3. Test Dark Mode (5 seconds)
+
 - [ ] Click moon icon (top right of chat)
 - [ ] Everything turns dark
 - [ ] Click sun icon
 - [ ] Back to light theme
 
 ### 4. Test Suggestion Click (10 seconds)
+
 - [ ] Wait for suggestions ("• learn top tech skills")
 - [ ] Click one suggestion
 - [ ] Sends immediately (no second click needed)
 - [ ] Suggestion turns indigo/purple
 
 ### 5. Test Voice Input (15 seconds)
+
 - [ ] Click microphone icon
 - [ ] Button turns red and pulses
 - [ ] Say "What are your skills?"
@@ -37,6 +43,7 @@
 - [ ] Mic stops automatically
 
 ### 6. Test Read Aloud (15 seconds)
+
 - [ ] Hover over assistant message
 - [ ] See speaker icon
 - [ ] Click speaker
@@ -44,6 +51,7 @@
 - [ ] Click again to stop
 
 ### 7. Test Copy Message (10 seconds)
+
 - [ ] Hover over assistant message
 - [ ] See copy icon (clipboard)
 - [ ] Click it
@@ -51,6 +59,7 @@
 - [ ] Paste in notepad - text matches
 
 ### 8. Test Reactions (10 seconds)
+
 - [ ] Hover over assistant message
 - [ ] See thumbs up/down icons
 - [ ] Click thumbs up
@@ -58,6 +67,7 @@
 - [ ] Click again - un-fills
 
 ### 9. Test Clear Chat (10 seconds)
+
 - [ ] Click trash icon (top right)
 - [ ] See confirmation dialog
 - [ ] Click OK
@@ -65,6 +75,7 @@
 - [ ] Quick actions reappear
 
 ### 10. Test Send Button Fit (5 seconds)
+
 - [ ] Type a message
 - [ ] Send button is fully visible
 - [ ] No overflow or cut-off
@@ -77,12 +88,14 @@
 Look for these elements:
 
 ### Header (Top of Chat):
+
 ```
 🤖 AIVA Chat          [🌙] [🗑️] [✕]
    AI Portfolio        ^ Dark  Clear Close
 ```
 
 ### Quick Actions (Empty Chat):
+
 ```
 ┌──────────┬──────────┐
 │ 🎯       │ 💼       │
@@ -95,6 +108,7 @@ Look for these elements:
 ```
 
 ### Message with All Actions (on Hover):
+
 ```
 🤖  That's interesting! Tell me more...
     2:30 PM  [🔊] [📋] [👍] [👎]
@@ -102,6 +116,7 @@ Look for these elements:
 ```
 
 ### Input Area:
+
 ```
 [🎤] [Input field...........] [Send→]
 Press Enter to send • Shift+Enter for new line
@@ -112,26 +127,34 @@ Press Enter to send • Shift+Enter for new line
 ## 🐛 If Something Doesn't Work
 
 ### Dark Mode Not Persisting?
+
 **Fix:** Check localStorage
+
 ```javascript
 // In browser console:
-localStorage.getItem('aiva-dark-mode')
+localStorage.getItem("aiva-dark-mode");
 ```
 
 ### Voice Input Not Working?
+
 **Check:**
+
 - Using Chrome or Edge?
 - Microphone permission granted?
 - On localhost or HTTPS?
 
 ### Read Aloud Not Working?
+
 **Check:**
+
 - Hover over message?
 - Speaker icon visible?
 - Browser supports Speech Synthesis?
 
 ### Clear Chat Not Clearing?
+
 **Check:**
+
 - Confirm dialog appeared?
 - Check browser console for errors
 - Messages state in React DevTools
@@ -154,6 +177,7 @@ localStorage.getItem('aiva-dark-mode')
 Great! Here's what you now have:
 
 ### Core Features:
+
 - ✅ One-click suggestions
 - ✅ Visited link highlighting
 - ✅ Typing indicators
@@ -170,6 +194,7 @@ Great! Here's what you now have:
 - ✅ Smooth animations
 
 ### UI Improvements:
+
 - ✅ No button overflow
 - ✅ Copy notification toast
 - ✅ Hover actions
@@ -181,29 +206,31 @@ Great! Here's what you now have:
 
 ## 📊 Feature Comparison
 
-| Feature | Before | After |
-|---------|--------|-------|
-| Suggest Click | 2 clicks | 1 click ✅ |
-| Visual Feedback | None | Indigo highlight ✅ |
-| Voice | Input only | Input + Output ✅ |
-| Theme | Light only | Light + Dark ✅ |
-| Copy | Hidden | Visible + Toast ✅ |
-| Reactions | None | Thumbs up/down ✅ |
-| Quick Start | None | 4 action buttons ✅ |
-| Clear Chat | Broken | Working ✅ |
-| Read Aloud | None | Full TTS ✅ |
+| Feature         | Before     | After               |
+| --------------- | ---------- | ------------------- |
+| Suggest Click   | 2 clicks   | 1 click ✅          |
+| Visual Feedback | None       | Indigo highlight ✅ |
+| Voice           | Input only | Input + Output ✅   |
+| Theme           | Light only | Light + Dark ✅     |
+| Copy            | Hidden     | Visible + Toast ✅  |
+| Reactions       | None       | Thumbs up/down ✅   |
+| Quick Start     | None       | 4 action buttons ✅ |
+| Clear Chat      | Broken     | Working ✅          |
+| Read Aloud      | None       | Full TTS ✅         |
 
 ---
 
 ## 🎨 Customization Quick Tips
 
 ### Change Theme Colors:
+
 ```typescript
 // Find in ChatWidgetUI.tsx:
-from-indigo-600  // Change to from-purple-600, from-blue-600, etc.
+from - indigo - 600; // Change to from-purple-600, from-blue-600, etc.
 ```
 
 ### Add More Quick Actions:
+
 ```typescript
 const QUICK_ACTIONS = [
   { icon: "🎯", label: "View Projects", query: "Show me your projects" },
@@ -216,12 +243,14 @@ const QUICK_ACTIONS = [
 ```
 
 ### Adjust Voice Speed:
+
 ```typescript
 // In readAloud function:
-utterance.rate = 0.9;  // 0.5 = slower, 1.5 = faster
+utterance.rate = 0.9; // 0.5 = slower, 1.5 = faster
 ```
 
 ### Change Widget Size:
+
 ```typescript
 // Find:
 w-[90vw] max-w-[380px]  // Make bigger: max-w-[450px]
@@ -233,6 +262,7 @@ h-[380px]                // Make taller: h-[500px]
 ## 🚀 Ready to Deploy?
 
 ### Pre-deployment Checklist:
+
 - [ ] All features tested
 - [ ] Dark mode works
 - [ ] Voice features tested
@@ -243,17 +273,20 @@ h-[380px]                // Make taller: h-[500px]
 - [ ] Copy notification shows
 
 ### Build for Production:
+
 ```bash
 npm run build
 ```
 
 ### Deploy to Vercel:
+
 ```bash
 npm install -g vercel
 vercel
 ```
 
 ### Or Netlify:
+
 ```bash
 npm install -g netlify-cli
 netlify deploy
@@ -264,6 +297,7 @@ netlify deploy
 ## 📚 Documentation Files
 
 Created for you:
+
 1. `COMPLETE_IMPLEMENTATION.md` - Full feature list
 2. `CHAT_WIDGET_ENHANCEMENTS.md` - Technical details
 3. `TESTING_CHECKLIST.md` - Detailed test cases
@@ -276,18 +310,21 @@ Created for you:
 ## 💡 Next Development Phase
 
 ### Short-term (1-2 weeks):
+
 1. Add GitHub integration
 2. Implement skill charts
 3. Create project timeline
 4. Add testimonials section
 
 ### Medium-term (1 month):
+
 1. Code syntax highlighting
 2. File upload support
 3. Export chat feature
 4. Advanced analytics
 
 ### Long-term (2-3 months):
+
 1. Multi-language UI
 2. Custom AI training
 3. Rich media messages
@@ -311,8 +348,8 @@ You now have a **professional-grade AI portfolio assistant** with:
 
 ---
 
-**Test started:** ___________
-**Test completed:** ___________
+**Test started:** ****\_\_\_****
+**Test completed:** ****\_\_\_****
 **All passed:** [ ] Yes [ ] No
 **Ready to deploy:** [ ] Yes [ ] No
 

@@ -5,6 +5,7 @@
 ### 1. Suggestion Buttons
 
 **BEFORE:**
+
 ```
 ┌─────────────────────────────────┐
 │ • learn top tech skills         │  ← Gray text
@@ -13,6 +14,7 @@
 ```
 
 **AFTER:**
+
 ```
 ┌─────────────────────────────────┐
 │ • learn top tech skills         │  ← Clicked: Indigo bg
@@ -28,6 +30,7 @@
 ### 2. Chat Header
 
 **BEFORE:**
+
 ```
 ┌──────────────────────────────────────┐
 │ 🤖 AIVA Chat              ✕         │  Plain white
@@ -36,6 +39,7 @@
 ```
 
 **AFTER:**
+
 ```
 ┌──────────────────────────────────────┐
 │ 🤖 AIVA Chat          🗑️  ✕         │  Gradient bg
@@ -47,6 +51,7 @@
 ### 3. Message Layout
 
 **BEFORE:**
+
 ```
 ┌────────────────────────────┐
 │ 🤖 Hi! How can I help?     │
@@ -57,6 +62,7 @@
 ```
 
 **AFTER:**
+
 ```
 ┌────────────────────────────┐
 │ 🤖 Hi! How can I help?     │
@@ -71,11 +77,13 @@
 ### 4. Typing Indicator
 
 **BEFORE:**
+
 ```
 (Nothing shown while waiting)
 ```
 
 **AFTER:**
+
 ```
 ┌────────────────────┐
 │ 🤖 ● ● ●          │  ← Animated bouncing dots
@@ -85,6 +93,7 @@
 ### 5. Input Area
 
 **BEFORE:**
+
 ```
 ┌───────────────────────────────────┐
 │ Ask AIVA...              [Send] │
@@ -92,6 +101,7 @@
 ```
 
 **AFTER:**
+
 ```
 ┌──────────────────────────────────────┐
 │ 🎤  Ask AIVA...           [Send →] │  ← Voice input
@@ -103,6 +113,7 @@
 ### 6. FAB Button (Floating Action Button)
 
 **BEFORE:**
+
 ```
    ┌─────┐
    │ 🤖  │  ← White circle
@@ -110,6 +121,7 @@
 ```
 
 **AFTER:**
+
 ```
    ┌─────┐
    │ 🤖  │  ← Gradient (indigo→purple)
@@ -162,6 +174,7 @@ ChatWidget (Container)
 ## Color Palette
 
 ### Primary Colors
+
 ```
 Indigo:
   50:  #EEF2FF  ← Suggestion clicked bg
@@ -187,15 +200,16 @@ Gray:
 ```
 
 ### Gradients
+
 ```css
 /* Header */
-background: linear-gradient(to right, #EEF2FF, #F3E8FF);
+background: linear-gradient(to right, #eef2ff, #f3e8ff);
 
 /* User messages */
-background: linear-gradient(to right, #4F46E5, #6366F1);
+background: linear-gradient(to right, #4f46e5, #6366f1);
 
 /* FAB button */
-background: linear-gradient(to right, #4F46E5, #9333EA);
+background: linear-gradient(to right, #4f46e5, #9333ea);
 ```
 
 ---
@@ -203,6 +217,7 @@ background: linear-gradient(to right, #4F46E5, #9333EA);
 ## Animation Details
 
 ### 1. Widget Open/Close
+
 ```
 Duration: 250ms
 Easing: ease-out
@@ -219,6 +234,7 @@ Close:
 ```
 
 ### 2. Typing Indicator
+
 ```
 Duration: 600ms
 Easing: ease-in-out
@@ -230,6 +246,7 @@ Dot 3: delay 300ms
 ```
 
 ### 3. FAB Interactions
+
 ```
 Hover:
   scale: 1 → 1.05
@@ -241,6 +258,7 @@ Tap:
 ```
 
 ### 4. Suggestion Click
+
 ```
 Background transition: 200ms
 Color transition: 200ms
@@ -329,8 +347,9 @@ Live Region          aria-live="polite"           Announces
 const [isTyping, setIsTyping] = useState(false);
 
 // ChatWidgetUI.tsx
-const [clickedSuggestions, setClickedSuggestions] = 
-  useState<Set<string>>(new Set());
+const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
+  new Set()
+);
 
 const [isListening, setIsListening] = useState(false);
 
@@ -388,18 +407,18 @@ Legend:
 
 ## Quick Reference: What Changed
 
-| Aspect          | Before      | After       | Impact         |
-|-----------------|-------------|-------------|----------------|
-| Suggestions     | 2 clicks    | 1 click     | 🔥 50% faster  |
-| Visual feedback | None        | Highlighted | 🎨 Better UX   |
-| Typing status   | ❌          | ✅ Dots     | 💬 Clarity     |
-| Timestamps      | ❌          | ✅ Time     | ⏰ Context     |
-| Copy feature    | ❌          | ✅ Button   | 📋 Useful      |
-| Voice input     | ❌          | ✅ Mic      | 🎤 Modern      |
-| Clear chat      | ❌          | ✅ Button   | 🗑️ Control    |
-| Animations      | Basic       | Smooth      | ✨ Polished    |
-| Header          | Plain       | Gradient    | 🎨 Attractive  |
-| FAB             | Simple      | Gradient    | 💎 Premium     |
+| Aspect          | Before   | After       | Impact        |
+| --------------- | -------- | ----------- | ------------- |
+| Suggestions     | 2 clicks | 1 click     | 🔥 50% faster |
+| Visual feedback | None     | Highlighted | 🎨 Better UX  |
+| Typing status   | ❌       | ✅ Dots     | 💬 Clarity    |
+| Timestamps      | ❌       | ✅ Time     | ⏰ Context    |
+| Copy feature    | ❌       | ✅ Button   | 📋 Useful     |
+| Voice input     | ❌       | ✅ Mic      | 🎤 Modern     |
+| Clear chat      | ❌       | ✅ Button   | 🗑️ Control    |
+| Animations      | Basic    | Smooth      | ✨ Polished   |
+| Header          | Plain    | Gradient    | 🎨 Attractive |
+| FAB             | Simple   | Gradient    | 💎 Premium    |
 
 ---
 
@@ -428,6 +447,7 @@ http://localhost:5175/
 ## Customization Quick Guide
 
 ### Change Primary Color
+
 ```typescript
 // Find and replace:
 'indigo' → 'purple'
@@ -436,24 +456,25 @@ http://localhost:5175/
 ```
 
 ### Adjust Widget Size
+
 ```typescript
 // ChatWidgetUI.tsx line ~91
-className='w-[340px]'  // → w-[400px] for larger
-className='h-[380px]'  // → h-[500px] for taller
+className = "w-[340px]"; // → w-[400px] for larger
+className = "h-[380px]"; // → h-[500px] for taller
 ```
 
 ### Change Animation Speed
+
 ```typescript
 // Line ~88
 transition={{ duration: 0.25 }}  // → 0.5 for slower
 ```
 
 ### Disable Voice Input
+
 ```typescript
 // Comment out or remove:
-<button onClick={toggleVoiceInput}>
-  {/* Voice input button */}
-</button>
+<button onClick={toggleVoiceInput}>{/* Voice input button */}</button>
 ```
 
 ---
