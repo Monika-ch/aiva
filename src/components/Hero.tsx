@@ -39,11 +39,10 @@
 
 // export default Hero;
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const Hero: React.FC = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const moveX = useTransform(x, [0, window.innerWidth], [-20, 20]);
@@ -51,7 +50,6 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
       x.set(e.clientX);
       y.set(e.clientY);
     };
@@ -148,4 +146,3 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
-

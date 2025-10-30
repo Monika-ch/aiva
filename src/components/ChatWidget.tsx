@@ -1,16 +1,24 @@
 import React, { useEffect, useState, useCallback } from "react";
-import ChatWidgetUI from "./ChatWidgetUI";
+import ChatWidgetUI, { QUICK_ACTIONS_MARKER } from "./ChatWidgetUI";
 import useChatWidget from "../hooks/useChatWidget";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  timestamp?: number;
+  id?: string;
+  reaction?: "helpful" | "not-helpful" | null;
 }
 
 interface ChatWidgetProps {
   messages: Message[];
   onSend: (msg: string) => void;
   onAssistantMessage?: (msg: string) => void;
+  onClearMessages?: () => void;
+  onReaction?: (
+    messageIndex: number,
+    reaction: "helpful" | "not-helpful"
+  ) => void;
 }
 
 const STORAGE_KEY = "aiva.chat.widget";
@@ -19,11 +27,14 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   messages,
   onSend,
   onAssistantMessage,
+  onClearMessages,
+  onReaction,
 }) => {
   const { isOpen, setIsOpen, input, setInput, handleSend } =
     useChatWidget(onSend);
   const [lastSeenIndex, setLastSeenIndex] = useState(messages.length);
   const [autoOpened, setAutoOpened] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   // Clear storage on mount
   useEffect(() => {
@@ -50,13 +61,33 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 • explore experience
 • tell me more about their journey
 • do a storytelling on Monika`;
+    const quickActionsPrompt = `${QUICK_ACTIONS_MARKER}Here are a few quick actions you can tap to jump in:`;
 
-    onAssistantMessage(greeting);
-    console.log("Greeting sent:", greeting);
-
+    // Show typing indicator before greeting
+    setIsTyping(true);
     setTimeout(() => {
-      onAssistantMessage(suggestions);
-      console.log("Suggestions sent:", suggestions);
+      setIsTyping(false);
+      onAssistantMessage(greeting);
+      console.log("Greeting sent:", greeting);
+
+      // Show typing for suggestions
+      setTimeout(() => {
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          onAssistantMessage(suggestions);
+          console.log("Suggestions sent:", suggestions);
+
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              onAssistantMessage(quickActionsPrompt);
+              console.log("Quick actions prompt sent:", quickActionsPrompt);
+            }, 800);
+          }, 500);
+        }, 800);
+      }, 500);
     }, 1000);
   }, [onAssistantMessage]);
 
@@ -106,6 +137,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       handleSend={handleSend}
       unreadCount={unreadCount}
       latestAssistantMessage={latestAssistantMessage}
+      isTyping={isTyping}
+      onClearMessages={onClearMessages}
+      onReaction={onReaction}
     />
   );
 };

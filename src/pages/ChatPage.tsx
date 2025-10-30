@@ -1,31 +1,85 @@
 import { useState, useRef, useEffect } from "react";
 import ChatContainer from "../components/ChatContainer";
 import ChatHeader from "../components/ChatHeader";
-import ChatInput from "../components/ChatInput";
-import MessageBubble from "../components/MessageBubble";
+import EnhancedChatInput from "../components/EnhancedChatInput";
+import EnhancedMessageBubble from "../components/EnhancedMessageBubble";
 
 interface Message {
-  sender: "user" | "aiva";
+  sender: "user" | "assistant";
   message: string;
+  timestamp?: number;
+  reaction?: "helpful" | "not-helpful" | null;
 }
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      sender: "aiva",
+      sender: "assistant",
       message:
-        "👋 Hey there! I’m AIVA — your AI-powered portfolio assistant. Ask me anything about Monika’s work!",
+        "👋 Hey there! I'm AIVA — your AI-powered portfolio assistant. Ask me anything about Monika's work!",
+      timestamp: Date.now(),
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+  const [darkMode] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
+  // Copy to clipboard
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    // You could add a toast notification here
+  };
+
+  // Read aloud function
+  const readAloud = (text: string, index: number) => {
+    if (isSpeaking && speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setSpeakingIndex(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setSpeakingIndex(null);
+    };
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setSpeakingIndex(null);
+    };
+
+    setIsSpeaking(true);
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Handle reactions
+  const handleReaction = (
+    index: number,
+    reaction: "helpful" | "not-helpful"
+  ) => {
+    setMessages((prev) =>
+      prev.map((msg, i) =>
+        i === index
+          ? { ...msg, reaction: msg.reaction === reaction ? null : reaction }
+          : msg
+      )
+    );
+  };
+
   const handleSend = async (text: string) => {
-    setMessages((prev) => [...prev, { sender: "user", message: text }]);
+    setMessages((prev) => [
+      ...prev,
+      { sender: "user", message: text, timestamp: Date.now() },
+    ]);
     setIsTyping(true);
 
     // Mock AI delay
@@ -33,9 +87,10 @@ const ChatPage = () => {
       setMessages((prev) => [
         ...prev,
         {
-          sender: "aiva",
+          sender: "assistant",
           message:
-            "That’s a great question! Soon I’ll pull real data from your portfolio.",
+            "That's a great question! Soon I'll pull real data from your portfolio.",
+          timestamp: Date.now(),
         },
       ]);
       setIsTyping(false);
@@ -48,7 +103,19 @@ const ChatPage = () => {
         <ChatHeader />
         <div className='flex-1 overflow-y-auto p-4 bg-gray-50'>
           {messages.map((msg, i) => (
-            <MessageBubble key={i} sender={msg.sender} message={msg.message} />
+            <EnhancedMessageBubble
+              key={i}
+              sender={msg.sender}
+              message={msg.message}
+              timestamp={msg.timestamp}
+              reaction={msg.reaction}
+              onReaction={(reaction) => handleReaction(i, reaction)}
+              onCopy={() => copyToClipboard(msg.message)}
+              onReadAloud={() => readAloud(msg.message, i)}
+              isSpeaking={isSpeaking && speakingIndex === i}
+              darkMode={darkMode}
+              showActions={msg.sender === "assistant"}
+            />
           ))}
 
           {isTyping && (
@@ -60,7 +127,7 @@ const ChatPage = () => {
           )}
           <div ref={endRef} />
         </div>
-        <ChatInput onSend={handleSend} />
+        <EnhancedChatInput onSend={handleSend} darkMode={darkMode} />
       </ChatContainer>
     </div>
   );

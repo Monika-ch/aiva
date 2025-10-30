@@ -6,7 +6,7 @@ export interface UseChatWidgetResult {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
-  handleSend: () => void;
+  handleSend: (messageOverride?: string) => void;
 }
 
 /**
@@ -19,9 +19,11 @@ export default function useChatWidget(
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    onSend(input);
+  const handleSend = (messageOverride?: string) => {
+    const messageToSend =
+      messageOverride !== undefined ? messageOverride : input;
+    if (!messageToSend.trim()) return;
+    onSend(messageToSend);
     setInput("");
   };
 

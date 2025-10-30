@@ -95,21 +95,57 @@ import ChatWidget from "./components/ChatWidget";
 interface Message {
   role: "user" | "assistant";
   content: string;
+  timestamp?: number;
+  id?: string;
+  reaction?: "helpful" | "not-helpful" | null;
 }
+
+const DEFAULT_AI_RESPONSE =
+  "That's interesting! Tell me more about your portfolio goals.";
+
+const AI_RESPONSE_TRANSLATIONS: Record<string, string> = {
+  en: DEFAULT_AI_RESPONSE,
+  es: "¡Eso es interesante! Cuéntame más sobre tus objetivos de portafolio.",
+  fr: "C'est intéressant ! Parle-moi davantage de tes objectifs de portfolio.",
+  de: "Das ist interessant! Erzähl mir mehr über deine Portfolio-Ziele.",
+  hi: "यह दिलचस्प है! कृपया अपने पोर्टफोलियो लक्ष्यों के बारे में और बताएं।",
+  ja: "それは興味深いですね！ポートフォリオの目標についてもっと教えてください。",
+  ko: "흥미로운데요! 포트폴리오 목표에 대해 더 이야기해 주세요.",
+  zh: "这很有意思！请再多告诉我一些你的作品集目标。",
+};
+
+const getResponseForLanguage = (locale: string | null | undefined) => {
+  if (!locale) return DEFAULT_AI_RESPONSE;
+  const prefix = locale.toLowerCase().split("-")[0];
+  return AI_RESPONSE_TRANSLATIONS[prefix] ?? DEFAULT_AI_RESPONSE;
+};
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const handleSend = (msg: string) => {
     if (!msg.trim()) return;
-    const userMessage: Message = { role: "user", content: msg };
+    const userMessage: Message = {
+      role: "user",
+      content: msg,
+      timestamp: Date.now(),
+      id: `user-${Date.now()}`,
+    };
     setMessages((prev) => [...prev, userMessage]);
 
     // Mock AI response
     setTimeout(() => {
+      const preferredLanguage =
+        typeof window !== "undefined"
+          ? localStorage.getItem("aiva-current-language")
+          : "en";
+
       const aiMessage: Message = {
         role: "assistant",
-        content: "That's interesting! Tell me more about your portfolio goals.",
+        content: getResponseForLanguage(preferredLanguage),
+        timestamp: Date.now(),
+        id: `assistant-${Date.now()}`,
+        reaction: null,
       };
       setMessages((prev) => [...prev, aiMessage]);
     }, 1000);
@@ -118,8 +154,33 @@ function App() {
   // allow adding assistant messages from widgets (greeting, suggestions)
   const addAssistantMessage = (text: string) => {
     if (!text) return;
-    const aiMessage: Message = { role: "assistant", content: text };
+    const aiMessage: Message = {
+      role: "assistant",
+      content: text,
+      timestamp: Date.now(),
+      id: `assistant-${Date.now()}`,
+      reaction: null,
+    };
     setMessages((prev) => [...prev, aiMessage]);
+  };
+
+  // Clear all messages
+  const clearMessages = () => {
+    setMessages([]);
+  };
+
+  // Handle message reaction
+  const handleReaction = (
+    messageIndex: number,
+    reaction: "helpful" | "not-helpful"
+  ) => {
+    setMessages((prev) =>
+      prev.map((msg, idx) =>
+        idx === messageIndex
+          ? { ...msg, reaction: msg.reaction === reaction ? null : reaction }
+          : msg
+      )
+    );
   };
 
   return (
@@ -181,6 +242,8 @@ function App() {
         messages={messages}
         onSend={handleSend}
         onAssistantMessage={addAssistantMessage}
+        onClearMessages={clearMessages}
+        onReaction={handleReaction}
       />
     </div>
   );
