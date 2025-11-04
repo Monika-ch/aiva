@@ -77,5 +77,8 @@ export const stripSendCommand = (
 export const normalizeAivaName = (text: string): string => {
   return text
     .replace(/\b(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi, "AIVA")
-    .replace(/\bhi\s+(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi, "hi AIVA");
+    .replace(
+      /\bhi\s+(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi,
+      "hi AIVA"
+    );
 };

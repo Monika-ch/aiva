@@ -20,14 +20,13 @@ export const ReadAloudButton: React.FC<ReadAloudButtonProps> = ({
     <button
       onClick={onClick}
       style={{
-        backgroundColor:
-          isSpeaking
-            ? darkMode
-              ? "#4338ca"
-              : "#6366f1"
-            : darkMode
-            ? "#374151"
-            : "#e5e7eb",
+        backgroundColor: isSpeaking
+          ? darkMode
+            ? "#4338ca"
+            : "#6366f1"
+          : darkMode
+          ? "#374151"
+          : "#e5e7eb",
         color: darkMode ? "#d1d5db" : "#6b7280",
         padding: "6px",
         borderRadius: "8px",
@@ -35,21 +34,21 @@ export const ReadAloudButton: React.FC<ReadAloudButtonProps> = ({
         border: "none",
         outline: "none",
       }}
-      className="hover:opacity-80"
+      className='hover:opacity-80'
       title={isSpeaking ? "Stop reading" : "Read aloud"}
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns='http://www.w3.org/2000/svg'
         style={{ width: "14px", height: "14px" }}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
         strokeWidth={2}
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z'
         />
       </svg>
     </button>
@@ -77,21 +76,21 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
         border: "none",
         outline: "none",
       }}
-      className="hover:opacity-80"
-      title="Copy message"
+      className='hover:opacity-80'
+      title='Copy message'
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns='http://www.w3.org/2000/svg'
         style={{ width: "14px", height: "14px" }}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
         strokeWidth={2}
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
         />
       </svg>
     </button>
@@ -134,21 +133,21 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
           border: "none",
           outline: "none",
         }}
-        className="hover:opacity-80"
-        title="Helpful"
+        className='hover:opacity-80'
+        title='Helpful'
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns='http://www.w3.org/2000/svg'
           style={{ width: "14px", height: "14px" }}
           fill={currentReaction === "helpful" ? "currentColor" : "none"}
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox='0 0 24 24'
+          stroke='currentColor'
           strokeWidth={2}
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5'
           />
         </svg>
       </button>
@@ -175,21 +174,21 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
           border: "none",
           outline: "none",
         }}
-        className="hover:opacity-80"
-        title="Not helpful"
+        className='hover:opacity-80'
+        title='Not helpful'
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns='http://www.w3.org/2000/svg'
           style={{ width: "14px", height: "14px" }}
           fill={currentReaction === "not-helpful" ? "currentColor" : "none"}
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox='0 0 24 24'
+          stroke='currentColor'
           strokeWidth={2}
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5'
           />
         </svg>
       </button>
@@ -209,25 +208,25 @@ export const CloseButton: React.FC<CloseButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className="p-2 rounded-lg transition-colors hover:bg-opacity-80"
+      className='p-2 rounded-lg transition-colors hover:bg-opacity-80'
       style={{
         color: darkMode ? "#9ca3af" : "#6b7280",
       }}
-      aria-label="Close chat"
-      title="Close"
+      aria-label='Close chat'
+      title='Close'
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        xmlns='http://www.w3.org/2000/svg'
+        className='w-5 h-5'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
         strokeWidth={2}
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6 18L18 6M6 6l12 12"
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M6 18L18 6M6 6l12 12'
         />
       </svg>
     </button>
@@ -266,21 +265,21 @@ export const SendButton: React.FC<SendButtonProps> = ({
           : "#6366f1",
         color: "#ffffff",
       }}
-      aria-label="Send message"
-      title="Send"
+      aria-label='Send message'
+      title='Send'
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns='http://www.w3.org/2000/svg'
         className={sizeClass}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
         strokeWidth={2}
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
         />
       </svg>
     </button>
@@ -295,7 +294,7 @@ export const CopyNotification: React.FC<CopyNotificationProps> = ({ show }) => {
   if (!show) return null;
 
   return (
-    <div className="mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg">
+    <div className='mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg'>
       ✓ Copied to clipboard
     </div>
   );

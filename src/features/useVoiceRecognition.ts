@@ -17,13 +17,19 @@ export type VoiceMode = "send" | "dictate" | null;
 
 interface UseVoiceRecognitionProps {
   effectiveSpeechLocale: string;
-  onSendMessage: (message: string, options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }) => void;
+  onSendMessage: (
+    message: string,
+    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+  ) => void;
   setInput: (s: string) => void;
   input: string;
   appendDictationChunk: (chunk: string) => void;
   buildDictationCombinedContent: () => string;
   clearDictationTranscript: (setInput: (s: string) => void) => void;
-  deleteLastWordsFromDictation: (count: number, setInput: (s: string) => void) => void;
+  deleteLastWordsFromDictation: (
+    count: number,
+    setInput: (s: string) => void
+  ) => void;
   setDictationBase: (input: string) => void;
   clearDictationSession: () => void;
 }
@@ -42,12 +48,14 @@ export const useVoiceRecognition = ({
 }: UseVoiceRecognitionProps) => {
   const [isListening, setIsListening] = useState(false);
   const [listeningMode, setListeningMode] = useState<VoiceMode>(null);
-  
+
   const recognitionRef = useRef<any>(null);
   const listeningModeRef = useRef<VoiceMode>(null);
   const stopRequestedRef = useRef(false);
   const sendModeTranscriptRef = useRef("");
-  const sendModeSilenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sendModeSilenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const lastProcessedResultIndexRef = useRef(0);
 
   const updateListeningMode = useCallback((mode: VoiceMode) => {
@@ -68,7 +76,7 @@ export const useVoiceRecognition = ({
     updateListeningMode(null);
     stopRequestedRef.current = false;
     lastProcessedResultIndexRef.current = 0;
-    
+
     if (lastMode === "dictate") {
       clearDictationSession();
     }
@@ -101,19 +109,20 @@ export const useVoiceRecognition = ({
   useEffect(() => {
     if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
       const SpeechRecognition =
-        (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      
+        (window as any).webkitSpeechRecognition ||
+        (window as any).SpeechRecognition;
+
       if (!recognitionRef.current) {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = false;
         recognitionRef.current.interimResults = false;
       }
-      
+
       recognitionRef.current.lang = effectiveSpeechLocale;
 
       recognitionRef.current.onresult = (event: any) => {
         console.log("[DEBUG] Speech recognition onresult fired");
-        
+
         if (stopRequestedRef.current) {
           return;
         }
@@ -122,7 +131,10 @@ export const useVoiceRecognition = ({
         if (!mode) return;
 
         let collectedTranscript = "";
-        const startIndex = Math.max(event.resultIndex, lastProcessedResultIndexRef.current);
+        const startIndex = Math.max(
+          event.resultIndex,
+          lastProcessedResultIndexRef.current
+        );
 
         for (let i = startIndex; i < event.results.length; i += 1) {
           const result = event.results[i];
@@ -135,24 +147,30 @@ export const useVoiceRecognition = ({
         const cleanedTranscript = normalizeAivaName(
           collectedTranscript.replace(/\s+/g, " ").trim()
         );
-        
+
         if (!cleanedTranscript) return;
 
         // Handle "send" mode
         if (mode === "send") {
-          const combinedTranscript = [sendModeTranscriptRef.current, cleanedTranscript]
+          const combinedTranscript = [
+            sendModeTranscriptRef.current,
+            cleanedTranscript,
+          ]
             .filter(Boolean)
             .join(" ")
             .replace(/\s+/g, " ")
             .trim();
-          
+
           sendModeTranscriptRef.current = combinedTranscript;
 
           if (sendModeSilenceTimerRef.current) {
             clearTimeout(sendModeSilenceTimerRef.current);
           }
 
-          sendModeSilenceTimerRef.current = setTimeout(finalizeSendModeMessage, 5000);
+          sendModeSilenceTimerRef.current = setTimeout(
+            finalizeSendModeMessage,
+            5000
+          );
           return;
         }
 
@@ -179,7 +197,8 @@ export const useVoiceRecognition = ({
             return;
           }
 
-          const { text: chunkWithoutCommand, triggered } = stripSendCommand(cleanedTranscript);
+          const { text: chunkWithoutCommand, triggered } =
+            stripSendCommand(cleanedTranscript);
           const trimmedChunk = chunkWithoutCommand.trim();
 
           if (trimmedChunk) {
@@ -192,7 +211,10 @@ export const useVoiceRecognition = ({
 
           if (triggered) {
             const finalContent = buildDictationCombinedContent();
-            onSendMessage(finalContent, { triggeredByVoice: true, voiceMode: "dictate" });
+            onSendMessage(finalContent, {
+              triggeredByVoice: true,
+              voiceMode: "dictate",
+            });
           }
         }
       };
@@ -222,7 +244,7 @@ export const useVoiceRecognition = ({
 
       recognitionRef.current.onend = () => {
         const mode = listeningModeRef.current;
-        
+
         if (stopRequestedRef.current) {
           resetListeningState();
           return;
@@ -272,7 +294,9 @@ export const useVoiceRecognition = ({
   const startVoiceRecognition = useCallback(
     (mode: "send" | "dictate") => {
       if (!recognitionRef.current) {
-        alert("Voice recognition is not supported in this browser. Try Chrome or Edge.");
+        alert(
+          "Voice recognition is not supported in this browser. Try Chrome or Edge."
+        );
         return;
       }
 

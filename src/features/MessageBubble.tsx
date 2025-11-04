@@ -63,11 +63,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             darkMode ? "bg-indigo-900" : "bg-indigo-50"
           }`}
         >
-          <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
+          <img src={sparkIcon} alt='AIVA' className='w-3 h-3' />
         </div>
       )}
 
-      <div className="flex flex-col max-w-[80%]">
+      <div className='flex flex-col max-w-[80%]'>
         <div
           className={`px-3 py-2 rounded-2xl text-sm shadow-sm ${
             isUser
@@ -109,7 +109,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                 isSpeaking={isSpeaking && speakingMessageIndex === messageIndex}
                 darkMode={darkMode}
               />
-              <CopyButton onClick={() => onCopy(message.content)} darkMode={darkMode} />
+              <CopyButton
+                onClick={() => onCopy(message.content)}
+                darkMode={darkMode}
+              />
               <ReactionButtons
                 onReaction={(reaction) => onReaction(messageIndex, reaction)}
                 currentReaction={message.reaction}

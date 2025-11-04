@@ -14,12 +14,15 @@ export const useDictation = () => {
     dictationBaseInputRef.current = "";
   }, []);
 
-  const clearDictationTranscript = useCallback((setInput: (s: string) => void) => {
-    // Clear only the current dictation transcript, not the base input
-    dictationTranscriptRef.current = "";
-    const base = dictationBaseInputRef.current || "";
-    setInput(base);
-  }, []);
+  const clearDictationTranscript = useCallback(
+    (setInput: (s: string) => void) => {
+      // Clear only the current dictation transcript, not the base input
+      dictationTranscriptRef.current = "";
+      const base = dictationBaseInputRef.current || "";
+      setInput(base);
+    },
+    []
+  );
 
   const appendDictationChunk = useCallback((rawChunk: string) => {
     if (!rawChunk) return;
@@ -41,7 +44,9 @@ export const useDictation = () => {
     }
 
     const needsSpace = !current.endsWith("\n");
-    dictationTranscriptRef.current = `${current}${needsSpace ? " " : ""}${chunk}`;
+    dictationTranscriptRef.current = `${current}${
+      needsSpace ? " " : ""
+    }${chunk}`;
   }, []);
 
   const buildDictationCombinedContent = useCallback(() => {
@@ -53,7 +58,8 @@ export const useDictation = () => {
 
     const baseEndsWithWhitespace = /\s$/.test(base);
     const transcriptStartsWithNewline = transcript.startsWith("\n");
-    const separator = baseEndsWithWhitespace || transcriptStartsWithNewline ? "" : " ";
+    const separator =
+      baseEndsWithWhitespace || transcriptStartsWithNewline ? "" : " ";
     return `${base}${separator}${transcript}`;
   }, []);
 

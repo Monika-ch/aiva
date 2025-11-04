@@ -4,7 +4,10 @@
  */
 
 import React from "react";
-import { QUICK_ACTIONS, QUICK_ACTIONS_MARKER } from "../constants/chatConstants";
+import {
+  QUICK_ACTIONS,
+  QUICK_ACTIONS_MARKER,
+} from "../constants/chatConstants";
 
 interface QuickActionsProps {
   onActionClick: (query: string) => void;
@@ -16,12 +19,12 @@ export const QuickActionCards: React.FC<QuickActionsProps> = ({
   darkMode,
 }) => {
   return (
-    <div className="grid grid-cols-2 gap-2 mt-2" style={{ maxWidth: "260px" }}>
+    <div className='grid grid-cols-2 gap-2 mt-2' style={{ maxWidth: "260px" }}>
       {QUICK_ACTIONS.map((action, idx) => (
         <button
           key={idx}
           onClick={() => onActionClick(action.query)}
-          className="p-3 rounded-lg transition-transform duration-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 focus:outline-none cursor-pointer"
+          className='p-3 rounded-lg transition-transform duration-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 focus:outline-none cursor-pointer'
           style={{
             backgroundColor: darkMode ? "#1f2937" : "#eef2ff",
             border: `1px solid ${darkMode ? "#4338ca" : "#c7d2fe"}`,
@@ -32,8 +35,8 @@ export const QuickActionCards: React.FC<QuickActionsProps> = ({
               : "0 10px 18px rgba(79, 70, 229, 0.14)",
           }}
         >
-          <div className="text-2xl mb-1">{action.icon}</div>
-          <div className="text-xs tracking-wide">{action.label}</div>
+          <div className='text-2xl mb-1'>{action.icon}</div>
+          <div className='text-xs tracking-wide'>{action.label}</div>
         </button>
       ))}
     </div>
@@ -89,7 +92,7 @@ export const SuggestionChip: React.FC<SuggestionChipProps> = ({
         outline: "none",
         whiteSpace: "pre-wrap",
       }}
-      className="hover:opacity-80"
+      className='hover:opacity-80'
     >
       • {suggestion}
     </button>
@@ -119,7 +122,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
     return (
       <div style={{ whiteSpace: "pre-wrap" }}>
         {description && (
-          <div className="mb-3 text-sm leading-relaxed">{description}</div>
+          <div className='mb-3 text-sm leading-relaxed'>{description}</div>
         )}
         <QuickActionCards onActionClick={onActionClick} darkMode={darkMode} />
       </div>

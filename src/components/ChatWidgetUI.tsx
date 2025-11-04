@@ -59,18 +59,18 @@ const ChatWidgetUI: React.FC<Props> = ({
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   // State
-  const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(new Set());
+  const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
+    new Set()
+  );
   const [voiceInputUsed, setVoiceInputUsed] = useState(false);
   const [showCopyNotification, setShowCopyNotification] = useState(false);
 
   // Custom hooks
   const { darkMode, toggleDarkMode } = useDarkMode();
   const theme = getThemeClasses(darkMode);
-  
-  const {
-    effectiveSpeechLocale,
-    recordVoiceLanguagePreference,
-  } = useLanguageSettings();
+
+  const { effectiveSpeechLocale, recordVoiceLanguagePreference } =
+    useLanguageSettings();
 
   const { isSpeaking, speakingMessageIndex, readAloud } = useTextToSpeech();
 
@@ -85,7 +85,10 @@ const ChatWidgetUI: React.FC<Props> = ({
 
   // Send message handler with voice support
   const sendUserMessage = useCallback(
-    (message: string, options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }) => {
+    (
+      message: string,
+      options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+    ) => {
       console.log("[DEBUG] sendUserMessage called with:", { message, options });
       const trimmedMessage = message.trim();
       if (!trimmedMessage) {
@@ -106,24 +109,28 @@ const ChatWidgetUI: React.FC<Props> = ({
         setVoiceInputUsed(false);
       }
 
-      console.log("[DEBUG] Calling handleSend from hook with trimmed message:", trimmedMessage);
+      console.log(
+        "[DEBUG] Calling handleSend from hook with trimmed message:",
+        trimmedMessage
+      );
       handleSend(trimmedMessage);
     },
     [handleSend, recordVoiceLanguagePreference]
   );
 
-  const { isListening, listeningMode, startVoiceRecognition } = useVoiceRecognition({
-    effectiveSpeechLocale,
-    onSendMessage: sendUserMessage,
-    setInput,
-    input,
-    appendDictationChunk,
-    buildDictationCombinedContent,
-    clearDictationTranscript,
-    deleteLastWordsFromDictation,
-    setDictationBase,
-    clearDictationSession,
-  });
+  const { isListening, listeningMode, startVoiceRecognition } =
+    useVoiceRecognition({
+      effectiveSpeechLocale,
+      onSendMessage: sendUserMessage,
+      setInput,
+      input,
+      appendDictationChunk,
+      buildDictationCombinedContent,
+      clearDictationTranscript,
+      deleteLastWordsFromDictation,
+      setDictationBase,
+      clearDictationSession,
+    });
 
   const isVoiceSendActive = isListening && listeningMode === "send";
   const isDictateActive = isListening && listeningMode === "dictate";
@@ -134,10 +141,15 @@ const ChatWidgetUI: React.FC<Props> = ({
       messageOverride?: string,
       options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
     ) => {
-      console.log("[DEBUG] handleSendWithDictation called:", { messageOverride, options, input });
+      console.log("[DEBUG] handleSendWithDictation called:", {
+        messageOverride,
+        options,
+        input,
+      });
       const triggeredByVoice = options?.triggeredByVoice ?? false;
       const voiceMode = options?.voiceMode;
-      const rawMessage = messageOverride !== undefined ? messageOverride : input;
+      const rawMessage =
+        messageOverride !== undefined ? messageOverride : input;
 
       console.log("[DEBUG] rawMessage:", rawMessage, "voiceMode:", voiceMode);
       const messageToSend = rawMessage.trim();
@@ -152,7 +164,12 @@ const ChatWidgetUI: React.FC<Props> = ({
       }
 
       clearDictationSession();
-      console.log("[DEBUG] Calling sendUserMessage with trimmed message:", messageToSend, "voiceMode:", voiceMode);
+      console.log(
+        "[DEBUG] Calling sendUserMessage with trimmed message:",
+        messageToSend,
+        "voiceMode:",
+        voiceMode
+      );
       sendUserMessage(messageToSend, { triggeredByVoice, voiceMode });
       console.log("[DEBUG] Clearing input");
       setInput("");
@@ -204,8 +221,6 @@ const ChatWidgetUI: React.FC<Props> = ({
     }
   }, [messages, isOpen]);
 
-
-
   // Handler functions
   const handleClearChat = () => {
     setClickedSuggestions(new Set());
@@ -222,7 +237,10 @@ const ChatWidgetUI: React.FC<Props> = ({
     });
   };
 
-  const handleReaction = (messageIndex: number, reaction: "helpful" | "not-helpful") => {
+  const handleReaction = (
+    messageIndex: number,
+    reaction: "helpful" | "not-helpful"
+  ) => {
     if (onReaction) {
       onReaction(messageIndex, reaction);
     }
@@ -240,8 +258,8 @@ const ChatWidgetUI: React.FC<Props> = ({
   // JSX Rendering
   return (
     <div
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden"
-      aria-live="polite"
+      className='fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden'
+      aria-live='polite'
     >
       {/* Copy Notification */}
       <AnimatePresence>
@@ -264,15 +282,15 @@ const ChatWidgetUI: React.FC<Props> = ({
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className={`w-[90vw] max-w-[380px] ${theme.bg} shadow-2xl rounded-2xl overflow-hidden border ${theme.border} mb-3`}
-            role="dialog"
-            aria-label="AIVA chat"
+            role='dialog'
+            aria-label='AIVA chat'
           >
             {/* Header */}
             <div
               className={`p-3 border-b ${theme.border} ${theme.headerBg} flex items-center justify-between`}
             >
-              <div className="flex items-center gap-2">
-                <img src={sparkIcon} alt="AIVA" className="w-8 h-8" />
+              <div className='flex items-center gap-2'>
+                <img src={sparkIcon} alt='AIVA' className='w-8 h-8' />
                 <div>
                   <span className={`text-sm font-semibold ${theme.text}`}>
                     AIVA Chat
@@ -287,7 +305,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div className='flex items-center gap-1.5'>
                 {/* Language Button - TODO: Add language menu functionality */}
                 <button
                   style={{
@@ -299,22 +317,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className="hover:opacity-80"
-                  aria-label="Language settings"
-                  title="Language settings"
+                  className='hover:opacity-80'
+                  aria-label='Language settings'
+                  title='Language settings'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns='http://www.w3.org/2000/svg'
                     style={{ width: "16px", height: "16px" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'
                     />
                   </svg>
                 </button>
@@ -331,38 +349,38 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className="hover:opacity-80"
-                  aria-label="Toggle dark mode"
+                  className='hover:opacity-80'
+                  aria-label='Toggle dark mode'
                   title={darkMode ? "Light mode" : "Dark mode"}
                 >
                   {darkMode ? (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns='http://www.w3.org/2000/svg'
                       style={{ width: "16px", height: "16px" }}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
                       strokeWidth={2}
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
                       />
                     </svg>
                   ) : (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns='http://www.w3.org/2000/svg'
                       style={{ width: "16px", height: "16px" }}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
                       strokeWidth={2}
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
                       />
                     </svg>
                   )}
@@ -380,22 +398,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className="hover:opacity-80"
-                  aria-label="Clear chat"
-                  title="Clear chat history"
+                  className='hover:opacity-80'
+                  aria-label='Clear chat'
+                  title='Clear chat history'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns='http://www.w3.org/2000/svg'
                     style={{ width: "16px", height: "16px" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
                     />
                   </svg>
                 </button>
@@ -412,22 +430,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className="hover:opacity-80"
-                  aria-label="Close chat"
-                  title="Close"
+                  className='hover:opacity-80'
+                  aria-label='Close chat'
+                  title='Close'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns='http://www.w3.org/2000/svg'
                     style={{ width: "16px", height: "16px" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M6 18L18 6M6 6l12 12'
                     />
                   </svg>
                 </button>
@@ -466,7 +484,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
             {/* Input Container */}
             <div className={`p-3 border-t ${theme.border} ${theme.bg}`}>
-              <div className="flex items-end gap-1.5 mb-2">
+              <div className='flex items-end gap-1.5 mb-2'>
                 <VoiceSendButton
                   onClick={() => startVoiceRecognition("send")}
                   isActive={isVoiceSendActive}
@@ -486,7 +504,9 @@ const ChatWidgetUI: React.FC<Props> = ({
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
                       : "border-gray-200 placeholder-gray-400"
-                  } rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${theme.text} resize-none`}
+                  } rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
+                    theme.text
+                  } resize-none`}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -497,7 +517,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       });
                     }
                   }}
-                  aria-label="Type your question to AIVA"
+                  aria-label='Type your question to AIVA'
                   readOnly={isListening && listeningMode === "send"}
                   rows={1}
                   spellCheck={false}
@@ -514,7 +534,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       triggeredByVoice: false,
                     })
                   }
-                  aria-label="Send message"
+                  aria-label='Send message'
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
@@ -528,26 +548,26 @@ const ChatWidgetUI: React.FC<Props> = ({
                     color: "#ffffff",
                     paddingInline: "clamp(12px, 1.8vw, 16px)",
                   }}
-                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all"
+                  className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='w-4 h-4'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M22 2L11 13"
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M22 2L11 13'
                     />
                     <path
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M22 2l-7 20-4-9-9-4 20-7z"
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M22 2l-7 20-4-9-9-4 20-7z'
                     />
                   </svg>
                 </button>
@@ -566,7 +586,7 @@ const ChatWidgetUI: React.FC<Props> = ({
       </AnimatePresence>
 
       {/* Floating Action Button */}
-      <div className="relative">
+      <div className='relative'>
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
@@ -577,12 +597,12 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          className='relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all'
         >
           <img
             src={sparkIcon}
-            alt="Open AIVA chat"
-            className="w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+            alt='Open AIVA chat'
+            className='w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]'
           />
         </motion.button>
 
@@ -591,7 +611,7 @@ const ChatWidgetUI: React.FC<Props> = ({
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md"
+            className='absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md'
           >
             {unreadCount > 9 ? "9+" : unreadCount}
           </motion.span>

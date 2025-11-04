@@ -10,7 +10,10 @@ interface VoiceButtonStyleProps {
   darkMode: boolean;
 }
 
-const getVoiceButtonStyle = ({ active, darkMode }: VoiceButtonStyleProps): React.CSSProperties => ({
+const getVoiceButtonStyle = ({
+  active,
+  darkMode,
+}: VoiceButtonStyleProps): React.CSSProperties => ({
   backgroundColor: active ? "#ef4444" : darkMode ? "#374151" : "#f3f4f6",
   color: active ? "#ffffff" : darkMode ? "#d1d5db" : "#6b7280",
   padding: "10px",
@@ -40,7 +43,7 @@ export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
     <button
       onClick={onClick}
       style={getVoiceButtonStyle({ active: isActive, darkMode })}
-      className="hover:opacity-90"
+      className='hover:opacity-90'
       aria-label={isActive ? "Stop voice input" : "Voice input and send"}
       title={isActive ? "Stop" : "Voice Send"}
     >
@@ -68,22 +71,22 @@ export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
         </>
       )}
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns='http://www.w3.org/2000/svg'
         style={{
           width: "16px",
           height: "16px",
           position: "relative",
           zIndex: 10,
         }}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
         strokeWidth={2}
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z'
         />
       </svg>
     </button>
@@ -105,7 +108,7 @@ export const DictateButton: React.FC<DictateButtonProps> = ({
     <button
       onClick={onClick}
       style={getVoiceButtonStyle({ active: isActive, darkMode })}
-      className="hover:opacity-90"
+      className='hover:opacity-90'
       aria-label={isActive ? "Stop dictation" : "Dictate message"}
       title={isActive ? "Stop dictation" : "Dictate"}
     >
@@ -135,43 +138,39 @@ export const DictateButton: React.FC<DictateButtonProps> = ({
       {isActive ? (
         // Stop icon when dictation is active
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns='http://www.w3.org/2000/svg'
           style={{
             width: "16px",
             height: "16px",
             position: "relative",
             zIndex: 10,
           }}
-          fill="currentColor"
-          viewBox="0 0 24 24"
+          fill='currentColor'
+          viewBox='0 0 24 24'
         >
-          <path d="M6 6h12v12H6z" />
+          <path d='M6 6h12v12H6z' />
         </svg>
       ) : (
         // Pen icon when dictation is not active
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns='http://www.w3.org/2000/svg'
           style={{
             width: "16px",
             height: "16px",
             position: "relative",
             zIndex: 10,
           }}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
           strokeWidth={2}
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5"
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5'
           />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10 21h11"
-          />
+          <path strokeLinecap='round' strokeLinejoin='round' d='M10 21h11' />
         </svg>
       )}
     </button>
