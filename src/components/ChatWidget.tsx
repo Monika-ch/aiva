@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import ChatWidgetUI, { QUICK_ACTIONS_MARKER } from "./ChatWidgetUI";
+import ChatWidgetUI from "./ChatWidgetUI";
+import { QUICK_ACTIONS_MARKER } from "../features";
 import useChatWidget from "../hooks/useChatWidget";
 
 interface Message {
@@ -42,11 +43,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  const latestAssistantMessage =
-    messages
-      .slice()
-      .reverse()
-      .find((m) => m.role === "assistant")?.content ?? null;
   const unreadCount = messages
     .slice(lastSeenIndex)
     .filter((m) => m.role === "assistant").length;
@@ -136,7 +132,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       setInput={setInput}
       handleSend={handleSend}
       unreadCount={unreadCount}
-      latestAssistantMessage={latestAssistantMessage}
       isTyping={isTyping}
       onClearMessages={onClearMessages}
       onReaction={onReaction}
