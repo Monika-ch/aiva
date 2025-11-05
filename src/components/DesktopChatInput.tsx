@@ -80,22 +80,27 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   useEffect(() => {
     const textarea = inputRef.current;
     if (!textarea) return;
-
+    
     // Reset height to auto to get the correct scrollHeight
     textarea.style.height = "auto";
-
+    
     // Calculate new height based on content (max 8 rows)
     const lineHeight = 24; // leading-6 = 1.5rem = 24px
     const maxHeight = lineHeight * 8 + 16; // 8 rows + padding
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
-
+    
     textarea.style.height = `${newHeight}px`;
-
+    
+    // Show scrollbar only when content overflows
+    if (textarea.scrollHeight > maxHeight) {
+      textarea.classList.add("has-overflow");
+    } else {
+      textarea.classList.remove("has-overflow");
+    }
+    
     // Scroll to bottom to keep cursor visible
     textarea.scrollTop = textarea.scrollHeight;
-  }, [input]);
-
-  const handleSend = () => {
+  }, [input]);  const handleSend = () => {
     const trimmedInput = input.trim();
     if (trimmedInput) {
       onSend(trimmedInput);
@@ -148,7 +153,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
           placeholder={getPlaceholderText()}
           className={`flex-1 min-w-0 ${inputClass} ${
             darkMode ? "dark-scrollbar" : ""
-          } rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all resize-none`}
+          } overflow-auto rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all resize-none`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -167,7 +172,6 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             maxHeight: "208px", // 8 rows * 24px (line-height) + 16px (padding)
             whiteSpace: "pre-wrap",
             border: darkMode ? "1px solid #4b5563" : "1px solid #d1d5db",
-            overflowY: "auto",
           }}
         />
 

@@ -112,6 +112,15 @@ textarea::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
 
+/* Only show scrollbar when content overflows */
+textarea.overflow-auto {
+  overflow-y: hidden;
+}
+
+textarea.overflow-auto.has-overflow {
+  overflow-y: auto;
+}
+
 /* Chat messages container scrollbar styles */
 .chat-messages-light::-webkit-scrollbar {
   width: 10px;
