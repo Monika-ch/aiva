@@ -20,6 +20,7 @@ interface ChatWidgetProps {
     messageIndex: number,
     reaction: "helpful" | "not-helpful"
   ) => void;
+  darkMode?: boolean;
 }
 
 const STORAGE_KEY = "aiva.chat.widget";
@@ -30,6 +31,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   onAssistantMessage,
   onClearMessages,
   onReaction,
+  darkMode = false,
 }) => {
   const { isOpen, setIsOpen, input, setInput, handleSend } =
     useChatWidget(onSend);
@@ -135,6 +137,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       isTyping={isTyping}
       onClearMessages={onClearMessages}
       onReaction={onReaction}
+      darkMode={darkMode}
     />
   );
 };

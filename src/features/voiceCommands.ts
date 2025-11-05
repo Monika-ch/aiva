@@ -25,25 +25,64 @@ export const SEND_COMMAND_REGEX = new RegExp(
  * Normalizes command text by removing punctuation and converting to lowercase
  */
 export const normalizeCommandText = (text: string): string =>
-  text.replace(/[.!?]/g, "").trim().toLowerCase();
+  text.replace(/[.!?,]/g, "").trim().toLowerCase();
 
 /**
- * Checks if the text is an "enter" command
+ * Checks if the text is an "enter" command (including variations)
  */
-export const isEnterCommand = (text: string): boolean =>
-  normalizeCommandText(text) === "enter";
+export const isEnterCommand = (text: string): boolean => {
+  const normalized = normalizeCommandText(text);
+  const enterVariations = ["enter", "inter", "entr", "enter."];
+  return enterVariations.some(variant => normalized === variant || normalized.endsWith(variant));
+};
 
 /**
- * Checks if the text is a "clear" command
+ * Checks if the text is a "clear" command (including variations)
  */
-export const isClearCommand = (text: string): boolean =>
-  normalizeCommandText(text) === "clear";
+export const isClearCommand = (text: string): boolean => {
+  const normalized = normalizeCommandText(text);
+  const clearVariations = [
+    "clear", 
+    "clear all", 
+    "clearall", 
+    "clair", 
+    "clare", 
+    "cleer",
+    "clear everything",
+    "cleareverything"
+  ];
+  // Check if the entire text is just a clear command or starts/ends with it
+  return clearVariations.some(variant => 
+    normalized === variant || 
+    normalized === `${variant}` ||
+    normalized.startsWith(`${variant} `) ||
+    normalized.endsWith(` ${variant}`) ||
+    normalized === variant.replace(/\s/g, '')
+  );
+};
 
 /**
- * Checks if the text is a "delete" command
+ * Checks if the text is a "delete" command (including variations)
  */
-export const isDeleteCommand = (text: string): boolean =>
-  normalizeCommandText(text) === "delete";
+export const isDeleteCommand = (text: string): boolean => {
+  const normalized = normalizeCommandText(text);
+  const deleteVariations = [
+    "delete", 
+    "delet", 
+    "deleet", 
+    "dilate", 
+    "delete word",
+    "deleteword"
+  ];
+  // Check if text contains any delete variation
+  return deleteVariations.some(variant => 
+    normalized === variant ||
+    normalized.includes(` ${variant} `) ||
+    normalized.startsWith(`${variant} `) ||
+    normalized.endsWith(` ${variant}`) ||
+    normalized === variant
+  );
+};
 
 /**
  * Counts how many times "delete" appears as a complete command
@@ -52,7 +91,13 @@ export const isDeleteCommand = (text: string): boolean =>
 export const countDeleteCommands = (text: string): number => {
   const normalized = normalizeCommandText(text);
   const words = normalized.split(/\s+/);
-  return words.filter((word) => word === "delete").length;
+  let count = 0;
+  for (const word of words) {
+    if (word === "delete" || word === "delet" || word === "deleet") {
+      count++;
+    }
+  }
+  return Math.max(1, count); // At least 1 if delete command is detected
 };
 
 /**

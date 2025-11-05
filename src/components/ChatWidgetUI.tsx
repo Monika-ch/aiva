@@ -9,7 +9,6 @@ import sparkIcon from "../assets/logo-robo-face.svg";
 
 // Import all features
 import {
-  useDarkMode,
   getThemeClasses,
   useLanguageSettings,
   useTextToSpeech,
@@ -23,6 +22,9 @@ import {
   DictateButton,
   type Message,
 } from "../features";
+
+// Import chat constants
+import { INTRO_SUGGESTIONS, QUICK_ACTIONS } from "../constants/chatConstants";
 
 interface Props {
   messages: Message[];
@@ -39,6 +41,7 @@ interface Props {
     messageIndex: number,
     reaction: "helpful" | "not-helpful"
   ) => void;
+  darkMode?: boolean;
 }
 
 const ChatWidgetUI: React.FC<Props> = ({
@@ -52,6 +55,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   isTyping = false,
   onClearMessages,
   onReaction,
+  darkMode = false,
 }) => {
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -66,7 +70,6 @@ const ChatWidgetUI: React.FC<Props> = ({
   const [showCopyNotification, setShowCopyNotification] = useState(false);
 
   // Custom hooks
-  const { darkMode, toggleDarkMode } = useDarkMode();
   const theme = getThemeClasses(darkMode);
 
   const { effectiveSpeechLocale, recordVoiceLanguagePreference } =
@@ -337,55 +340,6 @@ const ChatWidgetUI: React.FC<Props> = ({
                   </svg>
                 </button>
 
-                {/* Dark mode toggle */}
-                <button
-                  onClick={toggleDarkMode}
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-                    color: darkMode ? "#d1d5db" : "#6b7280",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    transition: "all 0.2s ease",
-                    border: "none",
-                    outline: "none",
-                  }}
-                  className='hover:opacity-80'
-                  aria-label='Toggle dark mode'
-                  title={darkMode ? "Light mode" : "Dark mode"}
-                >
-                  {darkMode ? (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      style={{ width: "16px", height: "16px" }}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      style={{ width: "16px", height: "16px" }}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
-                      />
-                    </svg>
-                  )}
-                </button>
-
                 {/* Clear chat button */}
                 <button
                   onClick={handleClearChat}
@@ -457,29 +411,125 @@ const ChatWidgetUI: React.FC<Props> = ({
               ref={messageContainerRef}
               className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
                 darkMode
-                  ? "bg-gradient-to-b from-gray-800 to-gray-900"
-                  : "bg-gradient-to-b from-gray-50 to-white"
+                  ? "bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark"
+                  : "bg-gradient-to-b from-gray-50 to-white chat-messages-light"
               }`}
             >
-              {messages.map((message, index) => (
-                <MessageBubble
-                  key={message.id || index}
-                  message={message}
-                  messageIndex={index}
-                  darkMode={darkMode}
-                  clickedSuggestions={clickedSuggestions}
-                  isSpeaking={isSpeaking}
-                  speakingMessageIndex={speakingMessageIndex}
-                  onReadAloud={readAloud}
-                  onCopy={copyToClipboard}
-                  onReaction={handleReaction}
-                  onSuggestionClick={handleSuggestionClick}
-                  onActionClick={handleQuickAction}
-                />
-              ))}
+              {messages.length === 0 && !isTyping ? (
+                // Empty state with welcome message, suggestions, and actions
+                <div className="flex flex-col h-full py-4 px-4">
+                  {/* Welcome greeting */}
+                  <div className="text-center space-y-1.5 mb-5">
+                    <h2
+                      className={`text-base font-semibold ${
+                        darkMode ? "text-gray-100" : "text-gray-800"
+                      }`}
+                    >
+                      Ask AIVA...
+                    </h2>
+                    <p
+                      className={`text-[11px] leading-relaxed ${
+                        darkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
+                      I'm your AI-Powered Portfolio Assistant. I can help you explore projects,
+                      discuss technical skills, and answer questions about experience.
+                    </p>
+                  </div>
 
-              {isTyping && <TypingIndicator darkMode={darkMode} />}
-              <div ref={messagesEndRef} />
+                  {/* Suggestion chips */}
+                  <div className="space-y-2.5 w-full mb-5">
+                    <p
+                      className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      💡 Try asking about:
+                    </p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {INTRO_SUGGESTIONS.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          disabled={clickedSuggestions.has(suggestion)}
+                          className={`px-3 py-2 rounded-full text-[11px] font-medium transition-all ${
+                            clickedSuggestions.has(suggestion)
+                              ? darkMode
+                                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              : darkMode
+                              ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
+                              : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
+                          }`}
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quick action cards */}
+                  <div className="space-y-2.5 w-full">
+                    <p
+                      className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      ⚡ Quick actions:
+                    </p>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {QUICK_ACTIONS.map((action, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleQuickAction(action.query)}
+                          className={`group p-3 rounded-lg text-left transition-all transform hover:scale-105 w-full ${
+                            darkMode
+                              ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600"
+                              : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-sm hover:shadow-md"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className={`text-xl transform transition-transform group-hover:scale-110 ${
+                              darkMode ? "drop-shadow-lg" : ""
+                            }`}>
+                              {action.icon}
+                            </div>
+                            <span
+                              className={`font-semibold text-[11px] ${
+                                darkMode ? "text-gray-200" : "text-gray-800"
+                              }`}
+                            >
+                              {action.label}
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {messages.map((message, index) => (
+                    <MessageBubble
+                      key={message.id || index}
+                      message={message}
+                      messageIndex={index}
+                      darkMode={darkMode}
+                      clickedSuggestions={clickedSuggestions}
+                      isSpeaking={isSpeaking}
+                      speakingMessageIndex={speakingMessageIndex}
+                      onReadAloud={readAloud}
+                      onCopy={copyToClipboard}
+                      onReaction={handleReaction}
+                      onSuggestionClick={handleSuggestionClick}
+                      onActionClick={handleQuickAction}
+                    />
+                  ))}
+
+                  {isTyping && <TypingIndicator darkMode={darkMode} />}
+                  <div ref={messagesEndRef} />
+                </>
+              )}
             </div>
 
             {/* Input Container */}
@@ -500,7 +550,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <textarea
                   ref={inputRef}
                   placeholder={isListening ? "Listening..." : "Ask AIVA..."}
-                  className={`flex-1 min-w-0 ${theme.inputBg} border ${
+                  className={`flex-1 min-w-0 ${theme.inputBg} ${darkMode ? 'dark-scrollbar' : ''} border ${
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
                       : "border-gray-200 placeholder-gray-400"

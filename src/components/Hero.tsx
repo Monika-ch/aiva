@@ -42,7 +42,11 @@
 import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  darkMode?: boolean;
+}
+
+const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const moveX = useTransform(x, [0, window.innerWidth], [-20, 20]);
@@ -73,7 +77,7 @@ const Hero: React.FC = () => {
   ];
 
   return (
-    <section className='relative p-8 overflow-hidden'>
+    <section className='relative overflow-hidden p-5'>
       {/* Floating AI blobs */}
       <motion.div
         style={{ x: moveX, y: moveY }}
@@ -87,7 +91,9 @@ const Hero: React.FC = () => {
       {/* Content */}
       <div className='relative z-10'>
         <motion.h1
-          className='text-3xl font-extrabold text-gray-900 mb-3'
+          className={`text-2xl font-extrabold mb-3 ${
+            darkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -96,7 +102,9 @@ const Hero: React.FC = () => {
         </motion.h1>
 
         <motion.p
-          className='text-gray-700 mb-6 max-w-2xl'
+          className={`text-sm mb-5 leading-relaxed ${
+            darkMode ? 'text-gray-300' : 'text-gray-700'
+          }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
@@ -106,24 +114,32 @@ const Hero: React.FC = () => {
           clients.
         </motion.p>
 
-        <div className='space-y-3'>
+        <div className='space-y-2.5'>
           {features.map((item, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 + index * 0.2, duration: 0.6 }}
-              className='border border-gray-200 p-4 rounded-xl shadow-sm bg-white/70 backdrop-blur-sm hover:shadow-md transition-all'
+              className={`border p-3 rounded-lg shadow-sm backdrop-blur-sm hover:shadow-md transition-all ${
+                darkMode 
+                  ? 'border-gray-700 bg-gray-800/70' 
+                  : 'border-gray-200 bg-white/70'
+              }`}
             >
-              <h3 className='font-semibold text-gray-900'>{item.title}</h3>
-              <p className='text-gray-600 text-sm'>{item.desc}</p>
+              <h3 className={`text-sm font-semibold mb-1 ${
+                darkMode ? 'text-gray-100' : 'text-gray-900'
+              }`}>{item.title}</h3>
+              <p className={`text-xs leading-relaxed ${
+                darkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>{item.desc}</p>
             </motion.div>
           ))}
         </div>
 
         {/* Tech Stack Badges */}
         <motion.div
-          className='flex flex-wrap gap-3 mt-8'
+          className='flex flex-wrap gap-2.5 mt-5'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
@@ -132,7 +148,11 @@ const Hero: React.FC = () => {
             (tech, idx) => (
               <motion.span
                 key={idx}
-                className='px-3 py-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full shadow-sm hover:bg-gray-200 transition-all'
+                className={`px-2.5 py-1 text-xs font-medium rounded-full shadow-sm transition-all ${
+                  darkMode
+                    ? 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                }`}
                 whileHover={{ scale: 1.05 }}
               >
                 {tech}

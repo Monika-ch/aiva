@@ -16,10 +16,10 @@ export const useDictation = () => {
 
   const clearDictationTranscript = useCallback(
     (setInput: (s: string) => void) => {
-      // Clear only the current dictation transcript, not the base input
+      // Clear EVERYTHING - both transcript and base input
       dictationTranscriptRef.current = "";
-      const base = dictationBaseInputRef.current || "";
-      setInput(base);
+      dictationBaseInputRef.current = "";
+      setInput("");
     },
     []
   );
@@ -65,11 +65,12 @@ export const useDictation = () => {
 
   const deleteLastWordsFromDictation = useCallback(
     (wordCount: number, setInput: (s: string) => void) => {
-      const current = dictationTranscriptRef.current || "";
-      if (!current) return;
+      // Work on the COMBINED content (base + transcript)
+      const combined = buildDictationCombinedContent();
+      if (!combined) return;
 
       // Split by whitespace, preserving newlines as separate "words"
-      const parts = current.split(/(\s+)/);
+      const parts = combined.split(/(\s+)/);
 
       // Filter out empty strings and count actual words (non-whitespace)
       const words: string[] = [];
@@ -96,9 +97,11 @@ export const useDictation = () => {
         }
       }
 
-      dictationTranscriptRef.current = result.trimEnd();
-      const combined = buildDictationCombinedContent();
-      setInput(combined);
+      // Update both base and transcript
+      const finalResult = result.trimEnd();
+      dictationBaseInputRef.current = finalResult;
+      dictationTranscriptRef.current = "";
+      setInput(finalResult);
     },
     [buildDictationCombinedContent]
   );

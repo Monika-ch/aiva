@@ -1,10 +1,20 @@
 import React from "react";
 
-const ChatContainer: React.FC<{ children: React.ReactNode }> = ({
+interface ChatContainerProps {
+  children: React.ReactNode;
+  darkMode?: boolean;
+}
+
+const ChatContainer: React.FC<ChatContainerProps> = ({
   children,
+  darkMode = false,
 }) => {
   return (
-    <div className="flex flex-col w-full min-h-[70vh] bg-white shadow-md rounded-xl overflow-hidden border border-gray-100">
+    <div className={`flex flex-col w-full h-[calc(100vh-8rem)] max-h-[800px] shadow-xl rounded-xl overflow-hidden border ${
+      darkMode 
+        ? 'bg-gray-800 border-gray-700' 
+        : 'bg-white border-gray-100'
+    }`}>
       {children}
     </div>
   );
