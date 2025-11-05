@@ -80,27 +80,28 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   useEffect(() => {
     const textarea = inputRef.current;
     if (!textarea) return;
-    
+
     // Reset height to auto to get the correct scrollHeight
     textarea.style.height = "auto";
-    
+
     // Calculate new height based on content (max 8 rows)
     const lineHeight = 24; // leading-6 = 1.5rem = 24px
     const maxHeight = lineHeight * 8 + 16; // 8 rows + padding
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
-    
+
     textarea.style.height = `${newHeight}px`;
-    
+
     // Show scrollbar only when content overflows
     if (textarea.scrollHeight > maxHeight) {
       textarea.classList.add("has-overflow");
     } else {
       textarea.classList.remove("has-overflow");
     }
-    
+
     // Scroll to bottom to keep cursor visible
     textarea.scrollTop = textarea.scrollHeight;
-  }, [input]);  const handleSend = () => {
+  }, [input]);
+  const handleSend = () => {
     const trimmedInput = input.trim();
     if (trimmedInput) {
       onSend(trimmedInput);
