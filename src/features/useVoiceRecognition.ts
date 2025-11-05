@@ -176,11 +176,11 @@ export const useVoiceRecognition = ({
 
         // Handle "dictate" mode
         if (mode === "dictate") {
-          console.log('[Voice Command Debug] Transcript:', cleanedTranscript);
-          
+          console.log("[Voice Command Debug] Transcript:", cleanedTranscript);
+
           // Handle "enter" command
           if (isEnterCommand(cleanedTranscript)) {
-            console.log('[Voice Command] ENTER detected');
+            console.log("[Voice Command] ENTER detected");
             appendDictationChunk("\n");
             const combined = buildDictationCombinedContent();
             setInput(combined);
@@ -189,7 +189,7 @@ export const useVoiceRecognition = ({
 
           // Handle "clear" command
           if (isClearCommand(cleanedTranscript)) {
-            console.log('[Voice Command] CLEAR detected');
+            console.log("[Voice Command] CLEAR detected");
             clearDictationTranscript(setInput);
             return;
           }
@@ -197,7 +197,7 @@ export const useVoiceRecognition = ({
           // Handle "delete" command
           if (isDeleteCommand(cleanedTranscript)) {
             const deleteCount = countDeleteCommands(cleanedTranscript);
-            console.log('[Voice Command] DELETE detected, count:', deleteCount);
+            console.log("[Voice Command] DELETE detected, count:", deleteCount);
             deleteLastWordsFromDictation(deleteCount, setInput);
             return;
           }
@@ -224,12 +224,12 @@ export const useVoiceRecognition = ({
               } catch (error) {
                 // ignore stop errors
               }
-              
+
               onSendMessage(finalContent, {
                 triggeredByVoice: true,
                 voiceMode: "dictate",
               });
-              
+
               // Reset state after sending
               resetListeningState();
             }

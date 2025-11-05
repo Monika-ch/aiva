@@ -92,7 +92,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
       <div className='relative z-10'>
         <motion.h1
           className={`text-2xl font-extrabold mb-3 ${
-            darkMode ? 'text-gray-100' : 'text-gray-900'
+            darkMode ? "text-gray-100" : "text-gray-900"
           }`}
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
 
         <motion.p
           className={`text-sm mb-5 leading-relaxed ${
-            darkMode ? 'text-gray-300' : 'text-gray-700'
+            darkMode ? "text-gray-300" : "text-gray-700"
           }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -122,17 +122,25 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 + index * 0.2, duration: 0.6 }}
               className={`border p-3 rounded-lg shadow-sm backdrop-blur-sm hover:shadow-md transition-all ${
-                darkMode 
-                  ? 'border-gray-700 bg-gray-800/70' 
-                  : 'border-gray-200 bg-white/70'
+                darkMode
+                  ? "border-gray-700 bg-gray-800/70"
+                  : "border-gray-200 bg-white/70"
               }`}
             >
-              <h3 className={`text-sm font-semibold mb-1 ${
-                darkMode ? 'text-gray-100' : 'text-gray-900'
-              }`}>{item.title}</h3>
-              <p className={`text-xs leading-relaxed ${
-                darkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>{item.desc}</p>
+              <h3
+                className={`text-sm font-semibold mb-1 ${
+                  darkMode ? "text-gray-100" : "text-gray-900"
+                }`}
+              >
+                {item.title}
+              </h3>
+              <p
+                className={`text-xs leading-relaxed ${
+                  darkMode ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                {item.desc}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -150,8 +158,8 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
                 key={idx}
                 className={`px-2.5 py-1 text-xs font-medium rounded-full shadow-sm transition-all ${
                   darkMode
-                    ? 'bg-gray-700 text-gray-200 hover:bg-gray-600'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                    ? "bg-gray-700 text-gray-200 hover:bg-gray-600"
+                    : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                 }`}
                 whileHover={{ scale: 1.05 }}
               >

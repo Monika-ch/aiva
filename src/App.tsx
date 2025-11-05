@@ -91,7 +91,11 @@ import Hero from "./components/Hero";
 import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
 import { useDarkMode } from "./features/useDarkMode";
-import { MessageBubble, useTextToSpeech, type Message as FeatureMessage } from "./features";
+import {
+  MessageBubble,
+  useTextToSpeech,
+  type Message as FeatureMessage,
+} from "./features";
 import { INTRO_SUGGESTIONS, QUICK_ACTIONS } from "./constants/chatConstants";
 
 interface Message {
@@ -127,7 +131,9 @@ function App() {
   const [mobileMessages, setMobileMessages] = useState<Message[]>([]); // Mobile widget messages
   const { darkMode, toggleDarkMode } = useDarkMode();
   const { isSpeaking, speakingMessageIndex, readAloud } = useTextToSpeech();
-  const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(new Set());
+  const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
+    new Set()
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleSend = (msg: string) => {
@@ -263,11 +269,13 @@ function App() {
   }, [messages]);
 
   return (
-    <div className={`min-h-screen w-full py-8 relative ${
-      darkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-        : 'bg-gray-50'
-    }`}>
+    <div
+      className={`min-h-screen w-full py-8 relative ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+          : "bg-gray-50"
+      }`}
+    >
       <div className='max-w-7xl mx-auto px-6 relative'>
         {/* Dark Mode Toggle - Top Right, Outside Chat Area */}
         <div className='fixed top-6 right-6 z-50'>
@@ -281,202 +289,221 @@ function App() {
               transition: "all 0.2s ease",
               border: darkMode ? "1px solid #4b5563" : "1px solid #e5e7eb",
               outline: "none",
-              boxShadow: darkMode 
-                ? "0 4px 6px rgba(0, 0, 0, 0.3)" 
+              boxShadow: darkMode
+                ? "0 4px 6px rgba(0, 0, 0, 0.3)"
                 : "0 2px 8px rgba(0, 0, 0, 0.1)",
             }}
             className='hover:opacity-80'
             aria-label='Toggle dark mode'
             title={darkMode ? "Light mode" : "Dark mode"}
           >
-          {darkMode ? (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              style={{ width: "24px", height: "24px" }}
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              style={{ width: "24px", height: "24px" }}
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
-              />
-            </svg>
-          )}
+            {darkMode ? (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                style={{ width: "24px", height: "24px" }}
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                style={{ width: "24px", height: "24px" }}
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
+                />
+              </svg>
+            )}
           </button>
         </div>
 
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 mt-10'>
           {/* Left column - Hero Section */}
-        <div className={`lg:col-span-4 rounded-xl shadow-lg p-5 ${
-          darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'
-        }`}>
-          <div className='flex items-center gap-3 mb-4'>
-            <img src={sparkIcon} alt='AIVA' className='w-14 h-14' />
-            <div>
-              <h2 className={`text-lg font-bold ${
-                darkMode ? 'text-gray-100' : 'text-gray-900'
-              }`}>AIVA</h2>
-              <p className={`text-xs ${
-                darkMode ? 'text-gray-400' : 'text-gray-500'
-              }`}>
-                AI-Powered Portfolio Assistant
-              </p>
+          <div
+            className={`lg:col-span-4 rounded-xl shadow-lg p-5 ${
+              darkMode ? "bg-gray-800 border border-gray-700" : "bg-white"
+            }`}
+          >
+            <div className='flex items-center gap-3 mb-4'>
+              <img src={sparkIcon} alt='AIVA' className='w-14 h-14' />
+              <div>
+                <h2
+                  className={`text-lg font-bold ${
+                    darkMode ? "text-gray-100" : "text-gray-900"
+                  }`}
+                >
+                  AIVA
+                </h2>
+                <p
+                  className={`text-xs ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  AI-Powered Portfolio Assistant
+                </p>
+              </div>
             </div>
+            <Hero darkMode={darkMode} />
           </div>
-          <Hero darkMode={darkMode} />
-        </div>
 
-        {/* Right column - Chat Section (hidden on small screens — mobile uses only ChatWidget) */}
-        <div className='hidden lg:col-span-8 lg:block'>
-          <ChatContainer darkMode={darkMode}>
-            <DesktopChatHeader onClearMessages={clearMessages} darkMode={darkMode} />
-            <div className={`flex-1 overflow-y-auto p-3 text-sm space-y-4 ${
-              darkMode 
-                ? 'bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark' 
-                : 'bg-gradient-to-b from-gray-50 to-white chat-messages-light'
-            }`}>
-              {messages.length === 0 ? (
-                // Empty state with welcome message, suggestions, and actions
-                <div className="flex flex-col items-center justify-center h-full space-y-8 py-8">
-                  {/* Welcome greeting */}
-                  <div className="text-center space-y-3 max-w-xl px-4">
-                    <h2
-                      className={`text-2xl font-semibold ${
-                        darkMode ? "text-gray-100" : "text-gray-800"
-                      }`}
-                    >
-                      Ask AIVA...
-                    </h2>
-                    <p
-                      className={`text-sm leading-relaxed ${
-                        darkMode ? "text-gray-400" : "text-gray-600"
-                      }`}
-                    >
-                      I'm your AI-Powered Portfolio Assistant. I can help you explore projects,
-                      discuss technical skills, and answer questions about experience.
-                    </p>
-                  </div>
-
-                  {/* Suggestion chips */}
-                  <div className="space-y-3 w-full max-w-xl px-4">
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-wider ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      💡 Try asking about:
-                    </p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {INTRO_SUGGESTIONS.map((suggestion, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          disabled={clickedSuggestions.has(suggestion)}
-                          className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                            clickedSuggestions.has(suggestion)
-                              ? darkMode
-                                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : darkMode
-                              ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                              : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
-                          }`}
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
+          {/* Right column - Chat Section (hidden on small screens — mobile uses only ChatWidget) */}
+          <div className='hidden lg:col-span-8 lg:block'>
+            <ChatContainer darkMode={darkMode}>
+              <DesktopChatHeader
+                onClearMessages={clearMessages}
+                darkMode={darkMode}
+              />
+              <div
+                className={`flex-1 overflow-y-auto p-3 text-sm space-y-4 ${
+                  darkMode
+                    ? "bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark"
+                    : "bg-gradient-to-b from-gray-50 to-white chat-messages-light"
+                }`}
+              >
+                {messages.length === 0 ? (
+                  // Empty state with welcome message, suggestions, and actions
+                  <div className='flex flex-col items-center justify-center h-full space-y-8 py-8'>
+                    {/* Welcome greeting */}
+                    <div className='text-center space-y-3 max-w-xl px-4'>
+                      <h2
+                        className={`text-2xl font-semibold ${
+                          darkMode ? "text-gray-100" : "text-gray-800"
+                        }`}
+                      >
+                        Ask AIVA...
+                      </h2>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          darkMode ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        I'm your AI-Powered Portfolio Assistant. I can help you
+                        explore projects, discuss technical skills, and answer
+                        questions about experience.
+                      </p>
                     </div>
-                  </div>
 
-                  {/* Quick action cards */}
-                  <div className="space-y-3 w-full max-w-xl px-4">
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-wider ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      ⚡ Quick actions:
-                    </p>
-                    <div className="grid grid-cols-2 gap-3">
-                      {QUICK_ACTIONS.map((action, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleQuickAction(action.query)}
-                          className={`group p-4 rounded-xl text-left transition-all transform hover:scale-105 ${
-                            darkMode
-                              ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600"
-                              : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-md hover:shadow-lg"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`text-3xl transform transition-transform group-hover:scale-110 ${
-                              darkMode ? "drop-shadow-lg" : ""
-                            }`}>
-                              {action.icon}
+                    {/* Suggestion chips */}
+                    <div className='space-y-3 w-full max-w-xl px-4'>
+                      <p
+                        className={`text-xs font-semibold uppercase tracking-wider ${
+                          darkMode ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        💡 Try asking about:
+                      </p>
+                      <div className='flex flex-wrap gap-2 justify-center'>
+                        {INTRO_SUGGESTIONS.map((suggestion, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            disabled={clickedSuggestions.has(suggestion)}
+                            className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                              clickedSuggestions.has(suggestion)
+                                ? darkMode
+                                  ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : darkMode
+                                ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
+                                : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
+                            }`}
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Quick action cards */}
+                    <div className='space-y-3 w-full max-w-xl px-4'>
+                      <p
+                        className={`text-xs font-semibold uppercase tracking-wider ${
+                          darkMode ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        ⚡ Quick actions:
+                      </p>
+                      <div className='grid grid-cols-2 gap-3'>
+                        {QUICK_ACTIONS.map((action, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleQuickAction(action.query)}
+                            className={`group p-4 rounded-xl text-left transition-all transform hover:scale-105 ${
+                              darkMode
+                                ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600"
+                                : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-md hover:shadow-lg"
+                            }`}
+                          >
+                            <div className='flex items-center gap-3'>
+                              <div
+                                className={`text-3xl transform transition-transform group-hover:scale-110 ${
+                                  darkMode ? "drop-shadow-lg" : ""
+                                }`}
+                              >
+                                {action.icon}
+                              </div>
+                              <span
+                                className={`font-semibold text-sm ${
+                                  darkMode ? "text-gray-200" : "text-gray-800"
+                                }`}
+                              >
+                                {action.label}
+                              </span>
                             </div>
-                            <span
-                              className={`font-semibold text-sm ${
-                                darkMode ? "text-gray-200" : "text-gray-800"
-                              }`}
-                            >
-                              {action.label}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <>
-                  {messages.map((message, index) => (
-                    <MessageBubble
-                      key={message.id || index}
-                      message={{
-                        sender: message.role === "user" ? "user" : "assistant",
-                        role: message.role,
-                        content: message.content,
-                        timestamp: message.timestamp,
-                        reaction: message.reaction,
-                        id: message.id,
-                      } as FeatureMessage}
-                      messageIndex={index}
-                      darkMode={darkMode}
-                      clickedSuggestions={clickedSuggestions}
-                      isSpeaking={isSpeaking}
-                      speakingMessageIndex={speakingMessageIndex}
-                      onReadAloud={readAloud}
-                      onCopy={copyToClipboard}
-                      onReaction={handleReaction}
-                      onSuggestionClick={handleSuggestionClick}
-                      onActionClick={handleQuickAction}
-                    />
-                  ))}
-                  <div ref={messagesEndRef} />
-                </>
-              )}
-            </div>
-            <DesktopChatInput onSend={handleSend} darkMode={darkMode} />
-          </ChatContainer>
-        </div>
+                ) : (
+                  <>
+                    {messages.map((message, index) => (
+                      <MessageBubble
+                        key={message.id || index}
+                        message={
+                          {
+                            sender:
+                              message.role === "user" ? "user" : "assistant",
+                            role: message.role,
+                            content: message.content,
+                            timestamp: message.timestamp,
+                            reaction: message.reaction,
+                            id: message.id,
+                          } as FeatureMessage
+                        }
+                        messageIndex={index}
+                        darkMode={darkMode}
+                        clickedSuggestions={clickedSuggestions}
+                        isSpeaking={isSpeaking}
+                        speakingMessageIndex={speakingMessageIndex}
+                        onReadAloud={readAloud}
+                        onCopy={copyToClipboard}
+                        onReaction={handleReaction}
+                        onSuggestionClick={handleSuggestionClick}
+                        onActionClick={handleQuickAction}
+                      />
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </>
+                )}
+              </div>
+              <DesktopChatInput onSend={handleSend} darkMode={darkMode} />
+            </ChatContainer>
+          </div>
         </div>
       </div>
 

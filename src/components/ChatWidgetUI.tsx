@@ -417,9 +417,9 @@ const ChatWidgetUI: React.FC<Props> = ({
             >
               {messages.length === 0 && !isTyping ? (
                 // Empty state with welcome message, suggestions, and actions
-                <div className="flex flex-col h-full py-4 px-4">
+                <div className='flex flex-col h-full py-4 px-4'>
                   {/* Welcome greeting */}
-                  <div className="text-center space-y-1.5 mb-5">
+                  <div className='text-center space-y-1.5 mb-5'>
                     <h2
                       className={`text-base font-semibold ${
                         darkMode ? "text-gray-100" : "text-gray-800"
@@ -432,13 +432,14 @@ const ChatWidgetUI: React.FC<Props> = ({
                         darkMode ? "text-gray-400" : "text-gray-600"
                       }`}
                     >
-                      I'm your AI-Powered Portfolio Assistant. I can help you explore projects,
-                      discuss technical skills, and answer questions about experience.
+                      I'm your AI-Powered Portfolio Assistant. I can help you
+                      explore projects, discuss technical skills, and answer
+                      questions about experience.
                     </p>
                   </div>
 
                   {/* Suggestion chips */}
-                  <div className="space-y-2.5 w-full mb-5">
+                  <div className='space-y-2.5 w-full mb-5'>
                     <p
                       className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
                         darkMode ? "text-gray-400" : "text-gray-500"
@@ -446,7 +447,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     >
                       💡 Try asking about:
                     </p>
-                    <div className="flex flex-wrap gap-2 justify-center">
+                    <div className='flex flex-wrap gap-2 justify-center'>
                       {INTRO_SUGGESTIONS.map((suggestion, index) => (
                         <button
                           key={index}
@@ -469,7 +470,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                   </div>
 
                   {/* Quick action cards */}
-                  <div className="space-y-2.5 w-full">
+                  <div className='space-y-2.5 w-full'>
                     <p
                       className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
                         darkMode ? "text-gray-400" : "text-gray-500"
@@ -477,7 +478,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     >
                       ⚡ Quick actions:
                     </p>
-                    <div className="grid grid-cols-2 gap-2.5">
+                    <div className='grid grid-cols-2 gap-2.5'>
                       {QUICK_ACTIONS.map((action, index) => (
                         <button
                           key={index}
@@ -488,10 +489,12 @@ const ChatWidgetUI: React.FC<Props> = ({
                               : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-sm hover:shadow-md"
                           }`}
                         >
-                          <div className="flex items-center gap-2.5">
-                            <div className={`text-xl transform transition-transform group-hover:scale-110 ${
-                              darkMode ? "drop-shadow-lg" : ""
-                            }`}>
+                          <div className='flex items-center gap-2.5'>
+                            <div
+                              className={`text-xl transform transition-transform group-hover:scale-110 ${
+                                darkMode ? "drop-shadow-lg" : ""
+                              }`}
+                            >
                               {action.icon}
                             </div>
                             <span
@@ -550,7 +553,9 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <textarea
                   ref={inputRef}
                   placeholder={isListening ? "Listening..." : "Ask AIVA..."}
-                  className={`flex-1 min-w-0 ${theme.inputBg} ${darkMode ? 'dark-scrollbar' : ''} border ${
+                  className={`flex-1 min-w-0 ${theme.inputBg} ${
+                    darkMode ? "dark-scrollbar" : ""
+                  } border ${
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
                       : "border-gray-200 placeholder-gray-400"

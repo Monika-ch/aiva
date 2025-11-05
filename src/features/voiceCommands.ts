@@ -25,7 +25,10 @@ export const SEND_COMMAND_REGEX = new RegExp(
  * Normalizes command text by removing punctuation and converting to lowercase
  */
 export const normalizeCommandText = (text: string): string =>
-  text.replace(/[.!?,]/g, "").trim().toLowerCase();
+  text
+    .replace(/[.!?,]/g, "")
+    .trim()
+    .toLowerCase();
 
 /**
  * Checks if the text is an "enter" command (including variations)
@@ -33,7 +36,9 @@ export const normalizeCommandText = (text: string): string =>
 export const isEnterCommand = (text: string): boolean => {
   const normalized = normalizeCommandText(text);
   const enterVariations = ["enter", "inter", "entr", "enter."];
-  return enterVariations.some(variant => normalized === variant || normalized.endsWith(variant));
+  return enterVariations.some(
+    (variant) => normalized === variant || normalized.endsWith(variant)
+  );
 };
 
 /**
@@ -42,22 +47,23 @@ export const isEnterCommand = (text: string): boolean => {
 export const isClearCommand = (text: string): boolean => {
   const normalized = normalizeCommandText(text);
   const clearVariations = [
-    "clear", 
-    "clear all", 
-    "clearall", 
-    "clair", 
-    "clare", 
+    "clear",
+    "clear all",
+    "clearall",
+    "clair",
+    "clare",
     "cleer",
     "clear everything",
-    "cleareverything"
+    "cleareverything",
   ];
   // Check if the entire text is just a clear command or starts/ends with it
-  return clearVariations.some(variant => 
-    normalized === variant || 
-    normalized === `${variant}` ||
-    normalized.startsWith(`${variant} `) ||
-    normalized.endsWith(` ${variant}`) ||
-    normalized === variant.replace(/\s/g, '')
+  return clearVariations.some(
+    (variant) =>
+      normalized === variant ||
+      normalized === `${variant}` ||
+      normalized.startsWith(`${variant} `) ||
+      normalized.endsWith(` ${variant}`) ||
+      normalized === variant.replace(/\s/g, "")
   );
 };
 
@@ -67,20 +73,21 @@ export const isClearCommand = (text: string): boolean => {
 export const isDeleteCommand = (text: string): boolean => {
   const normalized = normalizeCommandText(text);
   const deleteVariations = [
-    "delete", 
-    "delet", 
-    "deleet", 
-    "dilate", 
+    "delete",
+    "delet",
+    "deleet",
+    "dilate",
     "delete word",
-    "deleteword"
+    "deleteword",
   ];
   // Check if text contains any delete variation
-  return deleteVariations.some(variant => 
-    normalized === variant ||
-    normalized.includes(` ${variant} `) ||
-    normalized.startsWith(`${variant} `) ||
-    normalized.endsWith(` ${variant}`) ||
-    normalized === variant
+  return deleteVariations.some(
+    (variant) =>
+      normalized === variant ||
+      normalized.includes(` ${variant} `) ||
+      normalized.startsWith(`${variant} `) ||
+      normalized.endsWith(` ${variant}`) ||
+      normalized === variant
   );
 };
 

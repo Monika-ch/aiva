@@ -75,13 +75,11 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
   return (
     <div
       className={`p-3 border-b flex items-center justify-between ${
-        darkMode
-          ? "bg-gray-800 border-gray-700"
-          : "bg-white border-gray-200"
+        darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       }`}
     >
-      <div className="flex items-center gap-2">
-        <img src={sparkIcon} alt="AIVA" className="w-8 h-8" />
+      <div className='flex items-center gap-2'>
+        <img src={sparkIcon} alt='AIVA' className='w-8 h-8' />
         <div>
           <span
             className={`text-sm font-semibold ${
@@ -100,28 +98,28 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
+      <div className='flex items-center gap-1.5'>
         {/* Language Button */}
-        <div className="relative">
+        <div className='relative'>
           <button
             onClick={() => setShowLanguageMenu(!showLanguageMenu)}
             style={buttonStyle}
-            className="hover:opacity-80"
-            aria-label="Language settings"
-            title="Language settings"
+            className='hover:opacity-80'
+            aria-label='Language settings'
+            title='Language settings'
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns='http://www.w3.org/2000/svg'
               style={{ width: "16px", height: "16px" }}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+              fill='none'
+              viewBox='0 0 24 24'
+              stroke='currentColor'
               strokeWidth={2}
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'
               />
             </svg>
           </button>
@@ -137,8 +135,8 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
             >
               <div className="p-3 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}">
                 <input
-                  type="text"
-                  placeholder="Search languages..."
+                  type='text'
+                  placeholder='Search languages...'
                   value={languageSearch}
                   onChange={(e) => setLanguageSearch(e.target.value)}
                   className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
@@ -149,7 +147,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                 />
               </div>
 
-              <div className="max-h-64 overflow-y-auto">
+              <div className='max-h-64 overflow-y-auto'>
                 {filteredOptions.map((option) => (
                   <button
                     key={option.code}
@@ -164,21 +162,21 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                         : "hover:bg-gray-50 text-gray-700"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className='flex items-center justify-between'>
                       <span>{option.label}</span>
                       {speechLanguage === option.code && (
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+                          xmlns='http://www.w3.org/2000/svg'
+                          className='w-4 h-4'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
                         >
                           <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
                             strokeWidth={2}
-                            d="M5 13l4 4L19 7"
+                            d='M5 13l4 4L19 7'
                           />
                         </svg>
                       )}
@@ -188,7 +186,11 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
               </div>
 
               {/* Custom Language Input */}
-              <div className={`p-3 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div
+                className={`p-3 border-t ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                }`}
+              >
                 <label
                   className={`block text-xs font-medium mb-2 ${
                     darkMode ? "text-gray-300" : "text-gray-700"
@@ -196,10 +198,10 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                 >
                   Custom Language Code:
                 </label>
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   <input
-                    type="text"
-                    placeholder="e.g., en-US"
+                    type='text'
+                    placeholder='e.g., en-US'
                     value={customLanguage}
                     onChange={(e) => setCustomLanguage(e.target.value)}
                     className={`flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
@@ -211,13 +213,13 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                   <button
                     onClick={handleCustomLanguageSubmit}
                     disabled={!customLanguage.trim()}
-                    className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className='px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
                   >
                     Set
                   </button>
                 </div>
                 {isCustomSpeechLanguage && (
-                  <p className="text-xs text-indigo-500 mt-2">
+                  <p className='text-xs text-indigo-500 mt-2'>
                     Using custom: {speechLanguage}
                   </p>
                 )}
@@ -230,22 +232,22 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
         <button
           onClick={handleClearChat}
           style={buttonStyle}
-          className="hover:opacity-80"
-          aria-label="Clear chat history"
-          title="Clear chat"
+          className='hover:opacity-80'
+          aria-label='Clear chat history'
+          title='Clear chat'
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns='http://www.w3.org/2000/svg'
             style={{ width: "16px", height: "16px" }}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'
             strokeWidth={2}
           >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
             />
           </svg>
         </button>

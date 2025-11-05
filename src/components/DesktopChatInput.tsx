@@ -4,10 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
-import {
-  VoiceSendButton,
-  DictateButton,
-} from "../features/VoiceControls";
+import { VoiceSendButton, DictateButton } from "../features/VoiceControls";
 import { useVoiceRecognition } from "../features/useVoiceRecognition";
 import { useDictation } from "../features/useDictation";
 import { useLanguageSettings } from "../features/useLanguageSettings";
@@ -83,17 +80,17 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   useEffect(() => {
     const textarea = inputRef.current;
     if (!textarea) return;
-    
+
     // Reset height to auto to get the correct scrollHeight
     textarea.style.height = "auto";
-    
+
     // Calculate new height based on content (max 8 rows)
     const lineHeight = 24; // leading-6 = 1.5rem = 24px
     const maxHeight = lineHeight * 8 + 16; // 8 rows + padding
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
-    
+
     textarea.style.height = `${newHeight}px`;
-    
+
     // Scroll to bottom to keep cursor visible
     textarea.scrollTop = textarea.scrollHeight;
   }, [input]);
@@ -125,10 +122,12 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   };
 
   return (
-    <div className={`p-3 border-t ${
-      darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
-    }`}>
-      <div className="flex items-end gap-1.5 mb-2">
+    <div
+      className={`p-3 border-t ${
+        darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
+      }`}
+    >
+      <div className='flex items-end gap-1.5 mb-2'>
         {/* Voice Send Button */}
         <VoiceSendButton
           onClick={toggleVoiceSend}
@@ -147,7 +146,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
         <textarea
           ref={inputRef}
           placeholder={getPlaceholderText()}
-          className={`flex-1 min-w-0 ${inputClass} ${darkMode ? 'dark-scrollbar' : ''} rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all resize-none`}
+          className={`flex-1 min-w-0 ${inputClass} ${
+            darkMode ? "dark-scrollbar" : ""
+          } rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all resize-none`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -156,7 +157,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
               handleSend();
             }
           }}
-          aria-label="Type your question to AIVA"
+          aria-label='Type your question to AIVA'
           readOnly={isListening && listeningMode === "send"}
           rows={1}
           spellCheck={false}
@@ -173,10 +174,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
         {/* Send Button */}
         <button
           onClick={handleSend}
-          aria-label="Send message"
+          aria-label='Send message'
           disabled={
-            !input.trim() ||
-            (isListening && listeningMode !== "dictate")
+            !input.trim() || (isListening && listeningMode !== "dictate")
           }
           style={{
             border: "none",
@@ -187,26 +187,26 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             color: "#ffffff",
             paddingInline: "clamp(12px, 1.8vw, 16px)",
           }}
-          className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all"
+          className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-4 h-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
+            xmlns='http://www.w3.org/2000/svg'
+            className='w-4 h-4'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
           >
             <path
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M22 2L11 13"
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M22 2L11 13'
             />
             <path
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M22 2l-7 20-4-9-9-4 20-7z"
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M22 2l-7 20-4-9-9-4 20-7z'
             />
           </svg>
         </button>
