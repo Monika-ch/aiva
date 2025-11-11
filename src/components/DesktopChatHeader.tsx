@@ -21,13 +21,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
   onClearMessages,
   darkMode = false,
 }) => {
-  const {
-    speechLanguage,
-    setSpeechLanguage,
-    customLanguage,
-    setCustomLanguage,
-    isCustomSpeechLanguage,
-  } = useLanguageSettings();
+  const { speechLanguage, setSpeechLanguage } = useLanguageSettings();
 
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [languageSearch, setLanguageSearch] = useState("");
@@ -45,19 +39,6 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
     setSpeechLanguage(code);
     setShowLanguageMenu(false);
     setLanguageSearch("");
-  };
-
-  const handleCustomLanguageSubmit = () => {
-    const trimmed = customLanguage.trim();
-    if (trimmed && /^[a-z]{2}(-[A-Z]{2})?$/.test(trimmed)) {
-      setSpeechLanguage(trimmed);
-      setShowLanguageMenu(false);
-      setLanguageSearch("");
-    } else {
-      alert(
-        "Please enter a valid language code (e.g., en-US, fr-FR, or just en, fr)"
-      );
-    }
   };
 
   const filteredOptions = filterLanguageOptions(languageSearch);
@@ -247,49 +228,6 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                     </div>
                   </button>
                 ))}
-              </div>
-
-              {/* Custom Language Input */}
-              <div
-                className='p-3 border-t'
-                style={{
-                  borderColor: darkMode ? "#374151" : "#e5e7eb",
-                }}
-              >
-                <label
-                  className='block text-xs font-medium mb-2'
-                  style={{
-                    color: darkMode ? "#d1d5db" : "#374151",
-                  }}
-                >
-                  Custom Language Code:
-                </label>
-                <div className='flex gap-2'>
-                  <input
-                    type='text'
-                    placeholder='e.g., en-US'
-                    value={customLanguage}
-                    onChange={(e) => setCustomLanguage(e.target.value)}
-                    className='flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400'
-                    style={{
-                      backgroundColor: darkMode ? "#374151" : "#ffffff",
-                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                      color: darkMode ? "#f3f4f6" : "#111827",
-                    }}
-                  />
-                  <button
-                    onClick={handleCustomLanguageSubmit}
-                    disabled={!customLanguage.trim()}
-                    className='px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-                  >
-                    Set
-                  </button>
-                </div>
-                {isCustomSpeechLanguage && (
-                  <p className='text-xs text-indigo-500 mt-2'>
-                    Using custom: {speechLanguage}
-                  </p>
-                )}
               </div>
             </div>
           )}
