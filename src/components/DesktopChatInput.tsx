@@ -122,6 +122,17 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
     // Scroll to bottom to keep cursor visible
     textarea.scrollTop = textarea.scrollHeight;
   }, [input]);
+
+  // Keep textarea focused during dictation to show blinking cursor
+  useEffect(() => {
+    if (isListening && listeningMode === "dictate" && inputRef.current) {
+      inputRef.current.focus();
+      // Move cursor to end of text
+      const length = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(length, length);
+    }
+  }, [isListening, listeningMode, input]);
+
   const handleSend = () => {
     const trimmedInput = input.trim();
     if (trimmedInput) {
@@ -183,9 +194,16 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             <span
               className={`inline-flex h-1.5 w-1.5 rounded-full ${statusTone}`}
             />
-            <span className='text-[11px] font-medium text-slate-500'>
+            <span className={`text-[11px] font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
               {statusLabel}
             </span>
+            {isListening && listeningMode === "dictate" && (
+              <span className='flex items-center gap-0.5 ml-1'>
+                <span className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse' style={{ animationDelay: '0ms' }} />
+                <span className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse' style={{ animationDelay: '150ms' }} />
+                <span className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse' style={{ animationDelay: '300ms' }} />
+              </span>
+            )}
           </div>
 
           <div className='relative'>
@@ -223,34 +241,34 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
               <textarea
                 ref={inputRef}
                 placeholder={getPlaceholderText()}
-                className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm ${
-                  darkMode
-                    ? "dark-textarea-scrollbar"
-                    : "light-textarea-scrollbar"
-                }`}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                aria-label='Type your question to AIVA'
-                readOnly={isListening && listeningMode === "send"}
-                rows={1}
-                spellCheck={false}
-                style={{
-                  caretColor: darkMode ? "#f9fafb" : "#4338ca",
-                  minHeight: "40px",
-                  maxHeight: "160px",
-                  overflowY: "auto",
-                  scrollbarWidth: "thin",
-                  scrollbarColor: darkMode
-                    ? "#475569 transparent"
-                    : "#cbd5e1 transparent",
-                }}
-              />
+                  className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm ${
+                    darkMode
+                      ? "dark-textarea-scrollbar"
+                      : "light-textarea-scrollbar"
+                  }`}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  aria-label='Type your question to AIVA'
+                  readOnly={isListening && listeningMode === "send"}
+                  rows={1}
+                  spellCheck={false}
+                  style={{
+                    caretColor: darkMode ? "#f9fafb" : "#4338ca",
+                    minHeight: "40px",
+                    maxHeight: "160px",
+                    overflowY: "auto",
+                    scrollbarWidth: "thin",
+                    scrollbarColor: darkMode
+                      ? "#475569 transparent"
+                      : "#cbd5e1 transparent",
+                  }}
+                />
 
               <div className='pointer-events-none absolute right-1.5 bottom-1.5 flex items-center gap-1.5'>
                 <button
