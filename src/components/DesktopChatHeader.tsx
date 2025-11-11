@@ -127,40 +127,104 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
           {/* Language Dropdown Menu */}
           {showLanguageMenu && (
             <div
-              className={`absolute right-0 mt-2 w-72 rounded-lg shadow-2xl border z-50 ${
-                darkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-200"
-              }`}
+              className='absolute right-0 mt-2 w-72 rounded-lg shadow-2xl border z-50'
+              style={{
+                backgroundColor: darkMode ? "#1f2937" : "#ffffff",
+                borderColor: darkMode ? "#374151" : "#e5e7eb",
+              }}
             >
-              <div className="p-3 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}">
+              <div
+                className='p-3 border-b'
+                style={{
+                  borderColor: darkMode ? "#374151" : "#e5e7eb",
+                }}
+              >
                 <input
                   type='text'
                   placeholder='Search languages...'
                   value={languageSearch}
                   onChange={(e) => setLanguageSearch(e.target.value)}
-                  className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                    darkMode
-                      ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
-                      : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                  }`}
+                  className='w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                  style={{
+                    backgroundColor: darkMode ? "#374151" : "#ffffff",
+                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
+                    color: darkMode ? "#f3f4f6" : "#111827",
+                  }}
                 />
               </div>
 
-              <div className='max-h-64 overflow-y-auto'>
+              <div
+                className={`max-h-64 overflow-y-auto ${
+                  darkMode ? "dark-scrollbar" : "light-scrollbar"
+                }`}
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: darkMode
+                    ? "#4b5563 #1f2937"
+                    : "#d1d5db #f9fafb",
+                }}
+              >
+                <style>{`
+                  .dark-scrollbar::-webkit-scrollbar {
+                    width: 8px;
+                  }
+                  .dark-scrollbar::-webkit-scrollbar-track {
+                    background: #1f2937;
+                  }
+                  .dark-scrollbar::-webkit-scrollbar-thumb {
+                    background: #4b5563;
+                    border-radius: 4px;
+                  }
+                  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #6b7280;
+                  }
+                  .light-scrollbar::-webkit-scrollbar {
+                    width: 8px;
+                  }
+                  .light-scrollbar::-webkit-scrollbar-track {
+                    background: #f9fafb;
+                  }
+                  .light-scrollbar::-webkit-scrollbar-thumb {
+                    background: #d1d5db;
+                    border-radius: 4px;
+                  }
+                  .light-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #9ca3af;
+                  }
+                `}</style>
                 {filteredOptions.map((option) => (
                   <button
                     key={option.code}
                     onClick={() => handleLanguageSelect(option.code)}
-                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                      speechLanguage === option.code
-                        ? darkMode
-                          ? "bg-indigo-900 text-indigo-200"
-                          : "bg-indigo-50 text-indigo-700"
-                        : darkMode
-                        ? "hover:bg-gray-700 text-gray-200"
-                        : "hover:bg-gray-50 text-gray-700"
-                    }`}
+                    className='w-full text-left px-4 py-2.5 text-sm transition-colors'
+                    style={{
+                      backgroundColor:
+                        speechLanguage === option.code
+                          ? darkMode
+                            ? "#312e81"
+                            : "#eef2ff"
+                          : "transparent",
+                      color:
+                        speechLanguage === option.code
+                          ? darkMode
+                            ? "#c7d2fe"
+                            : "#4338ca"
+                          : darkMode
+                          ? "#e5e7eb"
+                          : "#374151",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (speechLanguage !== option.code) {
+                        e.currentTarget.style.backgroundColor = darkMode
+                          ? "#374151"
+                          : "#f9fafb";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (speechLanguage !== option.code) {
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }
+                    }}
                   >
                     <div className='flex items-center justify-between'>
                       <span>{option.label}</span>
@@ -187,14 +251,16 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
 
               {/* Custom Language Input */}
               <div
-                className={`p-3 border-t ${
-                  darkMode ? "border-gray-700" : "border-gray-200"
-                }`}
+                className='p-3 border-t'
+                style={{
+                  borderColor: darkMode ? "#374151" : "#e5e7eb",
+                }}
               >
                 <label
-                  className={`block text-xs font-medium mb-2 ${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  }`}
+                  className='block text-xs font-medium mb-2'
+                  style={{
+                    color: darkMode ? "#d1d5db" : "#374151",
+                  }}
                 >
                   Custom Language Code:
                 </label>
@@ -204,11 +270,12 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                     placeholder='e.g., en-US'
                     value={customLanguage}
                     onChange={(e) => setCustomLanguage(e.target.value)}
-                    className={`flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                      darkMode
-                        ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
-                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                    }`}
+                    className='flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                    style={{
+                      backgroundColor: darkMode ? "#374151" : "#ffffff",
+                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
+                      color: darkMode ? "#f3f4f6" : "#111827",
+                    }}
                   />
                   <button
                     onClick={handleCustomLanguageSubmit}

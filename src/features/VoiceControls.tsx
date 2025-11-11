@@ -8,42 +8,96 @@ import React from "react";
 interface VoiceButtonStyleProps {
   active: boolean;
   darkMode: boolean;
+  variant: "classic" | "glass";
 }
 
 const getVoiceButtonStyle = ({
   active,
   darkMode,
-}: VoiceButtonStyleProps): React.CSSProperties => ({
-  backgroundColor: active ? "#ef4444" : darkMode ? "#374151" : "#f3f4f6",
-  color: active ? "#ffffff" : darkMode ? "#d1d5db" : "#6b7280",
-  padding: "10px",
-  borderRadius: "8px",
-  position: "relative",
-  flexShrink: 0,
-  transition: "all 0.3s ease",
-  boxShadow: active
-    ? "0 10px 15px -3px rgba(239, 68, 68, 0.5), 0 4px 6px -2px rgba(239, 68, 68, 0.25)"
-    : "none",
-  border: "none",
-  outline: "none",
-});
+  variant,
+}: VoiceButtonStyleProps): React.CSSProperties => {
+  if (variant === "glass") {
+    const accentShadow = darkMode
+      ? "rgba(129, 140, 248, 0.45)"
+      : "rgba(99, 102, 241, 0.4)";
+    const baseBorder = darkMode
+      ? "rgba(148, 163, 184, 0.35)"
+      : "rgba(99, 102, 241, 0.28)";
+    return {
+      background: active
+        ? darkMode
+          ? "linear-gradient(135deg, rgba(79, 70, 229, 0.45), rgba(126, 34, 206, 0.55))"
+          : "linear-gradient(135deg, rgba(129, 140, 248, 0.7), rgba(99, 102, 241, 0.85))"
+        : darkMode
+        ? "rgba(30, 41, 59, 0.65)"
+        : "rgba(255, 255, 255, 0.78)",
+      color: darkMode ? "#e0e7ff" : "#312e81",
+      padding: "12px",
+      borderRadius: "9999px",
+      position: "relative",
+      flexShrink: 0,
+      transition: "all 0.3s ease",
+      boxShadow: active
+        ? `0 18px 30px -18px ${accentShadow}, 0 12px 14px -12px rgba(129, 140, 248, 0.35)`
+        : "0 8px 20px -16px rgba(15, 23, 42, 0.3)",
+      border: `1px solid ${baseBorder}`,
+      outline: "none",
+      backdropFilter: "blur(14px)",
+      WebkitBackdropFilter: "blur(14px)",
+    };
+  }
+
+  return {
+    backgroundColor: active ? "#ef4444" : darkMode ? "#374151" : "#f3f4f6",
+    color: active ? "#ffffff" : darkMode ? "#d1d5db" : "#6b7280",
+    padding: "10px",
+    borderRadius: "9999px",
+    position: "relative",
+    flexShrink: 0,
+    transition: "all 0.3s ease",
+    boxShadow: active
+      ? "0 10px 15px -3px rgba(239, 68, 68, 0.5), 0 4px 6px -2px rgba(239, 68, 68, 0.25)"
+      : "none",
+    border: "none",
+    outline: "none",
+  };
+};
 
 interface VoiceSendButtonProps {
   onClick: () => void;
   isActive: boolean;
   darkMode: boolean;
+  variant?: "classic" | "glass";
 }
 
 export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
   onClick,
   isActive,
   darkMode,
+  variant = "classic",
 }) => {
+  const accentPulse =
+    variant === "glass"
+      ? darkMode
+        ? "rgba(129, 140, 248, 0.55)"
+        : "rgba(129, 140, 248, 0.65)"
+      : "#f87171";
+  const accentGlow =
+    variant === "glass"
+      ? darkMode
+        ? "rgba(99, 102, 241, 0.35)"
+        : "rgba(99, 102, 241, 0.28)"
+      : "rgba(239, 68, 68, 0.3)";
+  const buttonClass =
+    variant === "glass"
+      ? "relative overflow-hidden transition-transform duration-200 hover:-translate-y-[2px] active:scale-95"
+      : "hover:opacity-90";
+
   return (
     <button
       onClick={onClick}
-      style={getVoiceButtonStyle({ active: isActive, darkMode })}
-      className='hover:opacity-90'
+      style={getVoiceButtonStyle({ active: isActive, darkMode, variant })}
+      className={buttonClass}
       aria-label={isActive ? "Stop voice input" : "Voice input and send"}
       title={isActive ? "Stop" : "Voice Send"}
     >
@@ -53,19 +107,19 @@ export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
             style={{
               position: "absolute",
               inset: 0,
-              borderRadius: "8px",
-              backgroundColor: "#f87171",
+              borderRadius: variant === "glass" ? "9999px" : "8px",
+              backgroundColor: accentPulse,
               animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
-              opacity: 0.4,
+              opacity: variant === "glass" ? 0.55 : 0.4,
             }}
           />
           <span
             style={{
               position: "absolute",
-              inset: "-2px",
-              borderRadius: "8px",
-              backgroundColor: "rgba(239, 68, 68, 0.3)",
-              filter: "blur(4px)",
+              inset: variant === "glass" ? "-4px" : "-2px",
+              borderRadius: variant === "glass" ? "9999px" : "8px",
+              backgroundColor: accentGlow,
+              filter: "blur(8px)",
             }}
           />
         </>
@@ -97,18 +151,37 @@ interface DictateButtonProps {
   onClick: () => void;
   isActive: boolean;
   darkMode: boolean;
+  variant?: "classic" | "glass";
 }
 
 export const DictateButton: React.FC<DictateButtonProps> = ({
   onClick,
   isActive,
   darkMode,
+  variant = "classic",
 }) => {
+  const accentPulse =
+    variant === "glass"
+      ? darkMode
+        ? "rgba(129, 140, 248, 0.55)"
+        : "rgba(129, 140, 248, 0.65)"
+      : "#f87171";
+  const accentGlow =
+    variant === "glass"
+      ? darkMode
+        ? "rgba(99, 102, 241, 0.35)"
+        : "rgba(99, 102, 241, 0.28)"
+      : "rgba(239, 68, 68, 0.3)";
+  const buttonClass =
+    variant === "glass"
+      ? "relative overflow-hidden transition-transform duration-200 hover:-translate-y-[2px] active:scale-95"
+      : "hover:opacity-90";
+
   return (
     <button
       onClick={onClick}
-      style={getVoiceButtonStyle({ active: isActive, darkMode })}
-      className='hover:opacity-90'
+      style={getVoiceButtonStyle({ active: isActive, darkMode, variant })}
+      className={buttonClass}
       aria-label={isActive ? "Stop dictation" : "Dictate message"}
       title={isActive ? "Stop dictation" : "Dictate"}
     >
@@ -118,19 +191,19 @@ export const DictateButton: React.FC<DictateButtonProps> = ({
             style={{
               position: "absolute",
               inset: 0,
-              borderRadius: "8px",
-              backgroundColor: "#f87171",
+              borderRadius: variant === "glass" ? "9999px" : "8px",
+              backgroundColor: accentPulse,
               animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
-              opacity: 0.4,
+              opacity: variant === "glass" ? 0.55 : 0.4,
             }}
           />
           <span
             style={{
               position: "absolute",
-              inset: "-2px",
-              borderRadius: "8px",
-              backgroundColor: "rgba(239, 68, 68, 0.3)",
-              filter: "blur(4px)",
+              inset: variant === "glass" ? "-4px" : "-2px",
+              borderRadius: variant === "glass" ? "9999px" : "8px",
+              backgroundColor: accentGlow,
+              filter: "blur(8px)",
             }}
           />
         </>

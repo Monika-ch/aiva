@@ -184,6 +184,20 @@ export const useVoiceRecognition = ({
             appendDictationChunk("\n");
             const combined = buildDictationCombinedContent();
             setInput(combined);
+            // Reset and restart recognition for fresh results
+            lastProcessedResultIndexRef.current = 0;
+            try {
+              recognitionRef.current?.stop();
+              setTimeout(() => {
+                if (listeningModeRef.current === "dictate") {
+                  recognitionRef.current.continuous = true;
+                  recognitionRef.current.interimResults = true;
+                  recognitionRef.current.start();
+                }
+              }, 100);
+            } catch (error) {
+              console.error("[Voice] Error restarting after enter:", error);
+            }
             return;
           }
 
@@ -191,6 +205,7 @@ export const useVoiceRecognition = ({
           if (isClearCommand(cleanedTranscript)) {
             console.log("[Voice Command] CLEAR detected");
             clearDictationTranscript(setInput);
+            lastProcessedResultIndexRef.current = 0;
             return;
           }
 
@@ -199,6 +214,7 @@ export const useVoiceRecognition = ({
             const deleteCount = countDeleteCommands(cleanedTranscript);
             console.log("[Voice Command] DELETE detected, count:", deleteCount);
             deleteLastWordsFromDictation(deleteCount, setInput);
+            lastProcessedResultIndexRef.current = 0;
             return;
           }
 

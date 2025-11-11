@@ -559,7 +559,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
                       : "border-gray-200 placeholder-gray-400"
-                  } rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
+                  } rounded-lg px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
                     theme.text
                   } resize-none`}
                   value={input}
@@ -603,7 +603,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     color: "#ffffff",
                     paddingInline: "clamp(12px, 1.8vw, 16px)",
                   }}
-                  className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
+                  className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'

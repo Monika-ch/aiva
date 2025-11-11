@@ -136,7 +136,10 @@ function App() {
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = (msg: string) => {
+  const handleSend = (
+    msg: string,
+    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+  ) => {
     if (!msg.trim()) return;
     const userMessage: Message = {
       role: "user",
@@ -161,6 +164,14 @@ function App() {
         reaction: null,
       };
       setMessages((prev) => [...prev, aiMessage]);
+
+      // Read aloud the response if triggered by voice send mode
+      if (options?.triggeredByVoice && options?.voiceMode === "send") {
+        setTimeout(() => {
+          // Use the new message index (current length after adding AI message)
+          readAloud(getResponseForLanguage(preferredLanguage), messages.length + 1);
+        }, 100);
+      }
     }, 1000);
   };
 

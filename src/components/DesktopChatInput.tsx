@@ -9,8 +9,29 @@ import { useVoiceRecognition } from "../features/useVoiceRecognition";
 import { useDictation } from "../features/useDictation";
 import { useLanguageSettings } from "../features/useLanguageSettings";
 
+const QUICK_PROMPTS = [
+  {
+    label: "DeepThink",
+    value:
+      "Engage DeepThink mode and provide a structured, step-by-step response.",
+  },
+  {
+    label: "Search",
+    value:
+      "Search the portfolio for stand-out case studies that match this request.",
+  },
+  {
+    label: "Summarize",
+    value:
+      "Summarize Monika's background and latest projects in two sentences.",
+  },
+] as const;
+
 interface DesktopChatInputProps {
-  onSend: (message: string) => void;
+  onSend: (
+    message: string,
+    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+  ) => void;
   darkMode?: boolean;
   placeholder?: string;
 }
@@ -42,10 +63,10 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
     resetListeningState,
   } = useVoiceRecognition({
     effectiveSpeechLocale,
-    onSendMessage: (message) => {
+    onSendMessage: (message, options) => {
       const trimmedMessage = message.trim();
       if (trimmedMessage) {
-        onSend(trimmedMessage);
+        onSend(trimmedMessage, options);
         setInput("");
         clearDictationSession();
       }
@@ -113,10 +134,6 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
     }
   };
 
-  const inputClass = darkMode
-    ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500"
-    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400";
-
   const getPlaceholderText = () => {
     if (isListening && listeningMode === "send") {
       return "Listening... (auto-send after 5s pause)";
@@ -127,103 +144,218 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
     return placeholder;
   };
 
+  const inputSurfaceClass = darkMode
+    ? "border-slate-700/60 bg-slate-900/55 text-slate-100 placeholder:text-slate-500"
+    : "border-slate-200/60 bg-white/80 text-slate-900 placeholder:text-slate-400";
+
+  const statusLabel = isListening
+    ? listeningMode === "send"
+      ? "Listening to send"
+      : "Dictation in progress"
+    : "AIVA is ready";
+
+  const statusTone = isListening ? "bg-rose-400" : "bg-emerald-400";
+
+  const applyQuickPrompt = (value: string) => {
+    if (isListening) {
+      resetListeningState();
+      clearDictationSession();
+    }
+    setInput(value);
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+  };
+
   return (
-    <div
-      className={`p-3 border-t ${
-        darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
-      }`}
-    >
-      <div className='flex items-end gap-1.5 mb-2'>
-        {/* Voice Send Button */}
-        <VoiceSendButton
-          onClick={toggleVoiceSend}
-          isActive={isListening && listeningMode === "send"}
-          darkMode={darkMode}
-        />
-
-        {/* Dictate Button */}
-        <DictateButton
-          onClick={toggleDictation}
-          isActive={isListening && listeningMode === "dictate"}
-          darkMode={darkMode}
-        />
-
-        {/* Textarea Input */}
-        <textarea
-          ref={inputRef}
-          placeholder={getPlaceholderText()}
-          className={`flex-1 min-w-0 ${inputClass} ${
-            darkMode ? "dark-scrollbar" : ""
-          } overflow-auto rounded-xl px-4 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all resize-none`}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          aria-label='Type your question to AIVA'
-          readOnly={isListening && listeningMode === "send"}
-          rows={1}
-          spellCheck={false}
-          style={{
-            caretColor: darkMode ? "#f9fafb" : "#4338ca",
-            minHeight: "40px",
-            maxHeight: "208px", // 8 rows * 24px (line-height) + 16px (padding)
-            whiteSpace: "pre-wrap",
-            border: darkMode ? "1px solid #4b5563" : "1px solid #d1d5db",
-          }}
-        />
-
-        {/* Send Button */}
-        <button
-          onClick={handleSend}
-          aria-label='Send message'
-          disabled={
-            !input.trim() || (isListening && listeningMode !== "dictate")
-          }
-          style={{
-            border: "none",
-            outline: "none",
-            background: darkMode
-              ? "linear-gradient(135deg, #4c1d95, #6d28d9)"
-              : "#6366f1",
-            color: "#ffffff",
-            paddingInline: "clamp(12px, 1.8vw, 16px)",
-          }}
-          className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
-        >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='w-4 h-4'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-          >
-            <path
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M22 2L11 13'
-            />
-            <path
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M22 2l-7 20-4-9-9-4 20-7z'
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* Help Text */}
+    <div>
       <div
-        className={`text-xs ${
-          darkMode ? "text-gray-300" : "text-gray-400"
-        } text-center mt-2`}
+        className={`group relative overflow-hidden rounded-2xl border ${
+          darkMode
+            ? "border-slate-800/70 bg-slate-950/70"
+            : "border-slate-200 bg-white/80"
+        } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.3)] backdrop-blur-xl transition-colors`}
       >
-        Press Enter to send • Shift+Enter for new line
+        <div className='pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-400/8 blur-3xl' />
+        <div className='pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-400/8 blur-3xl' />
+        <div className='relative z-10 flex flex-col gap-3 p-4'>
+          <div className='flex items-center gap-2'>
+            <span
+              className={`inline-flex h-1.5 w-1.5 rounded-full ${statusTone}`}
+            />
+            <span className='text-[11px] font-medium text-slate-500'>
+              {statusLabel}
+            </span>
+          </div>
+
+          <div className='relative'>
+            <div
+              className={`group/input relative flex flex-col overflow-hidden rounded-xl border ${inputSurfaceClass} shadow-sm transition-all duration-200 focus-within:border-indigo-400 focus-within:shadow-md focus-within:shadow-indigo-500/20`}
+            >
+              <style>{`
+                .dark-textarea-scrollbar::-webkit-scrollbar {
+                  width: 8px;
+                }
+                .dark-textarea-scrollbar::-webkit-scrollbar-track {
+                  background: transparent;
+                }
+                .dark-textarea-scrollbar::-webkit-scrollbar-thumb {
+                  background: #475569;
+                  border-radius: 4px;
+                }
+                .dark-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
+                  background: #64748b;
+                }
+                .light-textarea-scrollbar::-webkit-scrollbar {
+                  width: 8px;
+                }
+                .light-textarea-scrollbar::-webkit-scrollbar-track {
+                  background: transparent;
+                }
+                .light-textarea-scrollbar::-webkit-scrollbar-thumb {
+                  background: #cbd5e1;
+                  border-radius: 4px;
+                }
+                .light-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
+                  background: #94a3b8;
+                }
+              `}</style>
+              <textarea
+                ref={inputRef}
+                placeholder={getPlaceholderText()}
+                className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm ${
+                  darkMode
+                    ? "dark-textarea-scrollbar"
+                    : "light-textarea-scrollbar"
+                }`}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                aria-label='Type your question to AIVA'
+                readOnly={isListening && listeningMode === "send"}
+                rows={1}
+                spellCheck={false}
+                style={{
+                  caretColor: darkMode ? "#f9fafb" : "#4338ca",
+                  minHeight: "40px",
+                  maxHeight: "160px",
+                  overflowY: "auto",
+                  scrollbarWidth: "thin",
+                  scrollbarColor: darkMode
+                    ? "#475569 transparent"
+                    : "#cbd5e1 transparent",
+                }}
+              />
+
+              <div className='pointer-events-none absolute right-1.5 bottom-1.5 flex items-center gap-1.5'>
+                <button
+                  type='button'
+                  onClick={handleSend}
+                  aria-label='Send message'
+                  disabled={
+                    !input.trim() ||
+                    (isListening && listeningMode !== "dictate")
+                  }
+                  className='pointer-events-auto flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed'
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                    color: "#ffffff",
+                    padding: "0",
+                    margin: "0",
+                    border: "none",
+                    outline: "none",
+                    boxShadow: "0 4px 12px rgba(99, 102, 241, 0.4)",
+                    opacity:
+                      !input.trim() ||
+                      (isListening && listeningMode !== "dictate")
+                        ? darkMode
+                          ? "0.6"
+                          : "0.4"
+                        : "1",
+                  }}
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-4 w-4'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    style={{ strokeWidth: "2.5" }}
+                  >
+                    <path
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M22 2L11 13'
+                    />
+                    <path
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M22 2l-7 20-4-9-9-4 20-7z'
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1.5'>
+              <VoiceSendButton
+                onClick={toggleVoiceSend}
+                isActive={isListening && listeningMode === "send"}
+                darkMode={darkMode}
+              />
+              <DictateButton
+                onClick={toggleDictation}
+                isActive={isListening && listeningMode === "dictate"}
+                darkMode={darkMode}
+              />
+            </div>
+
+            {QUICK_PROMPTS.map((prompt) => (
+              <button
+                key={prompt.label}
+                type='button'
+                onClick={() => applyQuickPrompt(prompt.value)}
+                className='rounded-full font-medium transition-all hover:brightness-110'
+                style={{
+                  padding: "10px 14px",
+                  fontSize: "12px",
+                  backgroundColor: darkMode ? "#1e293b" : "#eef2ff",
+                  color: darkMode ? "#cbd5e1" : "#4338ca",
+                  border: "none",
+                  outline: "none",
+                  minHeight: "36px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#6366f1";
+                  e.currentTarget.style.color = "#ffffff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = darkMode
+                    ? "#1e293b"
+                    : "#eef2ff";
+                  e.currentTarget.style.color = darkMode
+                    ? "#cbd5e1"
+                    : "#4338ca";
+                }}
+              >
+                {prompt.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
