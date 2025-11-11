@@ -1,0 +1,68 @@
+/* Desktop Chat Header Logo Animation */
+@keyframes anime-dance {
+  0% { transform: translateY(0px) rotate(0deg) scale(1); }
+  0.91% { transform: translateY(-8px) rotate(-15deg) scale(1.1); }
+  1.82% { transform: translateY(-4px) rotate(15deg) scale(1.05); }
+  2.73% { transform: translateY(-10px) rotate(-10deg) scale(1.15); }
+  3.64% { transform: translateY(-2px) rotate(10deg) scale(1.08); }
+  4.55% { transform: translateY(-6px) rotate(0deg) scale(1.12); }
+  5.45% { transform: translateY(-8px) rotate(12deg) scale(1.1); }
+  6.36% { transform: translateY(-3px) rotate(-8deg) scale(1.06); }
+  7.27% { transform: translateY(-5px) rotate(5deg) scale(1.09); }
+  8.18% { transform: translateY(-7px) rotate(-5deg) scale(1.11); }
+  9.09%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+}
+
+@keyframes spin-pulse {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.2); }
+  50% { transform: rotate(180deg) scale(1.15); }
+  75% { transform: rotate(270deg) scale(1.25); }
+}
+
+.logo-animate {
+  animation: anime-dance 44s ease-in-out 10s infinite;
+  filter: drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35));
+  transition: filter 0.3s ease;
+  transform-origin: center;
+  -webkit-animation: anime-dance 44s ease-in-out 10s infinite;
+}
+
+.logo-animate:hover {
+  filter: drop-shadow(0 4px 10px rgba(99, 102, 241, 0.5));
+}
+
+/* Language Menu Scrollbar Styles */
+.dark-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+.light-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.light-scrollbar::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+.light-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.light-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

@@ -353,7 +353,11 @@ function App() {
             }`}
           >
             <div className='flex items-center gap-3 mb-4'>
-              <img src={sparkIcon} alt='AIVA' className='w-14 h-14' />
+              <img
+                src={sparkIcon}
+                alt='AIVA'
+                className='w-14 h-14 hero-logo cursor-pointer'
+              />
               <div>
                 <h2
                   className={`text-lg font-bold ${

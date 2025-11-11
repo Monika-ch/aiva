@@ -11,6 +11,7 @@ import {
 } from "../features/useLanguageSettings";
 import { clearConversationStorage } from "../features/ClearChat";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import "../styles/DesktopChatHeader.css";
 
 interface DesktopChatHeaderProps {
   onClearMessages?: () => void;
@@ -60,7 +61,11 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
       }`}
     >
       <div className='flex items-center gap-2'>
-        <img src={sparkIcon} alt='AIVA' className='w-8 h-8' />
+        <img
+          src={sparkIcon}
+          alt='AIVA'
+          className='w-8 h-8 logo-animate cursor-pointer'
+        />
         <div>
           <span
             className={`text-sm font-semibold ${
@@ -145,34 +150,6 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                     : "#d1d5db #f9fafb",
                 }}
               >
-                <style>{`
-                  .dark-scrollbar::-webkit-scrollbar {
-                    width: 8px;
-                  }
-                  .dark-scrollbar::-webkit-scrollbar-track {
-                    background: #1f2937;
-                  }
-                  .dark-scrollbar::-webkit-scrollbar-thumb {
-                    background: #4b5563;
-                    border-radius: 4px;
-                  }
-                  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #6b7280;
-                  }
-                  .light-scrollbar::-webkit-scrollbar {
-                    width: 8px;
-                  }
-                  .light-scrollbar::-webkit-scrollbar-track {
-                    background: #f9fafb;
-                  }
-                  .light-scrollbar::-webkit-scrollbar-thumb {
-                    background: #d1d5db;
-                    border-radius: 4px;
-                  }
-                  .light-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #9ca3af;
-                  }
-                `}</style>
                 {filteredOptions.map((option) => (
                   <button
                     key={option.code}

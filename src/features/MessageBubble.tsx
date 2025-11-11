@@ -63,7 +63,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             darkMode ? "bg-indigo-900" : "bg-indigo-50"
           }`}
         >
-          <img src={sparkIcon} alt='AIVA' className='w-3 h-3' />
+          <img
+            src={sparkIcon}
+            alt='AIVA'
+            className='w-3 h-3'
+          />
         </div>
       )}
 

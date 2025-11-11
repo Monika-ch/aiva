@@ -293,7 +293,16 @@ const ChatWidgetUI: React.FC<Props> = ({
               className={`p-3 border-b ${theme.border} ${theme.headerBg} flex items-center justify-between`}
             >
               <div className='flex items-center gap-2'>
-                <img src={sparkIcon} alt='AIVA' className='w-8 h-8' />
+                <div className='relative'>
+                  <img
+                    src={sparkIcon}
+                    alt='AIVA'
+                    className='w-8 h-8'
+                    style={{
+                      filter: 'drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35))'
+                    }}
+                  />
+                </div>
                 <div>
                   <span className={`text-sm font-semibold ${theme.text}`}>
                     AIVA Chat
