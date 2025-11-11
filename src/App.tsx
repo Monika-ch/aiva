@@ -96,7 +96,11 @@ import {
   useTextToSpeech,
   type Message as FeatureMessage,
 } from "./features";
-import { INTRO_SUGGESTIONS, QUICK_ACTIONS } from "./constants/chatConstants";
+import {
+  INTRO_SUGGESTIONS,
+  QUICK_ACTIONS,
+  CHAT_PLACEHOLDERS,
+} from "./constants/chatConstants";
 
 interface Message {
   role: "user" | "assistant";
@@ -290,9 +294,9 @@ function App() {
           : "bg-gray-50"
       }`}
     >
-      <div className='max-w-7xl mx-auto px-6 relative'>
+      <div className="max-w-7xl mx-auto px-6 relative">
         {/* Dark Mode Toggle - Top Right, Outside Chat Area */}
-        <div className='fixed top-6 right-6 z-50'>
+        <div className="fixed top-6 right-6 z-50">
           <button
             onClick={toggleDarkMode}
             style={{
@@ -307,56 +311,56 @@ function App() {
                 ? "0 4px 6px rgba(0, 0, 0, 0.3)"
                 : "0 2px 8px rgba(0, 0, 0, 0.1)",
             }}
-            className='hover:opacity-80'
-            aria-label='Toggle dark mode'
+            className="hover:opacity-80"
+            aria-label="Toggle dark mode"
             title={darkMode ? "Light mode" : "Dark mode"}
           >
             {darkMode ? (
               <svg
-                xmlns='http://www.w3.org/2000/svg'
+                xmlns="http://www.w3.org/2000/svg"
                 style={{ width: "24px", height: "24px" }}
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
                 strokeWidth={2}
               >
                 <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                 />
               </svg>
             ) : (
               <svg
-                xmlns='http://www.w3.org/2000/svg'
+                xmlns="http://www.w3.org/2000/svg"
                 style={{ width: "24px", height: "24px" }}
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
                 strokeWidth={2}
               >
                 <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                 />
               </svg>
             )}
           </button>
         </div>
 
-        <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 mt-10'>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-10">
           {/* Left column - Hero Section */}
           <div
             className={`lg:col-span-4 rounded-xl shadow-lg p-5 ${
               darkMode ? "bg-gray-800 border border-gray-700" : "bg-white"
             }`}
           >
-            <div className='flex items-center gap-3 mb-4'>
+            <div className="flex items-center gap-3 mb-4">
               <img
                 src={sparkIcon}
-                alt='AIVA'
-                className='w-14 h-14 hero-logo cursor-pointer'
+                alt="AIVA"
+                className="w-14 h-14 hero-logo cursor-pointer"
               />
               <div>
                 <h2
@@ -379,7 +383,7 @@ function App() {
           </div>
 
           {/* Right column - Chat Section (hidden on small screens — mobile uses only ChatWidget) */}
-          <div className='hidden lg:col-span-8 lg:block'>
+          <div className="hidden lg:col-span-8 lg:block">
             <ChatContainer darkMode={darkMode}>
               <DesktopChatHeader
                 onClearMessages={clearMessages}
@@ -394,15 +398,15 @@ function App() {
               >
                 {messages.length === 0 ? (
                   // Empty state with welcome message, suggestions, and actions
-                  <div className='flex flex-col items-center justify-center h-full space-y-8 py-8'>
+                  <div className="flex flex-col items-center justify-center h-full space-y-8 py-8">
                     {/* Welcome greeting */}
-                    <div className='text-center space-y-3 max-w-xl px-4'>
+                    <div className="text-center space-y-3 max-w-xl px-4">
                       <h2
                         className={`text-2xl font-semibold ${
                           darkMode ? "text-gray-100" : "text-gray-800"
                         }`}
                       >
-                        Ask AIVA...
+                        {CHAT_PLACEHOLDERS.ASK_AIVA}
                       </h2>
                       <p
                         className={`text-sm leading-relaxed ${
@@ -416,7 +420,7 @@ function App() {
                     </div>
 
                     {/* Suggestion chips */}
-                    <div className='space-y-3 w-full max-w-xl px-4'>
+                    <div className="space-y-3 w-full max-w-xl px-4">
                       <p
                         className={`text-xs font-semibold uppercase tracking-wider ${
                           darkMode ? "text-gray-400" : "text-gray-500"
@@ -424,7 +428,7 @@ function App() {
                       >
                         💡 Try asking about:
                       </p>
-                      <div className='flex flex-wrap gap-2 justify-center'>
+                      <div className="flex flex-wrap gap-2 justify-center">
                         {INTRO_SUGGESTIONS.map((suggestion, index) => (
                           <button
                             key={index}
@@ -436,8 +440,8 @@ function App() {
                                   ? "bg-gray-700 text-gray-500 cursor-not-allowed"
                                   : "bg-gray-100 text-gray-400 cursor-not-allowed"
                                 : darkMode
-                                ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                                : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
+                                  ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
+                                  : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
                             }`}
                           >
                             {suggestion}
@@ -447,7 +451,7 @@ function App() {
                     </div>
 
                     {/* Quick action cards */}
-                    <div className='space-y-3 w-full max-w-xl px-4'>
+                    <div className="space-y-3 w-full max-w-xl px-4">
                       <p
                         className={`text-xs font-semibold uppercase tracking-wider ${
                           darkMode ? "text-gray-400" : "text-gray-500"
@@ -455,7 +459,7 @@ function App() {
                       >
                         ⚡ Quick actions:
                       </p>
-                      <div className='grid grid-cols-2 gap-3'>
+                      <div className="grid grid-cols-2 gap-3">
                         {QUICK_ACTIONS.map((action, index) => (
                           <button
                             key={index}
@@ -466,7 +470,7 @@ function App() {
                                 : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-md hover:shadow-lg"
                             }`}
                           >
-                            <div className='flex items-center gap-3'>
+                            <div className="flex items-center gap-3">
                               <div
                                 className={`text-3xl transform transition-transform group-hover:scale-110 ${
                                   darkMode ? "drop-shadow-lg" : ""

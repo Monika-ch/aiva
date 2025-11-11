@@ -20,11 +20,20 @@ import {
   MessageBubble,
   VoiceSendButton,
   DictateButton,
+  filterLanguageOptions,
   type Message,
 } from "../features";
 
 // Import chat constants
-import { INTRO_SUGGESTIONS, QUICK_ACTIONS } from "../constants/chatConstants";
+import {
+  INTRO_SUGGESTIONS,
+  QUICK_ACTIONS,
+  CHAT_PLACEHOLDERS,
+} from "../constants/chatConstants";
+import { DIALOG_MESSAGES } from "../constants/dialogMessages";
+
+// Import confirm dialog
+import { ConfirmDialog } from "./ConfirmDialog";
 
 interface Props {
   messages: Message[];
@@ -61,6 +70,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
 
   // State
   const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
@@ -68,12 +78,19 @@ const ChatWidgetUI: React.FC<Props> = ({
   );
   const [voiceInputUsed, setVoiceInputUsed] = useState(false);
   const [showCopyNotification, setShowCopyNotification] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [languageSearch, setLanguageSearch] = useState("");
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Custom hooks
   const theme = getThemeClasses(darkMode);
 
-  const { effectiveSpeechLocale, recordVoiceLanguagePreference } =
-    useLanguageSettings();
+  const {
+    effectiveSpeechLocale,
+    recordVoiceLanguagePreference,
+    speechLanguage,
+    setSpeechLanguage,
+  } = useLanguageSettings();
 
   const { isSpeaking, speakingMessageIndex, readAloud } = useTextToSpeech();
 
@@ -224,13 +241,37 @@ const ChatWidgetUI: React.FC<Props> = ({
     }
   }, [messages, isOpen]);
 
+  // Close language menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageMenuRef.current &&
+        !languageMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowLanguageMenu(false);
+      }
+    };
+
+    if (showLanguageMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showLanguageMenu]);
+
   // Handler functions
   const handleClearChat = () => {
+    setShowClearConfirm(true);
+  };
+
+  const confirmClearChat = () => {
     setClickedSuggestions(new Set());
     clearConversationStorage();
     if (onClearMessages) {
       onClearMessages();
     }
+    setShowClearConfirm(false);
   };
 
   const copyToClipboard = (text: string) => {
@@ -258,12 +299,32 @@ const ChatWidgetUI: React.FC<Props> = ({
     handleSendWithDictation(query);
   };
 
+  const handleLanguageSelect = (code: string) => {
+    setSpeechLanguage(code);
+    setShowLanguageMenu(false);
+    setLanguageSearch("");
+  };
+
+  const filteredOptions = filterLanguageOptions(languageSearch);
+
   // JSX Rendering
   return (
     <div
       className="fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden"
       aria-live="polite"
     >
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        title={DIALOG_MESSAGES.CLEAR_CHAT.title}
+        message={DIALOG_MESSAGES.CLEAR_CHAT.message}
+        confirmText={DIALOG_MESSAGES.CLEAR_CHAT.confirmText}
+        cancelText={DIALOG_MESSAGES.CLEAR_CHAT.cancelText}
+        onConfirm={confirmClearChat}
+        onCancel={() => setShowClearConfirm(false)}
+        darkMode={darkMode}
+      />
+
       {/* Copy Notification */}
       <AnimatePresence>
         {showCopyNotification && (
@@ -318,36 +379,139 @@ const ChatWidgetUI: React.FC<Props> = ({
               </div>
 
               <div className="flex items-center gap-1.5">
-                {/* Language Button - TODO: Add language menu functionality */}
-                <button
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-                    color: darkMode ? "#d1d5db" : "#6b7280",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    transition: "all 0.2s ease",
-                    border: "none",
-                    outline: "none",
-                  }}
-                  className="hover:opacity-80"
-                  aria-label="Language settings"
-                  title="Language settings"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ width: "16px", height: "16px" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+                {/* Language Button */}
+                <div className="relative" ref={languageMenuRef}>
+                  <button
+                    onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                    style={{
+                      backgroundColor: darkMode ? "#374151" : "#e5e7eb",
+                      color: darkMode ? "#d1d5db" : "#6b7280",
+                      padding: "8px",
+                      borderRadius: "8px",
+                      transition: "all 0.2s ease",
+                      border: "none",
+                      outline: "none",
+                    }}
+                    className="hover:opacity-80"
+                    aria-label="Language settings"
+                    title="Language settings"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ width: "16px", height: "16px" }}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Language Dropdown Menu */}
+                  {showLanguageMenu && (
+                    <div
+                      className="absolute right-0 mt-2 w-72 rounded-lg shadow-2xl border z-50"
+                      style={{
+                        backgroundColor: darkMode ? "#1f2937" : "#ffffff",
+                        borderColor: darkMode ? "#374151" : "#e5e7eb",
+                      }}
+                    >
+                      <div
+                        className="p-3 border-b"
+                        style={{
+                          borderColor: darkMode ? "#374151" : "#e5e7eb",
+                        }}
+                      >
+                        <input
+                          type="text"
+                          placeholder="Search languages..."
+                          value={languageSearch}
+                          onChange={(e) => setLanguageSearch(e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                          style={{
+                            backgroundColor: darkMode ? "#374151" : "#ffffff",
+                            borderColor: darkMode ? "#4b5563" : "#d1d5db",
+                            color: darkMode ? "#f3f4f6" : "#111827",
+                          }}
+                        />
+                      </div>
+
+                      <div
+                        className={`max-h-64 overflow-y-auto ${
+                          darkMode ? "dark-scrollbar" : "light-scrollbar"
+                        }`}
+                        style={{
+                          scrollbarWidth: "thin",
+                          scrollbarColor: darkMode
+                            ? "#4b5563 #1f2937"
+                            : "#d1d5db #f9fafb",
+                        }}
+                      >
+                        {filteredOptions.map((option) => (
+                          <button
+                            key={option.code}
+                            onClick={() => handleLanguageSelect(option.code)}
+                            className="w-full text-left px-4 py-2.5 text-sm transition-colors"
+                            style={{
+                              backgroundColor:
+                                speechLanguage === option.code
+                                  ? darkMode
+                                    ? "#312e81"
+                                    : "#eef2ff"
+                                  : "transparent",
+                              color:
+                                speechLanguage === option.code
+                                  ? darkMode
+                                    ? "#c7d2fe"
+                                    : "#4338ca"
+                                  : darkMode
+                                    ? "#e5e7eb"
+                                    : "#374151",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (speechLanguage !== option.code) {
+                                e.currentTarget.style.backgroundColor = darkMode
+                                  ? "#374151"
+                                  : "#f9fafb";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (speechLanguage !== option.code) {
+                                e.currentTarget.style.backgroundColor =
+                                  "transparent";
+                              }
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span>{option.label}</span>
+                              {speechLanguage === option.code && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* Clear chat button */}
                 <button
@@ -434,7 +598,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         darkMode ? "text-gray-100" : "text-gray-800"
                       }`}
                     >
-                      Ask AIVA...
+                      {CHAT_PLACEHOLDERS.ASK_AIVA}
                     </h2>
                     <p
                       className={`text-[11px] leading-relaxed ${
@@ -561,7 +725,11 @@ const ChatWidgetUI: React.FC<Props> = ({
 
                 <textarea
                   ref={inputRef}
-                  placeholder={isListening ? "Listening..." : "Ask AIVA..."}
+                  placeholder={
+                    isListening
+                      ? CHAT_PLACEHOLDERS.LISTENING
+                      : CHAT_PLACEHOLDERS.ASK_AIVA
+                  }
                   className={`flex-1 min-w-0 ${theme.inputBg} ${
                     darkMode ? "dark-scrollbar" : ""
                   } border ${
@@ -636,14 +804,6 @@ const ChatWidgetUI: React.FC<Props> = ({
                   </svg>
                 </button>
               </div>
-
-              <div
-                className={`text-xs ${
-                  darkMode ? "text-gray-300" : "text-gray-400"
-                } text-center mt-2`}
-              >
-                Press Enter to send • Shift+Enter for new line
-              </div>
             </div>
           </motion.div>
         )}
@@ -661,7 +821,11 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          className={`relative p-3 rounded-full shadow-lg hover:shadow-xl transition-all ${
+            darkMode
+              ? "bg-gradient-to-r from-indigo-500 to-purple-500"
+              : "bg-gradient-to-r from-indigo-400 to-purple-400"
+          }`}
         >
           <img
             src={sparkIcon}

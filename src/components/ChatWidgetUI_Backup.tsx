@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 // NOTE: Primary chat widget used by the app with all current features enabled.
 
 interface Message {
@@ -93,13 +94,14 @@ const isEnterCommand = (text: string) => normalizeCommandText(text) === "enter";
 
 const isClearCommand = (text: string) => normalizeCommandText(text) === "clear";
 
-const isDeleteCommand = (text: string) => normalizeCommandText(text) === "delete";
+const isDeleteCommand = (text: string) =>
+  normalizeCommandText(text) === "delete";
 
 // Count how many times "delete" appears as a complete command
 const countDeleteCommands = (text: string): number => {
   const normalized = normalizeCommandText(text);
   const words = normalized.split(/\s+/);
-  return words.filter(word => word === "delete").length;
+  return words.filter((word) => word === "delete").length;
 };
 
 export const QUICK_ACTIONS_MARKER = "__AIVA_QUICK_ACTIONS__";
@@ -267,8 +269,11 @@ const ChatWidgetUI: React.FC<Props> = ({
     // Replace common phonetic variations of "AIVA" with the correct spelling
     // Using word boundaries to avoid replacing within other words
     return text
-      .replace(/\b(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi, 'AIVA')
-      .replace(/\bhi\s+(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi, 'hi AIVA');
+      .replace(/\b(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi, "AIVA")
+      .replace(
+        /\bhi\s+(ava|eva|iva|aiva|eiva|ayva|eyva|aeva|iowa)\b/gi,
+        "hi AIVA"
+      );
   }, []);
 
   const clearDictationSession = useCallback(() => {
@@ -297,42 +302,45 @@ const ChatWidgetUI: React.FC<Props> = ({
     setInput(base);
   }, [setInput]);
 
-  const deleteLastWordsFromDictation = useCallback((wordCount: number) => {
-    const current = dictationTranscriptRef.current || "";
-    if (!current) return;
+  const deleteLastWordsFromDictation = useCallback(
+    (wordCount: number) => {
+      const current = dictationTranscriptRef.current || "";
+      if (!current) return;
 
-    // Split by whitespace, preserving newlines as separate "words"
-    const parts = current.split(/(\s+)/);
-    
-    // Filter out empty strings and count actual words (non-whitespace)
-    const words: string[] = [];
-    const separators: string[] = [];
-    
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i].trim()) {
-        words.push(parts[i]);
-        if (i + 1 < parts.length) {
-          separators.push(parts[i + 1] || "");
+      // Split by whitespace, preserving newlines as separate "words"
+      const parts = current.split(/(\s+)/);
+
+      // Filter out empty strings and count actual words (non-whitespace)
+      const words: string[] = [];
+      const separators: string[] = [];
+
+      for (let i = 0; i < parts.length; i++) {
+        if (parts[i].trim()) {
+          words.push(parts[i]);
+          if (i + 1 < parts.length) {
+            separators.push(parts[i + 1] || "");
+          }
         }
       }
-    }
 
-    // Delete the specified number of words from the end
-    const wordsToKeep = Math.max(0, words.length - wordCount);
-    const separatorsToKeep = Math.max(0, separators.length - wordCount);
-    
-    let result = "";
-    for (let i = 0; i < wordsToKeep; i++) {
-      result += words[i];
-      if (i < separatorsToKeep && separators[i]) {
-        result += separators[i];
+      // Delete the specified number of words from the end
+      const wordsToKeep = Math.max(0, words.length - wordCount);
+      const separatorsToKeep = Math.max(0, separators.length - wordCount);
+
+      let result = "";
+      for (let i = 0; i < wordsToKeep; i++) {
+        result += words[i];
+        if (i < separatorsToKeep && separators[i]) {
+          result += separators[i];
+        }
       }
-    }
-    
-    dictationTranscriptRef.current = result.trimEnd();
-    const combined = buildDictationCombinedContent();
-    setInput(combined);
-  }, [buildDictationCombinedContent, setInput]);
+
+      dictationTranscriptRef.current = result.trimEnd();
+      const combined = buildDictationCombinedContent();
+      setInput(combined);
+    },
+    [buildDictationCombinedContent, setInput]
+  );
 
   const appendDictationChunk = useCallback((rawChunk: string) => {
     if (!rawChunk) return;
@@ -377,17 +385,20 @@ const ChatWidgetUI: React.FC<Props> = ({
   }, [effectiveSpeechLocale]);
 
   const sendUserMessage = useCallback(
-    (message: string, options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }) => {
-      console.log('[DEBUG] sendUserMessage called with:', { message, options });
+    (
+      message: string,
+      options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+    ) => {
+      console.log("[DEBUG] sendUserMessage called with:", { message, options });
       // Trim leading and trailing whitespace/newlines from the message
       const trimmedMessage = message.trim();
       if (!trimmedMessage) {
-        console.log('[DEBUG] Empty message, returning');
+        console.log("[DEBUG] Empty message, returning");
         return;
       }
 
       if (options?.triggeredByVoice) {
-        console.log('[DEBUG] Recording voice language preference');
+        console.log("[DEBUG] Recording voice language preference");
         recordVoiceLanguagePreference();
         // Only auto-read response for "send" mode, not "dictate" mode
         if (options?.voiceMode === "send") {
@@ -399,7 +410,10 @@ const ChatWidgetUI: React.FC<Props> = ({
         setVoiceInputUsed(false);
       }
 
-      console.log('[DEBUG] Calling handleSend from hook with trimmed message:', trimmedMessage);
+      console.log(
+        "[DEBUG] Calling handleSend from hook with trimmed message:",
+        trimmedMessage
+      );
       handleSend(trimmedMessage);
     },
     [handleSend, recordVoiceLanguagePreference]
@@ -452,18 +466,25 @@ const ChatWidgetUI: React.FC<Props> = ({
   }, [customLanguage]);
 
   const handleSendWithDictation = useCallback(
-    (messageOverride?: string, options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }) => {
-      console.log('[DEBUG] handleSendWithDictation called:', { messageOverride, options, input });
+    (
+      messageOverride?: string,
+      options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
+    ) => {
+      console.log("[DEBUG] handleSendWithDictation called:", {
+        messageOverride,
+        options,
+        input,
+      });
       const triggeredByVoice = options?.triggeredByVoice ?? false;
       const voiceMode = options?.voiceMode;
       const rawMessage =
         messageOverride !== undefined ? messageOverride : input;
 
-      console.log('[DEBUG] rawMessage:', rawMessage, 'voiceMode:', voiceMode);
+      console.log("[DEBUG] rawMessage:", rawMessage, "voiceMode:", voiceMode);
       // Trim leading and trailing whitespace/newlines
       const messageToSend = rawMessage.trim();
       if (!messageToSend) {
-        console.log('[DEBUG] Empty message after trimming, returning');
+        console.log("[DEBUG] Empty message after trimming, returning");
         return;
       }
 
@@ -480,9 +501,14 @@ const ChatWidgetUI: React.FC<Props> = ({
       }
 
       clearDictationSession();
-      console.log('[DEBUG] Calling sendUserMessage with trimmed message:', messageToSend, 'voiceMode:', voiceMode);
+      console.log(
+        "[DEBUG] Calling sendUserMessage with trimmed message:",
+        messageToSend,
+        "voiceMode:",
+        voiceMode
+      );
       sendUserMessage(messageToSend, { triggeredByVoice, voiceMode });
-      console.log('[DEBUG] Clearing input');
+      console.log("[DEBUG] Clearing input");
       setInput("");
     },
     [
@@ -550,46 +576,72 @@ const ChatWidgetUI: React.FC<Props> = ({
       recognitionRef.current.lang = resolvedSpeechLanguage;
 
       recognitionRef.current.onresult = (event: any) => {
-        console.log('[DEBUG] Speech recognition onresult fired, resultIndex:', event.resultIndex, 'total results:', event.results.length);
+        console.log(
+          "[DEBUG] Speech recognition onresult fired, resultIndex:",
+          event.resultIndex,
+          "total results:",
+          event.results.length
+        );
         if (stopRequestedRef.current) {
-          console.log('[DEBUG] Stop was requested, ignoring result');
+          console.log("[DEBUG] Stop was requested, ignoring result");
           return;
         }
 
         const mode = listeningModeRef.current;
-        console.log('[DEBUG] Current listening mode:', mode);
+        console.log("[DEBUG] Current listening mode:", mode);
         if (!mode) {
-          console.log('[DEBUG] No mode set, ignoring result');
+          console.log("[DEBUG] No mode set, ignoring result");
           return;
         }
 
         let collectedTranscript = "";
 
         // Only process NEW final results to avoid duplicates
-        const startIndex = Math.max(event.resultIndex, lastProcessedResultIndexRef.current);
-        console.log('[DEBUG] Processing results from index', startIndex, 'to', event.results.length);
-        
+        const startIndex = Math.max(
+          event.resultIndex,
+          lastProcessedResultIndexRef.current
+        );
+        console.log(
+          "[DEBUG] Processing results from index",
+          startIndex,
+          "to",
+          event.results.length
+        );
+
         for (let i = startIndex; i < event.results.length; i += 1) {
           const result = event.results[i];
-          console.log('[DEBUG] Result', i, 'isFinal:', result.isFinal, 'transcript:', result[0].transcript);
-          
+          console.log(
+            "[DEBUG] Result",
+            i,
+            "isFinal:",
+            result.isFinal,
+            "transcript:",
+            result[0].transcript
+          );
+
           // Only process final results to avoid duplicates from interim results
           if (result.isFinal) {
             collectedTranscript += result[0].transcript;
-            console.log('[DEBUG] Collected final result from index', i, ':', result[0].transcript);
+            console.log(
+              "[DEBUG] Collected final result from index",
+              i,
+              ":",
+              result[0].transcript
+            );
             // Update last processed index after processing each final result
             lastProcessedResultIndexRef.current = i + 1;
           }
         }
 
         const cleanedTranscript = normalizeAivaName(
-          collectedTranscript
-            .replace(/\s+/g, " ")
-            .trim()
+          collectedTranscript.replace(/\s+/g, " ").trim()
         );
-        console.log('[DEBUG] Cleaned and normalized transcript:', cleanedTranscript);
+        console.log(
+          "[DEBUG] Cleaned and normalized transcript:",
+          cleanedTranscript
+        );
         if (!cleanedTranscript) {
-          console.log('[DEBUG] Empty transcript, ignoring');
+          console.log("[DEBUG] Empty transcript, ignoring");
           return;
         }
 
@@ -651,13 +703,16 @@ const ChatWidgetUI: React.FC<Props> = ({
 
           if (triggered) {
             const finalContent = buildDictationCombinedContent();
-            handleSendWithDictation(finalContent, { triggeredByVoice: true, voiceMode: "dictate" });
+            handleSendWithDictation(finalContent, {
+              triggeredByVoice: true,
+              voiceMode: "dictate",
+            });
           }
         }
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('[DEBUG] Speech recognition error:', event?.error, event);
+        console.error("[DEBUG] Speech recognition error:", event?.error, event);
         setVoiceInputUsed(false);
 
         if (
@@ -728,16 +783,16 @@ const ChatWidgetUI: React.FC<Props> = ({
   ]);
 
   const handleSpeechCapture = (mode: "send" | "dictate") => {
-    console.log('[DEBUG] handleSpeechCapture called with mode:', mode);
+    console.log("[DEBUG] handleSpeechCapture called with mode:", mode);
     if (!recognitionRef.current) {
-      console.log('[DEBUG] recognitionRef.current is null or undefined');
+      console.log("[DEBUG] recognitionRef.current is null or undefined");
       alert(
         "Voice recognition is not supported in this browser. Try Chrome or Edge."
       );
       return;
     }
 
-    console.log('[DEBUG] isListening:', isListening);
+    console.log("[DEBUG] isListening:", isListening);
     if (isListening) {
       if (listeningModeRef.current === "send") {
         if (sendModeTranscriptRef.current.trim()) {
@@ -771,13 +826,16 @@ const ChatWidgetUI: React.FC<Props> = ({
     }
     recognitionRef.current.lang = resolvedSpeechLanguage;
 
-    console.log('[DEBUG] Starting speech recognition with lang:', resolvedSpeechLanguage);
+    console.log(
+      "[DEBUG] Starting speech recognition with lang:",
+      resolvedSpeechLanguage
+    );
     try {
       recognitionRef.current.start();
       setIsListening(true);
-      console.log('[DEBUG] Speech recognition started successfully');
+      console.log("[DEBUG] Speech recognition started successfully");
     } catch (error) {
-      console.error('[DEBUG] Error starting speech recognition:', error);
+      console.error("[DEBUG] Error starting speech recognition:", error);
       setIsListening(false);
       updateListeningMode(null);
     }
@@ -882,12 +940,12 @@ const ChatWidgetUI: React.FC<Props> = ({
   };
 
   const renderQuickActions = () => (
-    <div className='grid grid-cols-2 gap-2 mt-2' style={{ maxWidth: "260px" }}>
+    <div className="grid grid-cols-2 gap-2 mt-2" style={{ maxWidth: "260px" }}>
       {QUICK_ACTIONS.map((action, idx) => (
         <button
           key={idx}
           onClick={() => handleQuickAction(action.query)}
-          className='p-3 rounded-lg transition-transform duration-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 focus:outline-none cursor-pointer'
+          className="p-3 rounded-lg transition-transform duration-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 focus:outline-none cursor-pointer"
           style={{
             backgroundColor: darkMode ? "#1f2937" : "#eef2ff",
             border: `1px solid ${darkMode ? "#4338ca" : "#c7d2fe"}`,
@@ -898,8 +956,8 @@ const ChatWidgetUI: React.FC<Props> = ({
               : "0 10px 18px rgba(79, 70, 229, 0.14)",
           }}
         >
-          <div className='text-2xl mb-1'>{action.icon}</div>
-          <div className='text-xs tracking-wide'>{action.label}</div>
+          <div className="text-2xl mb-1">{action.icon}</div>
+          <div className="text-xs tracking-wide">{action.label}</div>
         </button>
       ))}
     </div>
@@ -920,9 +978,9 @@ const ChatWidgetUI: React.FC<Props> = ({
     if (isAssistant && content.startsWith(QUICK_ACTIONS_MARKER)) {
       const description = content.substring(QUICK_ACTIONS_MARKER.length).trim();
       return (
-        <div style={{ whiteSpace: 'pre-wrap' }}>
+        <div style={{ whiteSpace: "pre-wrap" }}>
           {description && (
-            <div className='mb-3 text-sm leading-relaxed'>{description}</div>
+            <div className="mb-3 text-sm leading-relaxed">{description}</div>
           )}
           {renderQuickActions()}
         </div>
@@ -930,7 +988,7 @@ const ChatWidgetUI: React.FC<Props> = ({
     }
 
     if (!isAssistant || !content.includes("• ")) {
-      return <div style={{ whiteSpace: 'pre-wrap' }}>{content}</div>;
+      return <div style={{ whiteSpace: "pre-wrap" }}>{content}</div>;
     }
 
     const lines = content.split("\n");
@@ -953,15 +1011,15 @@ const ChatWidgetUI: React.FC<Props> = ({
                   ? "#1e293b"
                   : "#dbeafe"
                 : darkMode
-                ? "#1e293b"
-                : "#f1f5f9",
+                  ? "#1e293b"
+                  : "#f1f5f9",
               color: isClicked
                 ? darkMode
                   ? "#38bdf8"
                   : "#0369a1"
                 : darkMode
-                ? "#cbd5e1"
-                : "#334155",
+                  ? "#cbd5e1"
+                  : "#334155",
               borderWidth: "1px",
               borderStyle: "solid",
               borderColor: darkMode ? "#334155" : "#cbd5e1",
@@ -976,34 +1034,38 @@ const ChatWidgetUI: React.FC<Props> = ({
               fontWeight: isClicked ? "500" : "400",
               border: "none",
               outline: "none",
-              whiteSpace: 'pre-wrap',
+              whiteSpace: "pre-wrap",
             }}
-            className='hover:opacity-80'
+            className="hover:opacity-80"
           >
             • {suggestion}
           </button>
         );
       }
-      return <div key={i} style={{ whiteSpace: 'pre-wrap' }}>{line}</div>;
+      return (
+        <div key={i} style={{ whiteSpace: "pre-wrap" }}>
+          {line}
+        </div>
+      );
     });
   };
 
   // Typing indicator component
   const TypingIndicator = () => (
-    <div className='flex items-end justify-start mb-4'>
+    <div className="flex items-end justify-start mb-4">
       <div
         className={`w-6 h-6 mr-2 flex-shrink-0 self-start mt-1 flex items-center justify-center rounded-full ${
           darkMode ? "bg-indigo-900" : "bg-indigo-50"
         }`}
       >
-        <img src={sparkIcon} alt='AIVA' className='w-3 h-3' />
+        <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
       </div>
       <div
         className={`px-4 py-2 rounded-2xl rounded-bl-none shadow-sm ${
           darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
         }`}
       >
-        <div className='flex gap-1'>
+        <div className="flex gap-1">
           <div
             className={`w-2 h-2 rounded-full animate-bounce ${
               darkMode ? "bg-gray-400" : "bg-gray-400"
@@ -1038,8 +1100,8 @@ const ChatWidgetUI: React.FC<Props> = ({
 
   return (
     <div
-      className='fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden'
-      aria-live='polite'
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden"
+      aria-live="polite"
     >
       {/* Copy Notification */}
       <AnimatePresence>
@@ -1048,7 +1110,7 @@ const ChatWidgetUI: React.FC<Props> = ({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className='mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg'
+            className="mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg"
           >
             ✓ Copied to clipboard
           </motion.div>
@@ -1063,15 +1125,15 @@ const ChatWidgetUI: React.FC<Props> = ({
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className={`w-[90vw] max-w-[380px] ${bgClass} shadow-2xl rounded-2xl overflow-hidden border ${borderClass} mb-3`}
-            role='dialog'
-            aria-label='AIVA chat'
+            role="dialog"
+            aria-label="AIVA chat"
           >
             {/* Header with logo and actions */}
             <div
               className={`p-3 border-b ${borderClass} ${headerBgClass} flex items-center justify-between`}
             >
-              <div className='flex items-center gap-2'>
-                <img src={sparkIcon} alt='AIVA' className='w-8 h-8' />
+              <div className="flex items-center gap-2">
+                <img src={sparkIcon} alt="AIVA" className="w-8 h-8" />
                 <div>
                   <span className={`text-sm font-semibold ${textClass}`}>
                     AIVA Chat
@@ -1088,7 +1150,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
               <div
                 ref={languageMenuRef}
-                className='flex items-center gap-2 relative'
+                className="flex items-center gap-2 relative"
               >
                 {/* Language selection menu toggle */}
                 <button
@@ -1102,27 +1164,27 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Select voice language'
+                  className="hover:opacity-80"
+                  aria-label="Select voice language"
                   aria-expanded={languageMenuOpen}
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M12 3c1.74 0 3 3.357 3 9s-1.26 9-3 9-3-3.357-3-9 1.26-9 3-9z'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 3c1.74 0 3 3.357 3 9s-1.26 9-3 9-3-3.357-3-9 1.26-9 3-9z"
                     />
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z"
                     />
                   </svg>
                 </button>
@@ -1136,15 +1198,15 @@ const ChatWidgetUI: React.FC<Props> = ({
                     }`}
                     style={{ zIndex: 100 }}
                   >
-                    <div className='p-3 space-y-3 text-sm'>
-                      <div className='space-y-2'>
-                        <div className='flex items-center justify-between'>
-                          <p className='font-semibold text-xs uppercase tracking-wide opacity-70'>
+                    <div className="p-3 space-y-3 text-sm">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="font-semibold text-xs uppercase tracking-wide opacity-70">
                             Voice language
                           </p>
                           {speechLanguage !== "auto" && (
                             <button
-                              type='button'
+                              type="button"
                               onClick={() => handleLanguageSelect("auto")}
                               className={`text-[10px] font-medium ${
                                 darkMode
@@ -1156,14 +1218,14 @@ const ChatWidgetUI: React.FC<Props> = ({
                             </button>
                           )}
                         </div>
-                        <div className='relative'>
+                        <div className="relative">
                           <input
-                            type='search'
+                            type="search"
                             value={languageSearchTerm}
                             onChange={(e) =>
                               setLanguageSearchTerm(e.target.value)
                             }
-                            placeholder='Search languages'
+                            placeholder="Search languages"
                             className={`w-full px-3 py-2 text-xs rounded-lg border ${
                               darkMode
                                 ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500"
@@ -1171,19 +1233,19 @@ const ChatWidgetUI: React.FC<Props> = ({
                             }`}
                           />
                           <svg
-                            xmlns='http://www.w3.org/2000/svg'
+                            xmlns="http://www.w3.org/2000/svg"
                             className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 ${
                               darkMode ? "text-gray-400" : "text-gray-500"
                             }`}
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            stroke='currentColor'
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                             strokeWidth={2}
                           >
                             <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M15 15l5 5m-5-5a7 7 0 10-10 0 7 7 0 0010 0z'
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 15l5 5m-5-5a7 7 0 10-10 0 7 7 0 0010 0z"
                             />
                           </svg>
                         </div>
@@ -1211,13 +1273,13 @@ const ChatWidgetUI: React.FC<Props> = ({
                                     ? "#312e81"
                                     : "#1f2937"
                                   : isActive
-                                  ? "#e0e7ff"
-                                  : "#eef2ff",
+                                    ? "#e0e7ff"
+                                    : "#eef2ff",
                                 color: darkMode ? "#e0e7ff" : "#1f1f3d",
                               }}
                             >
-                              <div className='font-medium'>{option.label}</div>
-                              <div className='text-[10px] opacity-70 mt-0.5'>
+                              <div className="font-medium">{option.label}</div>
+                              <div className="text-[10px] opacity-70 mt-0.5">
                                 {option.code}
                               </div>
                             </button>
@@ -1242,17 +1304,17 @@ const ChatWidgetUI: React.FC<Props> = ({
                         }`}
                       >
                         <label
-                          className='text-xs font-semibold uppercase tracking-wide opacity-70'
-                          htmlFor='custom-language-input'
+                          className="text-xs font-semibold uppercase tracking-wide opacity-70"
+                          htmlFor="custom-language-input"
                         >
                           Custom language code
                         </label>
                         <input
-                          id='custom-language-input'
-                          type='text'
+                          id="custom-language-input"
+                          type="text"
                           value={customLanguage}
                           onChange={(e) => setCustomLanguage(e.target.value)}
-                          placeholder='e.g., it-IT, ar-SA'
+                          placeholder="e.g., it-IT, ar-SA"
                           className={`w-full px-3 py-2 rounded-lg border ${
                             darkMode
                               ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500"
@@ -1261,7 +1323,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         />
                         <button
                           onClick={applyCustomLanguage}
-                          className='w-full px-3 py-2 rounded-lg text-sm font-medium text-white'
+                          className="w-full px-3 py-2 rounded-lg text-sm font-medium text-white"
                           style={{
                             background:
                               "linear-gradient(135deg, #4338ca, #312e81)",
@@ -1270,7 +1332,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                           Use custom language
                         </button>
                         {customLanguage && (
-                          <p className='text-[10px] opacity-60'>
+                          <p className="text-[10px] opacity-60">
                             Currently using{" "}
                             {speechLanguage === "auto"
                               ? resolvedSpeechLanguage
@@ -1295,38 +1357,38 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Toggle dark mode'
+                  className="hover:opacity-80"
+                  aria-label="Toggle dark mode"
                   title={darkMode ? "Light mode" : "Dark mode"}
                 >
                   {darkMode ? (
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
+                      xmlns="http://www.w3.org/2000/svg"
                       style={{ width: "16px", height: "16px" }}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                       strokeWidth={2}
                     >
                       <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                       />
                     </svg>
                   ) : (
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
+                      xmlns="http://www.w3.org/2000/svg"
                       style={{ width: "16px", height: "16px" }}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                       strokeWidth={2}
                     >
                       <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                       />
                     </svg>
                   )}
@@ -1344,22 +1406,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Clear chat'
-                  title='Clear chat history'
+                  className="hover:opacity-80"
+                  aria-label="Clear chat"
+                  title="Clear chat history"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     />
                   </svg>
                 </button>
@@ -1376,21 +1438,21 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Close chat'
+                  className="hover:opacity-80"
+                  aria-label="Close chat"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M6 18L18 6M6 6l12 12'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 </button>
@@ -1407,22 +1469,22 @@ const ChatWidgetUI: React.FC<Props> = ({
               }`}
             >
               {/* Live region for screen readers */}
-              <div className='sr-only' aria-live='polite'>
+              <div className="sr-only" aria-live="polite">
                 {latestAssistantMessage || ""}
               </div>
 
               {messages.length === 0 ? (
                 isTyping ? (
-                  <div className='pt-6'>
+                  <div className="pt-6">
                     <TypingIndicator />
                   </div>
                 ) : (
-                  <div className='text-center py-8'>
-                    <div className='mb-3'>
+                  <div className="text-center py-8">
+                    <div className="mb-3">
                       <img
                         src={sparkIcon}
-                        alt='AIVA'
-                        className='w-16 h-16 mx-auto opacity-50'
+                        alt="AIVA"
+                        className="w-16 h-16 mx-auto opacity-50"
                       />
                     </div>
                     <p
@@ -1441,7 +1503,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     </p>
 
                     <div
-                      className='mt-4 text-left mx-auto'
+                      className="mt-4 text-left mx-auto"
                       style={{ maxWidth: "240px" }}
                     >
                       <p
@@ -1457,7 +1519,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         }`}
                       >
                         {INTRO_SUGGESTIONS.map((item, idx) => (
-                          <li key={idx} className='flex items-start gap-2'>
+                          <li key={idx} className="flex items-start gap-2">
                             <span
                               className={`mt-1 h-1.5 w-1.5 rounded-full ${
                                 darkMode ? "bg-indigo-400" : "bg-indigo-500"
@@ -1469,7 +1531,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       </ul>
                     </div>
 
-                    <div className='mt-6'>
+                    <div className="mt-6">
                       <p
                         className={`text-xs uppercase tracking-wide ${
                           darkMode ? "text-indigo-200" : "text-indigo-500"
@@ -1477,7 +1539,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       >
                         Quick actions
                       </p>
-                      <div className='flex justify-center'>
+                      <div className="flex justify-center">
                         {renderQuickActions()}
                       </div>
                     </div>
@@ -1493,7 +1555,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     } p-3 shadow-sm mb-4`}
                   >
                     <div
-                      className='text-left'
+                      className="text-left"
                       style={{ maxWidth: "260px", margin: "0 auto" }}
                     >
                       <p
@@ -1511,7 +1573,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         {INTRO_SUGGESTIONS.map((item, idx) => (
                           <li
                             key={`inline-suggestion-${idx}`}
-                            className='flex items-start gap-2'
+                            className="flex items-start gap-2"
                           >
                             <span
                               className={`mt-1 h-1.5 w-1.5 rounded-full ${
@@ -1523,7 +1585,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         ))}
                       </ul>
 
-                      <div className='mt-4'>
+                      <div className="mt-4">
                         <p
                           className={`text-xs uppercase tracking-wide ${
                             darkMode ? "text-indigo-200" : "text-indigo-500"
@@ -1531,7 +1593,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                         >
                           Quick actions
                         </p>
-                        <div className='flex justify-center'>
+                        <div className="flex justify-center">
                           {renderQuickActions()}
                         </div>
                       </div>
@@ -1551,17 +1613,17 @@ const ChatWidgetUI: React.FC<Props> = ({
                             darkMode ? "bg-indigo-900" : "bg-indigo-50"
                           }`}
                         >
-                          <img src={sparkIcon} alt='AIVA' className='w-3 h-3' />
+                          <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
                         </div>
                       )}
-                      <div className='flex flex-col max-w-[80%]'>
+                      <div className="flex flex-col max-w-[80%]">
                         <div
                           className={`px-3 py-2 rounded-2xl text-sm shadow-sm ${
                             m.role === "user"
                               ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-none"
                               : darkMode
-                              ? "bg-gray-700 text-gray-100 rounded-bl-none border border-gray-600"
-                              : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
+                                ? "bg-gray-700 text-gray-100 rounded-bl-none border border-gray-600"
+                                : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
                           }`}
                         >
                           {renderMessageContent(
@@ -1597,8 +1659,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                                         ? "#4338ca"
                                         : "#6366f1"
                                       : darkMode
-                                      ? "#374151"
-                                      : "#e5e7eb",
+                                        ? "#374151"
+                                        : "#e5e7eb",
                                   color: darkMode ? "#d1d5db" : "#6b7280",
                                   padding: "6px",
                                   borderRadius: "8px",
@@ -1606,7 +1668,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                                   border: "none",
                                   outline: "none",
                                 }}
-                                className='hover:opacity-80'
+                                className="hover:opacity-80"
                                 title={
                                   isSpeaking && speakingMessageIndex === i
                                     ? "Stop reading"
@@ -1614,17 +1676,17 @@ const ChatWidgetUI: React.FC<Props> = ({
                                 }
                               >
                                 <svg
-                                  xmlns='http://www.w3.org/2000/svg'
+                                  xmlns="http://www.w3.org/2000/svg"
                                   style={{ width: "14px", height: "14px" }}
-                                  fill='none'
-                                  viewBox='0 0 24 24'
-                                  stroke='currentColor'
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
                                   strokeWidth={2}
                                 >
                                   <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
                                   />
                                 </svg>
                               </button>
@@ -1643,21 +1705,21 @@ const ChatWidgetUI: React.FC<Props> = ({
                                   border: "none",
                                   outline: "none",
                                 }}
-                                className='hover:opacity-80'
-                                title='Copy message'
+                                className="hover:opacity-80"
+                                title="Copy message"
                               >
                                 <svg
-                                  xmlns='http://www.w3.org/2000/svg'
+                                  xmlns="http://www.w3.org/2000/svg"
                                   style={{ width: "14px", height: "14px" }}
-                                  fill='none'
-                                  viewBox='0 0 24 24'
-                                  stroke='currentColor'
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
                                   strokeWidth={2}
                                 >
                                   <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                                   />
                                 </svg>
                               </button>
@@ -1672,39 +1734,39 @@ const ChatWidgetUI: React.FC<Props> = ({
                                         ? "#16a34a"
                                         : "#22c55e"
                                       : darkMode
-                                      ? "#374151"
-                                      : "#e5e7eb",
+                                        ? "#374151"
+                                        : "#e5e7eb",
                                   color:
                                     m.reaction === "helpful"
                                       ? "#ffffff"
                                       : darkMode
-                                      ? "#d1d5db"
-                                      : "#6b7280",
+                                        ? "#d1d5db"
+                                        : "#6b7280",
                                   padding: "6px",
                                   borderRadius: "8px",
                                   transition: "all 0.2s ease",
                                   border: "none",
                                   outline: "none",
                                 }}
-                                className='hover:opacity-80'
-                                title='Helpful'
+                                className="hover:opacity-80"
+                                title="Helpful"
                               >
                                 <svg
-                                  xmlns='http://www.w3.org/2000/svg'
+                                  xmlns="http://www.w3.org/2000/svg"
                                   style={{ width: "14px", height: "14px" }}
                                   fill={
                                     m.reaction === "helpful"
                                       ? "currentColor"
                                       : "none"
                                   }
-                                  viewBox='0 0 24 24'
-                                  stroke='currentColor'
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
                                   strokeWidth={2}
                                 >
                                   <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                                   />
                                 </svg>
                               </button>
@@ -1717,39 +1779,39 @@ const ChatWidgetUI: React.FC<Props> = ({
                                         ? "#dc2626"
                                         : "#ef4444"
                                       : darkMode
-                                      ? "#374151"
-                                      : "#e5e7eb",
+                                        ? "#374151"
+                                        : "#e5e7eb",
                                   color:
                                     m.reaction === "not-helpful"
                                       ? "#ffffff"
                                       : darkMode
-                                      ? "#d1d5db"
-                                      : "#6b7280",
+                                        ? "#d1d5db"
+                                        : "#6b7280",
                                   padding: "6px",
                                   borderRadius: "8px",
                                   transition: "all 0.2s ease",
                                   border: "none",
                                   outline: "none",
                                 }}
-                                className='hover:opacity-80'
-                                title='Not helpful'
+                                className="hover:opacity-80"
+                                title="Not helpful"
                               >
                                 <svg
-                                  xmlns='http://www.w3.org/2000/svg'
+                                  xmlns="http://www.w3.org/2000/svg"
                                   style={{ width: "14px", height: "14px" }}
                                   fill={
                                     m.reaction === "not-helpful"
                                       ? "currentColor"
                                       : "none"
                                   }
-                                  viewBox='0 0 24 24'
-                                  stroke='currentColor'
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
                                   strokeWidth={2}
                                 >
                                   <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
                                   />
                                 </svg>
                               </button>
@@ -1769,12 +1831,12 @@ const ChatWidgetUI: React.FC<Props> = ({
 
             {/* Input area */}
             <div className={`p-3 border-t ${borderClass} ${bgClass}`}>
-              <div className='flex items-center gap-1'>
+              <div className="flex items-center gap-1">
                 {/* Voice input button (auto send) */}
                 <button
                   onClick={() => handleSpeechCapture("send")}
                   style={getVoiceButtonStyle(isVoiceSendActive)}
-                  className='hover:opacity-90'
+                  className="hover:opacity-90"
                   aria-label={
                     isVoiceSendActive ? "Stop voice input" : "Start voice input"
                   }
@@ -1805,7 +1867,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     </>
                   )}
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{
                       width: "16px",
                       height: "16px",
@@ -1813,14 +1875,14 @@ const ChatWidgetUI: React.FC<Props> = ({
                       zIndex: 10,
                     }}
                     fill={isVoiceSendActive ? "currentColor" : "none"}
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                     />
                   </svg>
                 </button>
@@ -1829,7 +1891,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <button
                   onClick={() => handleSpeechCapture("dictate")}
                   style={getVoiceButtonStyle(isDictateActive)}
-                  className='hover:opacity-90'
+                  className="hover:opacity-90"
                   aria-label={
                     isDictateActive ? "Stop dictation" : "Dictate message"
                   }
@@ -1862,42 +1924,42 @@ const ChatWidgetUI: React.FC<Props> = ({
                   {isDictateActive ? (
                     // Stop icon when dictation is active
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
+                      xmlns="http://www.w3.org/2000/svg"
                       style={{
                         width: "16px",
                         height: "16px",
                         position: "relative",
                         zIndex: 10,
                       }}
-                      fill='currentColor'
-                      viewBox='0 0 24 24'
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <path d='M6 6h12v12H6z' />
+                      <path d="M6 6h12v12H6z" />
                     </svg>
                   ) : (
                     // Pen icon when dictation is not active
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
+                      xmlns="http://www.w3.org/2000/svg"
                       style={{
                         width: "16px",
                         height: "16px",
                         position: "relative",
                         zIndex: 10,
                       }}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                       strokeWidth={2}
                     >
                       <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5'
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5"
                       />
                       <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M10 21h11'
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10 21h11"
                       />
                     </svg>
                   )}
@@ -1905,7 +1967,11 @@ const ChatWidgetUI: React.FC<Props> = ({
 
                 <textarea
                   ref={inputRef}
-                  placeholder={isListening ? "Listening..." : "Ask AIVA..."}
+                  placeholder={
+                    isListening
+                      ? CHAT_PLACEHOLDERS.LISTENING
+                      : CHAT_PLACEHOLDERS.ASK_AIVA
+                  }
                   className={`flex-1 min-w-0 ${inputBgClass} border ${
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
@@ -1921,7 +1987,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       });
                     }
                   }}
-                  aria-label='Type your question to AIVA'
+                  aria-label="Type your question to AIVA"
                   readOnly={isListening && listeningMode === "send"}
                   rows={1}
                   spellCheck={false}
@@ -1938,7 +2004,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       triggeredByVoice: false,
                     })
                   }
-                  aria-label='Send message'
+                  aria-label="Send message"
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
@@ -1952,26 +2018,26 @@ const ChatWidgetUI: React.FC<Props> = ({
                     color: "#ffffff",
                     paddingInline: "clamp(12px, 1.8vw, 16px)",
                   }}
-                  className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
+                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='w-4 h-4'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
                   >
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2L11 13'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2L11 13"
                     />
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2l-7 20-4-9-9-4 20-7z'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2l-7 20-4-9-9-4 20-7z"
                     />
                   </svg>
                 </button>
@@ -1993,7 +2059,7 @@ const ChatWidgetUI: React.FC<Props> = ({
       </AnimatePresence>
 
       {/* Floating action button */}
-      <div className='relative'>
+      <div className="relative">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
@@ -2004,12 +2070,12 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className='relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all'
+          className="relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all"
         >
           <img
             src={sparkIcon}
-            alt='Open AIVA chat'
-            className='w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]'
+            alt="Open AIVA chat"
+            className="w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
           />
         </motion.button>
 
@@ -2018,7 +2084,7 @@ const ChatWidgetUI: React.FC<Props> = ({
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className='absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md'
+            className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md"
           >
             {unreadCount > 9 ? "9+" : unreadCount}
           </motion.span>

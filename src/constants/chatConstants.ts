@@ -17,3 +17,8 @@ export const INTRO_SUGGESTIONS = [
   "Request a summary of skills",
   "Learn about recent achievements",
 ];
+
+export const CHAT_PLACEHOLDERS = {
+  ASK_AIVA: "Ask AIVA...",
+  LISTENING: "Listening...",
+} as const;

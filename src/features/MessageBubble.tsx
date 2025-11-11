@@ -59,11 +59,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     >
       {isAssistant && (
         <div
-          className={`w-6 h-6 mr-2 flex-shrink-0 self-start mt-1 flex items-center justify-center rounded-full ${
+          className={`w-8 h-8 mr-1.5 flex-shrink-0 self-start mt-1 flex items-center justify-center rounded-full ${
             darkMode ? "bg-indigo-900" : "bg-indigo-50"
           }`}
         >
-          <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
+          <img src={sparkIcon} alt="AIVA" className="w-5 h-5" />
         </div>
       )}
 

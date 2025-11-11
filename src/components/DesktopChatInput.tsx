@@ -8,6 +8,7 @@ import { VoiceSendButton, DictateButton } from "../features/VoiceControls";
 import { useVoiceRecognition } from "../features/useVoiceRecognition";
 import { useDictation } from "../features/useDictation";
 import { useLanguageSettings } from "../features/useLanguageSettings";
+import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 
 const QUICK_PROMPTS = [
   {
@@ -39,7 +40,7 @@ interface DesktopChatInputProps {
 const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   onSend,
   darkMode = false,
-  placeholder = "Ask AIVA...",
+  placeholder = CHAT_PLACEHOLDERS.ASK_AIVA,
 }) => {
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -147,7 +148,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
 
   const getPlaceholderText = () => {
     if (isListening && listeningMode === "send") {
-      return "Listening... (auto-send after 5s pause)";
+      return `${CHAT_PLACEHOLDERS.LISTENING} (auto-send after 5s pause)`;
     }
     if (isListening && listeningMode === "dictate") {
       return "Dictating... (say 'send' or 'enter' to submit)";
@@ -187,10 +188,10 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             : "border-slate-200 bg-white/80"
         } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.3)] backdrop-blur-xl transition-colors`}
       >
-        <div className='pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-400/8 blur-3xl' />
-        <div className='pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-400/8 blur-3xl' />
-        <div className='relative z-10 flex flex-col gap-3 p-4'>
-          <div className='flex items-center gap-2'>
+        <div className="pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-400/8 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-400/8 blur-3xl" />
+        <div className="relative z-10 flex flex-col gap-3 p-4">
+          <div className="flex items-center gap-2">
             <span
               className={`inline-flex h-1.5 w-1.5 rounded-full ${statusTone}`}
             />
@@ -202,24 +203,24 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
               {statusLabel}
             </span>
             {isListening && listeningMode === "dictate" && (
-              <span className='flex items-center gap-0.5 ml-1'>
+              <span className="flex items-center gap-0.5 ml-1">
                 <span
-                  className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse'
+                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
                   style={{ animationDelay: "0ms" }}
                 />
                 <span
-                  className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse'
+                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
                   style={{ animationDelay: "150ms" }}
                 />
                 <span
-                  className='inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse'
+                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
                   style={{ animationDelay: "300ms" }}
                 />
               </span>
             )}
           </div>
 
-          <div className='relative'>
+          <div className="relative">
             <div
               className={`group/input relative flex flex-col overflow-hidden rounded-xl border ${inputSurfaceClass} shadow-sm transition-all duration-200 focus-within:border-indigo-400 focus-within:shadow-md focus-within:shadow-indigo-500/20`}
             >
@@ -267,7 +268,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                     handleSend();
                   }
                 }}
-                aria-label='Type your question to AIVA'
+                aria-label="Type your question to AIVA"
                 readOnly={isListening && listeningMode === "send"}
                 rows={1}
                 spellCheck={false}
@@ -283,16 +284,16 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                 }}
               />
 
-              <div className='pointer-events-none absolute right-1.5 bottom-1.5 flex items-center gap-1.5'>
+              <div className="pointer-events-none absolute right-1.5 bottom-1.5 flex items-center gap-1.5">
                 <button
-                  type='button'
+                  type="button"
                   onClick={handleSend}
-                  aria-label='Send message'
+                  aria-label="Send message"
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
                   }
-                  className='pointer-events-auto flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed'
+                  className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed"
                   style={{
                     background:
                       "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
@@ -312,24 +313,24 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                   }}
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-4 w-4'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
                     style={{ strokeWidth: "2.5" }}
                   >
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2L11 13'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2L11 13"
                     />
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2l-7 20-4-9-9-4 20-7z'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2l-7 20-4-9-9-4 20-7z"
                     />
                   </svg>
                 </button>
@@ -337,8 +338,8 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             </div>
           </div>
 
-          <div className='flex items-center gap-2'>
-            <div className='flex items-center gap-1.5'>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <VoiceSendButton
                 onClick={toggleVoiceSend}
                 isActive={isListening && listeningMode === "send"}
@@ -354,9 +355,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             {QUICK_PROMPTS.map((prompt) => (
               <button
                 key={prompt.label}
-                type='button'
+                type="button"
                 onClick={() => applyQuickPrompt(prompt.value)}
-                className='rounded-full font-medium transition-all hover:brightness-110'
+                className="rounded-full font-medium transition-all hover:brightness-110"
                 style={{
                   padding: "10px 14px",
                   fontSize: "12px",
