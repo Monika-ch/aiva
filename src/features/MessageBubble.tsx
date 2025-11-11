@@ -63,22 +63,18 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             darkMode ? "bg-indigo-900" : "bg-indigo-50"
           }`}
         >
-          <img
-            src={sparkIcon}
-            alt='AIVA'
-            className='w-3 h-3'
-          />
+          <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
         </div>
       )}
 
-      <div className='flex flex-col max-w-[80%]'>
+      <div className="flex flex-col max-w-[80%]">
         <div
           className={`px-3 py-2 rounded-2xl text-sm shadow-sm ${
             isUser
               ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-none"
               : darkMode
-              ? "bg-gray-700 text-gray-100 rounded-bl-none border border-gray-600"
-              : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
+                ? "bg-gray-700 text-gray-100 rounded-bl-none border border-gray-600"
+                : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
           }`}
         >
           <MessageContentRenderer

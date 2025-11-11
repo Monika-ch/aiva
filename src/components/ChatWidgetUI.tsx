@@ -261,8 +261,8 @@ const ChatWidgetUI: React.FC<Props> = ({
   // JSX Rendering
   return (
     <div
-      className='fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden'
-      aria-live='polite'
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden"
+      aria-live="polite"
     >
       {/* Copy Notification */}
       <AnimatePresence>
@@ -285,21 +285,21 @@ const ChatWidgetUI: React.FC<Props> = ({
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className={`w-[90vw] max-w-[380px] ${theme.bg} shadow-2xl rounded-2xl overflow-hidden border ${theme.border} mb-3`}
-            role='dialog'
-            aria-label='AIVA chat'
+            role="dialog"
+            aria-label="AIVA chat"
           >
             {/* Header */}
             <div
               className={`p-3 border-b ${theme.border} ${theme.headerBg} flex items-center justify-between`}
             >
-              <div className='flex items-center gap-2'>
-                <div className='relative'>
+              <div className="flex items-center gap-2">
+                <div className="relative">
                   <img
                     src={sparkIcon}
-                    alt='AIVA'
-                    className='w-8 h-8'
+                    alt="AIVA"
+                    className="w-8 h-8"
                     style={{
-                      filter: 'drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35))'
+                      filter: "drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35))",
                     }}
                   />
                 </div>
@@ -317,7 +317,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                 </div>
               </div>
 
-              <div className='flex items-center gap-1.5'>
+              <div className="flex items-center gap-1.5">
                 {/* Language Button - TODO: Add language menu functionality */}
                 <button
                   style={{
@@ -329,22 +329,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Language settings'
-                  title='Language settings'
+                  className="hover:opacity-80"
+                  aria-label="Language settings"
+                  title="Language settings"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
                     />
                   </svg>
                 </button>
@@ -361,22 +361,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Clear chat'
-                  title='Clear chat history'
+                  className="hover:opacity-80"
+                  aria-label="Clear chat"
+                  title="Clear chat history"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     />
                   </svg>
                 </button>
@@ -393,22 +393,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                     border: "none",
                     outline: "none",
                   }}
-                  className='hover:opacity-80'
-                  aria-label='Close chat'
-                  title='Close'
+                  className="hover:opacity-80"
+                  aria-label="Close chat"
+                  title="Close"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
+                    xmlns="http://www.w3.org/2000/svg"
                     style={{ width: "16px", height: "16px" }}
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M6 18L18 6M6 6l12 12'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 </button>
@@ -426,9 +426,9 @@ const ChatWidgetUI: React.FC<Props> = ({
             >
               {messages.length === 0 && !isTyping ? (
                 // Empty state with welcome message, suggestions, and actions
-                <div className='flex flex-col h-full py-4 px-4'>
+                <div className="flex flex-col h-full py-4 px-4">
                   {/* Welcome greeting */}
-                  <div className='text-center space-y-1.5 mb-5'>
+                  <div className="text-center space-y-1.5 mb-5">
                     <h2
                       className={`text-base font-semibold ${
                         darkMode ? "text-gray-100" : "text-gray-800"
@@ -448,7 +448,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                   </div>
 
                   {/* Suggestion chips */}
-                  <div className='space-y-2.5 w-full mb-5'>
+                  <div className="space-y-2.5 w-full mb-5">
                     <p
                       className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
                         darkMode ? "text-gray-400" : "text-gray-500"
@@ -456,7 +456,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     >
                       💡 Try asking about:
                     </p>
-                    <div className='flex flex-wrap gap-2 justify-center'>
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {INTRO_SUGGESTIONS.map((suggestion, index) => (
                         <button
                           key={index}
@@ -468,8 +468,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                                 ? "bg-gray-700 text-gray-500 cursor-not-allowed"
                                 : "bg-gray-100 text-gray-400 cursor-not-allowed"
                               : darkMode
-                              ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                              : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
+                                ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
+                                : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
                           }`}
                         >
                           {suggestion}
@@ -479,7 +479,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                   </div>
 
                   {/* Quick action cards */}
-                  <div className='space-y-2.5 w-full'>
+                  <div className="space-y-2.5 w-full">
                     <p
                       className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
                         darkMode ? "text-gray-400" : "text-gray-500"
@@ -487,7 +487,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     >
                       ⚡ Quick actions:
                     </p>
-                    <div className='grid grid-cols-2 gap-2.5'>
+                    <div className="grid grid-cols-2 gap-2.5">
                       {QUICK_ACTIONS.map((action, index) => (
                         <button
                           key={index}
@@ -498,7 +498,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                               : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-sm hover:shadow-md"
                           }`}
                         >
-                          <div className='flex items-center gap-2.5'>
+                          <div className="flex items-center gap-2.5">
                             <div
                               className={`text-xl transform transition-transform group-hover:scale-110 ${
                                 darkMode ? "drop-shadow-lg" : ""
@@ -546,7 +546,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
             {/* Input Container */}
             <div className={`p-3 border-t ${theme.border} ${theme.bg}`}>
-              <div className='flex items-end gap-1.5 mb-2'>
+              <div className="flex items-end gap-1.5 mb-2">
                 <VoiceSendButton
                   onClick={() => startVoiceRecognition("send")}
                   isActive={isVoiceSendActive}
@@ -581,7 +581,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       });
                     }
                   }}
-                  aria-label='Type your question to AIVA'
+                  aria-label="Type your question to AIVA"
                   readOnly={isListening && listeningMode === "send"}
                   rows={1}
                   spellCheck={false}
@@ -598,7 +598,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       triggeredByVoice: false,
                     })
                   }
-                  aria-label='Send message'
+                  aria-label="Send message"
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
@@ -612,26 +612,26 @@ const ChatWidgetUI: React.FC<Props> = ({
                     color: "#ffffff",
                     paddingInline: "clamp(12px, 1.8vw, 16px)",
                   }}
-                  className='flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all'
+                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all"
                 >
                   <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='w-4 h-4'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
                   >
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2L11 13'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2L11 13"
                     />
                     <path
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M22 2l-7 20-4-9-9-4 20-7z'
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M22 2l-7 20-4-9-9-4 20-7z"
                     />
                   </svg>
                 </button>
@@ -650,7 +650,7 @@ const ChatWidgetUI: React.FC<Props> = ({
       </AnimatePresence>
 
       {/* Floating Action Button */}
-      <div className='relative'>
+      <div className="relative">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
@@ -661,12 +661,12 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className='relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all'
+          className="relative p-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg hover:shadow-xl transition-all"
         >
           <img
             src={sparkIcon}
-            alt='Open AIVA chat'
-            className='w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]'
+            alt="Open AIVA chat"
+            className="w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
           />
         </motion.button>
 
@@ -675,7 +675,7 @@ const ChatWidgetUI: React.FC<Props> = ({
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className='absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md'
+            className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md"
           >
             {unreadCount > 9 ? "9+" : unreadCount}
           </motion.span>

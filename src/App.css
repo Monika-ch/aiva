@@ -7,18 +7,35 @@
 
 /* Hero Logo Animations */
 @keyframes hero-float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-4px) rotate(-2deg); }
-  66% { transform: translateY(-2px) rotate(2deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+
+  66% {
+    transform: translateY(-2px) rotate(2deg);
+  }
 }
 
 @keyframes hero-glow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.4)); }
-  50% { filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.7)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.4));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.7));
+  }
 }
 
 .hero-logo {
-  animation: hero-float 4s ease-in-out infinite, hero-glow 2s ease-in-out infinite;
+  animation:
+    hero-float 4s ease-in-out infinite,
+    hero-glow 2s ease-in-out infinite;
   transition: all 0.3s ease;
 }
 
@@ -33,9 +50,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
