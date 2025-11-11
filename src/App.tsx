@@ -169,7 +169,10 @@ function App() {
       if (options?.triggeredByVoice && options?.voiceMode === "send") {
         setTimeout(() => {
           // Use the new message index (current length after adding AI message)
-          readAloud(getResponseForLanguage(preferredLanguage), messages.length + 1);
+          readAloud(
+            getResponseForLanguage(preferredLanguage),
+            messages.length + 1
+          );
         }, 100);
       }
     }, 1000);
