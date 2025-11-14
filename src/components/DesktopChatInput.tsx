@@ -9,6 +9,7 @@ import { useVoiceRecognition } from "../features/useVoiceRecognition";
 import { useDictation } from "../features/useDictation";
 import { useLanguageSettings } from "../features/useLanguageSettings";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
+import type { SendMessageOptions } from "../types/Message";
 
 const QUICK_PROMPTS = [
   {
@@ -29,10 +30,7 @@ const QUICK_PROMPTS = [
 ] as const;
 
 interface DesktopChatInputProps {
-  onSend: (
-    message: string,
-    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
-  ) => void;
+  onSend: (message: string, options?: SendMessageOptions) => void;
   darkMode?: boolean;
   placeholder?: string;
 }

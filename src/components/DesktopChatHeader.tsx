@@ -9,7 +9,7 @@ import {
   useLanguageSettings,
   filterLanguageOptions,
 } from "../features/useLanguageSettings";
-import { clearConversationStorage } from "../features/ClearChat";
+import { clearConversationStorage } from "../features/clearConversationStorage";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 import sparkIcon from "../assets/logo-robo-face.svg";

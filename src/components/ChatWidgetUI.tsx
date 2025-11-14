@@ -21,8 +21,8 @@ import {
   VoiceSendButton,
   DictateButton,
   filterLanguageOptions,
-  type Message,
 } from "../features";
+import type { Message, SendMessageOptions } from "../types/Message";
 
 // Import chat constants
 import {
@@ -34,6 +34,7 @@ import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 
 // Import confirm dialog
 import { ConfirmDialog } from "./ConfirmDialog";
+import { ReplyPreview } from "./ReplyPreview";
 
 interface Props {
   messages: Message[];
@@ -41,7 +42,7 @@ interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   input: string;
   setInput: (s: string) => void;
-  handleSend: (messageOverride?: string) => void;
+  handleSend: (messageOverride?: string, options?: SendMessageOptions) => void;
   unreadCount?: number;
   latestAssistantMessage?: string | null;
   isTyping?: boolean;
@@ -81,6 +82,10 @@ const ChatWidgetUI: React.FC<Props> = ({
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [languageSearch, setLanguageSearch] = useState("");
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<{
+    message: Message;
+    index: number;
+  } | null>(null);
 
   // Custom hooks
   const theme = getThemeClasses(darkMode);
@@ -103,12 +108,20 @@ const ChatWidgetUI: React.FC<Props> = ({
     setDictationBase,
   } = useDictation();
 
+  // Handle reply to message
+  const handleReply = useCallback((message: Message, index: number) => {
+    setReplyingTo({ message, index });
+    inputRef.current?.focus();
+  }, []);
+
+  // Clear reply
+  const clearReply = useCallback(() => {
+    setReplyingTo(null);
+  }, []);
+
   // Send message handler with voice support
   const sendUserMessage = useCallback(
-    (
-      message: string,
-      options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
-    ) => {
+    (message: string, options?: SendMessageOptions) => {
       console.log("[DEBUG] sendUserMessage called with:", { message, options });
       const trimmedMessage = message.trim();
       if (!trimmedMessage) {
@@ -133,9 +146,15 @@ const ChatWidgetUI: React.FC<Props> = ({
         "[DEBUG] Calling handleSend from hook with trimmed message:",
         trimmedMessage
       );
-      handleSend(trimmedMessage);
+      handleSend(trimmedMessage, {
+        ...options,
+        replyToId: replyingTo?.message.id,
+      });
+      if (replyingTo) {
+        clearReply();
+      }
     },
-    [handleSend, recordVoiceLanguagePreference]
+    [handleSend, recordVoiceLanguagePreference, replyingTo, clearReply]
   );
 
   const { isListening, listeningMode, startVoiceRecognition } =
@@ -157,10 +176,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
   // Handle send with dictation cleanup
   const handleSendWithDictation = useCallback(
-    (
-      messageOverride?: string,
-      options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
-    ) => {
+    (messageOverride?: string, options?: SendMessageOptions) => {
       console.log("[DEBUG] handleSendWithDictation called:", {
         messageOverride,
         options,
@@ -271,6 +287,7 @@ const ChatWidgetUI: React.FC<Props> = ({
     if (onClearMessages) {
       onClearMessages();
     }
+    clearReply();
     setShowClearConfirm(false);
   };
 
@@ -699,6 +716,12 @@ const ChatWidgetUI: React.FC<Props> = ({
                       onReaction={handleReaction}
                       onSuggestionClick={handleSuggestionClick}
                       onActionClick={handleQuickAction}
+                      onReply={handleReply}
+                      replyToMessage={
+                        message.replyToId
+                          ? messages.find((m) => m.id === message.replyToId)
+                          : undefined
+                      }
                     />
                   ))}
 
@@ -710,6 +733,16 @@ const ChatWidgetUI: React.FC<Props> = ({
 
             {/* Input Container */}
             <div className={`p-3 border-t ${theme.border} ${theme.bg}`}>
+              {/* Reply Preview */}
+              {replyingTo && (
+                <ReplyPreview
+                  replyToContent={replyingTo.message.content}
+                  replyToRole={replyingTo.message.role}
+                  darkMode={darkMode}
+                  onClear={clearReply}
+                />
+              )}
+
               <div className="flex items-end gap-1.5 mb-2">
                 <VoiceSendButton
                   onClick={() => startVoiceRecognition("send")}

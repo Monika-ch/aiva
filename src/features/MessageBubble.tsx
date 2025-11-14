@@ -9,17 +9,11 @@ import {
   ReadAloudButton,
   CopyButton,
   ReactionButtons,
-  formatTime,
+  ReplyButton,
 } from "./UIControls";
 import { MessageContentRenderer } from "./ActionCards";
-
-export interface Message {
-  role: "user" | "assistant";
-  content: string;
-  timestamp?: number;
-  id?: string;
-  reaction?: "helpful" | "not-helpful" | null;
-}
+import type { Message } from "../types/Message";
+import { formatTime } from "../lib/formatTime";
 
 interface MessageBubbleProps {
   message: Message;
@@ -33,6 +27,8 @@ interface MessageBubbleProps {
   onReaction: (index: number, reaction: "helpful" | "not-helpful") => void;
   onSuggestionClick: (suggestion: string) => void;
   onActionClick: (query: string) => void;
+  onReply?: (message: Message, index: number) => void;
+  replyToMessage?: Message;
 }
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
@@ -47,9 +43,21 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   onReaction,
   onSuggestionClick,
   onActionClick,
+  onReply,
+  replyToMessage,
 }) => {
   const isAssistant = message.role === "assistant";
   const isUser = message.role === "user";
+  const repliedRoleLabel = replyToMessage
+    ? replyToMessage.role === "assistant"
+      ? "AIVA"
+      : "You"
+    : null;
+  const repliedContentSnippet = replyToMessage
+    ? replyToMessage.content.length > 160
+      ? `${replyToMessage.content.slice(0, 160)}...`
+      : replyToMessage.content
+    : null;
 
   return (
     <div
@@ -77,6 +85,42 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                 : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
           }`}
         >
+          {/* Reply Quote */}
+          {replyToMessage && repliedRoleLabel && repliedContentSnippet && (
+            <div
+              className={`mb-2 pb-2 border-l-4 pl-2 ${
+                isUser
+                  ? "border-white/40 bg-white/10"
+                  : darkMode
+                    ? "border-gray-500 bg-gray-800/60"
+                    : "border-gray-300 bg-gray-100/90"
+              } rounded`}
+            >
+              <p
+                className={`text-xs font-semibold mb-0.5 ${
+                  isUser
+                    ? "text-white/90"
+                    : darkMode
+                      ? "text-gray-300"
+                      : "text-gray-700"
+                }`}
+              >
+                {repliedRoleLabel}
+              </p>
+              <p
+                className={`text-xs italic ${
+                  isUser
+                    ? "text-white/70"
+                    : darkMode
+                      ? "text-gray-400"
+                      : "text-gray-600"
+                }`}
+              >
+                {repliedContentSnippet}
+              </p>
+            </div>
+          )}
+
           <MessageContentRenderer
             content={message.content}
             isAssistant={isAssistant}
@@ -113,12 +157,24 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                 onClick={() => onCopy(message.content)}
                 darkMode={darkMode}
               />
+              {onReply && (
+                <ReplyButton
+                  onClick={() => onReply(message, messageIndex)}
+                  darkMode={darkMode}
+                />
+              )}
               <ReactionButtons
                 onReaction={(reaction) => onReaction(messageIndex, reaction)}
                 currentReaction={message.reaction}
                 darkMode={darkMode}
               />
             </>
+          )}
+          {isUser && onReply && (
+            <ReplyButton
+              onClick={() => onReply(message, messageIndex)}
+              darkMode={darkMode}
+            />
           )}
         </div>
       </div>

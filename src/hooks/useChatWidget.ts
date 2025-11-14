@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { SendMessageOptions } from "../types/Message";
 
 export interface UseChatWidgetResult {
   isOpen: boolean;
@@ -6,7 +7,7 @@ export interface UseChatWidgetResult {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
-  handleSend: (messageOverride?: string) => void;
+  handleSend: (messageOverride?: string, options?: SendMessageOptions) => void;
 }
 
 /**
@@ -14,16 +15,19 @@ export interface UseChatWidgetResult {
  * Keeps UI and logic separated so the UI component stays purely presentational.
  */
 export default function useChatWidget(
-  onSend: (msg: string) => void
+  onSend: (msg: string, options?: SendMessageOptions) => void
 ): UseChatWidgetResult {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
 
-  const handleSend = (messageOverride?: string) => {
+  const handleSend = (
+    messageOverride?: string,
+    options?: SendMessageOptions
+  ) => {
     const messageToSend =
       messageOverride !== undefined ? messageOverride : input;
     if (!messageToSend.trim()) return;
-    onSend(messageToSend);
+    onSend(messageToSend, options);
     setInput("");
   };
 

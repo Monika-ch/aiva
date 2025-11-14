@@ -40,11 +40,6 @@
 //               <p className="text-sm text-gray-500">AI-Powered Portfolio Assistant</p>
 //             </div>
 //           </div>
-//           <Hero />
-//         </div>
-
-//         {/* Right column: Chat */}
-//         <div className="md:col-span-2">
 //           <ChatContainer>
 //             <ChatHeader />
 //             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
@@ -82,33 +77,23 @@
 
 // export default App;
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
 import ChatContainer from "./components/ChatContainer";
 import DesktopChatHeader from "./components/DesktopChatHeader";
 import DesktopChatInput from "./components/DesktopChatInput";
+import { ReplyPreview } from "./components/ReplyPreview";
 import Hero from "./components/Hero";
 import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
 import { useDarkMode } from "./features/useDarkMode";
-import {
-  MessageBubble,
-  useTextToSpeech,
-  type Message as FeatureMessage,
-} from "./features";
+import { MessageBubble, useTextToSpeech } from "./features";
 import {
   INTRO_SUGGESTIONS,
   QUICK_ACTIONS,
   CHAT_PLACEHOLDERS,
 } from "./constants/chatConstants";
-
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-  timestamp?: number;
-  id?: string;
-  reaction?: "helpful" | "not-helpful" | null;
-}
+import type { Message, SendMessageOptions } from "./types/Message";
 
 const DEFAULT_AI_RESPONSE =
   "That's interesting! Tell me more about your portfolio goals.";
@@ -139,48 +124,67 @@ function App() {
     new Set()
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [replyingTo, setReplyingTo] = useState<{
+    message: Message;
+    index: number;
+  } | null>(null);
 
-  const handleSend = (
-    msg: string,
-    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
-  ) => {
-    if (!msg.trim()) return;
-    const userMessage: Message = {
-      role: "user",
-      content: msg,
-      timestamp: Date.now(),
-      id: `user-${Date.now()}`,
-    };
-    setMessages((prev) => [...prev, userMessage]);
+  const clearReply = useCallback(() => {
+    setReplyingTo(null);
+  }, []);
 
-    // Mock AI response
-    setTimeout(() => {
-      const preferredLanguage =
-        typeof window !== "undefined"
-          ? localStorage.getItem("aiva-current-language")
-          : "en";
+  const handleSend = useCallback(
+    (msg: string, options?: SendMessageOptions) => {
+      const trimmed = msg.trim();
+      if (!trimmed) return;
 
-      const aiMessage: Message = {
-        role: "assistant",
-        content: getResponseForLanguage(preferredLanguage),
-        timestamp: Date.now(),
-        id: `assistant-${Date.now()}`,
-        reaction: null,
+      const replyTargetId = replyingTo?.message.id;
+      const userTimestamp = Date.now();
+      const userMessage: Message = {
+        role: "user",
+        content: trimmed,
+        timestamp: userTimestamp,
+        id: `user-${userTimestamp}`,
+        replyToId: replyTargetId,
       };
-      setMessages((prev) => [...prev, aiMessage]);
 
-      // Read aloud the response if triggered by voice send mode
-      if (options?.triggeredByVoice && options?.voiceMode === "send") {
-        setTimeout(() => {
-          // Use the new message index (current length after adding AI message)
-          readAloud(
-            getResponseForLanguage(preferredLanguage),
-            messages.length + 1
-          );
-        }, 100);
+      setMessages((prev) => [...prev, userMessage]);
+
+      if (replyingTo) {
+        clearReply();
       }
-    }, 1000);
-  };
+
+      // Mock AI response
+      setTimeout(() => {
+        const preferredLanguage =
+          typeof window !== "undefined"
+            ? localStorage.getItem("aiva-current-language")
+            : "en";
+
+        setMessages((prev) => {
+          const aiTimestamp = Date.now();
+          const aiContent = getResponseForLanguage(preferredLanguage);
+          const aiMessage: Message = {
+            role: "assistant",
+            content: aiContent,
+            timestamp: aiTimestamp,
+            id: `assistant-${aiTimestamp}`,
+            reaction: null,
+          };
+
+          const nextMessages = [...prev, aiMessage];
+
+          if (options?.triggeredByVoice && options.voiceMode === "send") {
+            const aiIndex = nextMessages.length - 1;
+            readAloud(aiContent, aiIndex);
+          }
+
+          return nextMessages;
+        });
+      }, 1000);
+    },
+    [replyingTo, clearReply, readAloud]
+  );
 
   // Mobile: allow adding assistant messages (for welcome/intro messages)
   const addMobileAssistantMessage = (text: string) => {
@@ -198,6 +202,7 @@ function App() {
   // Clear all messages
   const clearMessages = () => {
     setMessages([]);
+    clearReply();
   };
 
   // Clear mobile messages
@@ -205,35 +210,50 @@ function App() {
     setMobileMessages([]);
   };
 
-  // Mobile: Handle send (separate from desktop)
-  const handleMobileSend = (msg: string) => {
-    if (!msg.trim()) return;
-    const userMessage: Message = {
-      role: "user",
-      content: msg,
-      timestamp: Date.now(),
-      id: `mobile-user-${Date.now()}`,
-      reaction: null,
-    };
-    setMobileMessages((prev) => [...prev, userMessage]);
+  // Handle reply to message (desktop)
+  const handleReply = useCallback((message: Message, index: number) => {
+    setReplyingTo({ message, index });
+  }, []);
 
-    // Mock AI response for mobile
-    setTimeout(() => {
-      const preferredLanguage =
-        typeof window !== "undefined"
-          ? localStorage.getItem("aiva-current-language")
-          : "en";
+  const handleMobileSend = useCallback(
+    (msg: string, options?: SendMessageOptions) => {
+      const trimmed = msg.trim();
+      if (!trimmed) return;
 
-      const aiMessage: Message = {
-        role: "assistant",
-        content: getResponseForLanguage(preferredLanguage),
-        timestamp: Date.now(),
-        id: `mobile-assistant-${Date.now()}`,
+      const userTimestamp = Date.now();
+      const userMessage: Message = {
+        role: "user",
+        content: trimmed,
+        timestamp: userTimestamp,
+        id: `mobile-user-${userTimestamp}`,
         reaction: null,
+        replyToId: options?.replyToId,
       };
-      setMobileMessages((prev) => [...prev, aiMessage]);
-    }, 1000);
-  };
+      setMobileMessages((prev) => [...prev, userMessage]);
+
+      // Mock AI response for mobile
+      setTimeout(() => {
+        const preferredLanguage =
+          typeof window !== "undefined"
+            ? localStorage.getItem("aiva-current-language")
+            : "en";
+
+        setMobileMessages((prev) => {
+          const aiTimestamp = Date.now();
+          const aiContent = getResponseForLanguage(preferredLanguage);
+          const aiMessage: Message = {
+            role: "assistant",
+            content: aiContent,
+            timestamp: aiTimestamp,
+            id: `mobile-assistant-${aiTimestamp}`,
+            reaction: null,
+          };
+          return [...prev, aiMessage];
+        });
+      }, 1000);
+    },
+    []
+  );
 
   // Handle message reaction (desktop)
   const handleReaction = (
@@ -269,15 +289,31 @@ function App() {
   }, []);
 
   // Handle suggestion click
-  const handleSuggestionClick = useCallback((suggestion: string) => {
-    setClickedSuggestions((prev) => new Set(prev).add(suggestion));
-    handleSend(suggestion);
-  }, []);
+  const handleSuggestionClick = useCallback(
+    (suggestion: string) => {
+      setClickedSuggestions((prev) => new Set(prev).add(suggestion));
+      handleSend(suggestion);
+    },
+    [handleSend]
+  );
 
   // Handle quick action click
-  const handleQuickAction = useCallback((query: string) => {
-    handleSend(query);
-  }, []);
+  const handleQuickAction = useCallback(
+    (query: string) => {
+      handleSend(query);
+    },
+    [handleSend]
+  );
+
+  const messagesById = useMemo(() => {
+    const map = new Map<string, Message>();
+    for (const message of messages) {
+      if (message.id) {
+        map.set(message.id, message);
+      }
+    }
+    return map;
+  }, [messages]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -285,6 +321,21 @@ function App() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  // Focus input when replying (desktop)
+  useEffect(() => {
+    if (replyingTo) {
+      // Small timeout to ensure the reply preview is rendered first
+      setTimeout(() => {
+        const textarea = document.querySelector<HTMLTextAreaElement>(
+          ".desktop-chat-input textarea"
+        );
+        if (textarea) {
+          textarea.focus();
+        }
+      }, 100);
+    }
+  }, [replyingTo]);
 
   return (
     <div
@@ -496,17 +547,7 @@ function App() {
                     {messages.map((message, index) => (
                       <MessageBubble
                         key={message.id || index}
-                        message={
-                          {
-                            sender:
-                              message.role === "user" ? "user" : "assistant",
-                            role: message.role,
-                            content: message.content,
-                            timestamp: message.timestamp,
-                            reaction: message.reaction,
-                            id: message.id,
-                          } as FeatureMessage
-                        }
+                        message={message}
                         messageIndex={index}
                         darkMode={darkMode}
                         clickedSuggestions={clickedSuggestions}
@@ -516,14 +557,35 @@ function App() {
                         onCopy={copyToClipboard}
                         onReaction={handleReaction}
                         onSuggestionClick={handleSuggestionClick}
+                        replyToMessage={
+                          message.replyToId
+                            ? messagesById.get(message.replyToId)
+                            : undefined
+                        }
                         onActionClick={handleQuickAction}
+                        onReply={handleReply}
                       />
                     ))}
                     <div ref={messagesEndRef} />
                   </>
                 )}
               </div>
-              <DesktopChatInput onSend={handleSend} darkMode={darkMode} />
+
+              {/* Reply Preview for Desktop */}
+              {replyingTo && (
+                <div className="px-4 pt-3">
+                  <ReplyPreview
+                    replyToContent={replyingTo.message.content}
+                    replyToRole={replyingTo.message.role}
+                    darkMode={darkMode}
+                    onClear={clearReply}
+                  />
+                </div>
+              )}
+
+              <div className="desktop-chat-input">
+                <DesktopChatInput onSend={handleSend} darkMode={darkMode} />
+              </div>
             </ChatContainer>
           </div>
         </div>

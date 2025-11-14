@@ -95,7 +95,7 @@ export const useLanguageSettings = () => {
     if (typeof window === "undefined") return;
     try {
       localStorage.setItem(CURRENT_LANGUAGE_KEY, effectiveSpeechLocale);
-    } catch (error) {
+    } catch {
       // ignore persistence errors
     }
   }, [effectiveSpeechLocale]);
@@ -105,7 +105,7 @@ export const useLanguageSettings = () => {
     try {
       localStorage.setItem(LAST_VOICE_LANGUAGE_KEY, effectiveSpeechLocale);
       localStorage.setItem(CURRENT_LANGUAGE_KEY, effectiveSpeechLocale);
-    } catch (error) {
+    } catch {
       // ignore storage errors
     }
   };

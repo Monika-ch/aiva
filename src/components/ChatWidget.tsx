@@ -2,18 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import ChatWidgetUI from "./ChatWidgetUI";
 import { QUICK_ACTIONS_MARKER } from "../features";
 import useChatWidget from "../hooks/useChatWidget";
-
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-  timestamp?: number;
-  id?: string;
-  reaction?: "helpful" | "not-helpful" | null;
-}
+import type { Message, SendMessageOptions } from "../types/Message";
 
 interface ChatWidgetProps {
   messages: Message[];
-  onSend: (msg: string) => void;
+  onSend: (msg: string, options?: SendMessageOptions) => void;
   onAssistantMessage?: (msg: string) => void;
   onClearMessages?: () => void;
   onReaction?: (

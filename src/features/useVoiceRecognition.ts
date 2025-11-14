@@ -12,15 +12,20 @@ import {
   stripSendCommand,
   normalizeAivaName,
 } from "./voiceCommands";
+import type { SendMessageOptions } from "../types/Message";
+import type {
+  SpeechRecognitionConstructorLike,
+  SpeechRecognitionErrorEventLike,
+  SpeechRecognitionEventLike,
+  SpeechRecognitionLike,
+  WindowWithSpeechRecognition,
+} from "../types/SpeechRecognition";
 
 export type VoiceMode = "send" | "dictate" | null;
 
 interface UseVoiceRecognitionProps {
   effectiveSpeechLocale: string;
-  onSendMessage: (
-    message: string,
-    options?: { triggeredByVoice?: boolean; voiceMode?: "send" | "dictate" }
-  ) => void;
+  onSendMessage: (message: string, options?: SendMessageOptions) => void;
   setInput: (s: string) => void;
   input: string;
   appendDictationChunk: (chunk: string) => void;
@@ -49,7 +54,7 @@ export const useVoiceRecognition = ({
   const [isListening, setIsListening] = useState(false);
   const [listeningMode, setListeningMode] = useState<VoiceMode>(null);
 
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const listeningModeRef = useRef<VoiceMode>(null);
   const stopRequestedRef = useRef(false);
   const sendModeTranscriptRef = useRef("");
@@ -98,221 +103,271 @@ export const useVoiceRecognition = ({
     try {
       stopRequestedRef.current = true;
       recognitionRef.current?.stop();
-    } catch (error) {
+    } catch {
       // ignore stop errors
     } finally {
       resetListeningState();
     }
   }, [clearSendModeTimer, resetListeningState, onSendMessage]);
 
-  // Initialize Speech Recognition
+  // Initialize Speech Recognition - only once on mount
   useEffect(() => {
-    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-      const SpeechRecognition =
-        (window as any).webkitSpeechRecognition ||
-        (window as any).SpeechRecognition;
+    if (typeof window === "undefined") {
+      return undefined;
+    }
 
-      if (!recognitionRef.current) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = false;
-        recognitionRef.current.interimResults = false;
+    const { webkitSpeechRecognition, SpeechRecognition } =
+      window as WindowWithSpeechRecognition;
+    const RecognitionCtor: SpeechRecognitionConstructorLike | undefined =
+      webkitSpeechRecognition ?? SpeechRecognition;
+
+    if (!RecognitionCtor) {
+      return undefined;
+    }
+
+    const recognitionInstance = new RecognitionCtor();
+    recognitionInstance.continuous = false;
+    recognitionInstance.interimResults = false;
+    recognitionRef.current = recognitionInstance;
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.onresult = null;
+        recognitionRef.current.onerror = null;
+        recognitionRef.current.onend = null;
+        try {
+          recognitionRef.current.stop();
+        } catch {
+          // ignore cleanup errors
+        }
+        recognitionRef.current = null;
+      }
+    };
+  }, []);
+
+  // Update event handlers when dependencies change
+  useEffect(() => {
+    const recognition = recognitionRef.current;
+    if (!recognition) {
+      return;
+    }
+
+    recognition.lang = effectiveSpeechLocale;
+
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
+      console.log("[DEBUG] Speech recognition onresult fired");
+
+      if (stopRequestedRef.current) {
+        return;
       }
 
-      recognitionRef.current.lang = effectiveSpeechLocale;
+      const mode = listeningModeRef.current;
+      if (!mode) return;
 
-      recognitionRef.current.onresult = (event: any) => {
-        console.log("[DEBUG] Speech recognition onresult fired");
+      let collectedTranscript = "";
+      const startIndex = Math.max(
+        event.resultIndex,
+        lastProcessedResultIndexRef.current
+      );
 
-        if (stopRequestedRef.current) {
+      for (let i = startIndex; i < event.results.length; i += 1) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          collectedTranscript += result[0].transcript;
+          lastProcessedResultIndexRef.current = i + 1;
+        }
+      }
+
+      const cleanedTranscript = normalizeAivaName(
+        collectedTranscript.replace(/\s+/g, " ").trim()
+      );
+
+      if (!cleanedTranscript) return;
+
+      // Handle "send" mode
+      if (mode === "send") {
+        const combinedTranscript = [
+          sendModeTranscriptRef.current,
+          cleanedTranscript,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        sendModeTranscriptRef.current = combinedTranscript;
+
+        if (sendModeSilenceTimerRef.current) {
+          clearTimeout(sendModeSilenceTimerRef.current);
+        }
+
+        sendModeSilenceTimerRef.current = setTimeout(
+          finalizeSendModeMessage,
+          5000
+        );
+        return;
+      }
+
+      // Handle "dictate" mode
+      if (mode === "dictate") {
+        console.log("[Voice Command Debug] Transcript:", cleanedTranscript);
+
+        // Handle "enter" command
+        if (isEnterCommand(cleanedTranscript)) {
+          console.log("[Voice Command] ENTER detected");
+          appendDictationChunk("\n");
+          const combined = buildDictationCombinedContent();
+          setInput(combined);
+          // Reset and restart recognition for fresh results
+          lastProcessedResultIndexRef.current = 0;
+          try {
+            recognitionRef.current?.stop();
+            setTimeout(() => {
+              if (
+                listeningModeRef.current === "dictate" &&
+                recognitionRef.current
+              ) {
+                recognitionRef.current.continuous = true;
+                recognitionRef.current.interimResults = true;
+                recognitionRef.current.start();
+              }
+            }, 100);
+          } catch (error) {
+            console.error("[Voice] Error restarting after enter:", error);
+          }
           return;
         }
 
-        const mode = listeningModeRef.current;
-        if (!mode) return;
-
-        let collectedTranscript = "";
-        const startIndex = Math.max(
-          event.resultIndex,
-          lastProcessedResultIndexRef.current
-        );
-
-        for (let i = startIndex; i < event.results.length; i += 1) {
-          const result = event.results[i];
-          if (result.isFinal) {
-            collectedTranscript += result[0].transcript;
-            lastProcessedResultIndexRef.current = i + 1;
-          }
-        }
-
-        const cleanedTranscript = normalizeAivaName(
-          collectedTranscript.replace(/\s+/g, " ").trim()
-        );
-
-        if (!cleanedTranscript) return;
-
-        // Handle "send" mode
-        if (mode === "send") {
-          const combinedTranscript = [
-            sendModeTranscriptRef.current,
-            cleanedTranscript,
-          ]
-            .filter(Boolean)
-            .join(" ")
-            .replace(/\s+/g, " ")
-            .trim();
-
-          sendModeTranscriptRef.current = combinedTranscript;
-
-          if (sendModeSilenceTimerRef.current) {
-            clearTimeout(sendModeSilenceTimerRef.current);
-          }
-
-          sendModeSilenceTimerRef.current = setTimeout(
-            finalizeSendModeMessage,
-            5000
-          );
+        // Handle "clear" command
+        if (isClearCommand(cleanedTranscript)) {
+          console.log("[Voice Command] CLEAR detected");
+          clearDictationTranscript(setInput);
+          lastProcessedResultIndexRef.current = 0;
           return;
         }
 
-        // Handle "dictate" mode
-        if (mode === "dictate") {
-          console.log("[Voice Command Debug] Transcript:", cleanedTranscript);
+        // Handle "delete" command
+        if (isDeleteCommand(cleanedTranscript)) {
+          const deleteCount = countDeleteCommands(cleanedTranscript);
+          console.log("[Voice Command] DELETE detected, count:", deleteCount);
+          deleteLastWordsFromDictation(deleteCount, setInput);
+          lastProcessedResultIndexRef.current = 0;
+          return;
+        }
 
-          // Handle "enter" command
-          if (isEnterCommand(cleanedTranscript)) {
-            console.log("[Voice Command] ENTER detected");
-            appendDictationChunk("\n");
-            const combined = buildDictationCombinedContent();
-            setInput(combined);
-            // Reset and restart recognition for fresh results
-            lastProcessedResultIndexRef.current = 0;
+        const { text: chunkWithoutCommand, triggered } =
+          stripSendCommand(cleanedTranscript);
+        const trimmedChunk = chunkWithoutCommand.trim();
+
+        if (trimmedChunk) {
+          appendDictationChunk(trimmedChunk);
+          const combined = buildDictationCombinedContent();
+          setInput(combined);
+        } else if (!triggered) {
+          return;
+        }
+
+        if (triggered) {
+          const finalContent = buildDictationCombinedContent().trim();
+          if (finalContent) {
+            // Stop listening before sending
+            stopRequestedRef.current = true;
             try {
               recognitionRef.current?.stop();
-              setTimeout(() => {
-                if (listeningModeRef.current === "dictate") {
-                  recognitionRef.current.continuous = true;
-                  recognitionRef.current.interimResults = true;
-                  recognitionRef.current.start();
-                }
-              }, 100);
-            } catch (error) {
-              console.error("[Voice] Error restarting after enter:", error);
+            } catch {
+              // ignore stop errors
             }
-            return;
-          }
 
-          // Handle "clear" command
-          if (isClearCommand(cleanedTranscript)) {
-            console.log("[Voice Command] CLEAR detected");
-            clearDictationTranscript(setInput);
-            lastProcessedResultIndexRef.current = 0;
-            return;
-          }
+            onSendMessage(finalContent, {
+              triggeredByVoice: true,
+              voiceMode: "dictate",
+            });
 
-          // Handle "delete" command
-          if (isDeleteCommand(cleanedTranscript)) {
-            const deleteCount = countDeleteCommands(cleanedTranscript);
-            console.log("[Voice Command] DELETE detected, count:", deleteCount);
-            deleteLastWordsFromDictation(deleteCount, setInput);
-            lastProcessedResultIndexRef.current = 0;
-            return;
-          }
-
-          const { text: chunkWithoutCommand, triggered } =
-            stripSendCommand(cleanedTranscript);
-          const trimmedChunk = chunkWithoutCommand.trim();
-
-          if (trimmedChunk) {
-            appendDictationChunk(trimmedChunk);
-            const combined = buildDictationCombinedContent();
-            setInput(combined);
-          } else if (!triggered) {
-            return;
-          }
-
-          if (triggered) {
-            const finalContent = buildDictationCombinedContent().trim();
-            if (finalContent) {
-              // Stop listening before sending
-              stopRequestedRef.current = true;
-              try {
-                recognitionRef.current?.stop();
-              } catch (error) {
-                // ignore stop errors
-              }
-
-              onSendMessage(finalContent, {
-                triggeredByVoice: true,
-                voiceMode: "dictate",
-              });
-
-              // Reset state after sending
-              resetListeningState();
-            }
+            // Reset state after sending
+            resetListeningState();
           }
         }
-      };
+      }
+    };
 
-      recognitionRef.current.onerror = (event: any) => {
-        console.error("[DEBUG] Speech recognition error:", event?.error);
+    recognition.onerror = (event: SpeechRecognitionErrorEventLike) => {
+      console.error("[DEBUG] Speech recognition error:", event?.error);
 
-        if (
-          listeningModeRef.current === "dictate" &&
-          !stopRequestedRef.current &&
-          event?.error === "no-speech"
-        ) {
-          try {
-            recognitionRef.current.continuous = true;
-            recognitionRef.current.interimResults = true;
-            recognitionRef.current.lang = effectiveSpeechLocale;
-            recognitionRef.current?.start();
-            setIsListening(true);
+      if (
+        listeningModeRef.current === "dictate" &&
+        !stopRequestedRef.current &&
+        event?.error === "no-speech"
+      ) {
+        try {
+          if (!recognitionRef.current) {
             return;
-          } catch (error) {
-            // fall through to reset
           }
-        }
-
-        resetListeningState();
-      };
-
-      recognitionRef.current.onend = () => {
-        const mode = listeningModeRef.current;
-
-        if (stopRequestedRef.current) {
-          resetListeningState();
+          recognitionRef.current.continuous = true;
+          recognitionRef.current.interimResults = true;
+          recognitionRef.current.lang = effectiveSpeechLocale;
+          recognitionRef.current.start();
+          setIsListening(true);
           return;
+        } catch {
+          // fall through to reset
         }
+      }
 
-        if (mode === "dictate") {
+      resetListeningState();
+    };
+
+    recognition.onend = () => {
+      const mode = listeningModeRef.current;
+
+      if (stopRequestedRef.current) {
+        resetListeningState();
+        return;
+      }
+
+      if (mode === "dictate") {
+        try {
+          if (!recognitionRef.current) {
+            return;
+          }
+          recognitionRef.current.continuous = true;
+          recognitionRef.current.interimResults = true;
+          recognitionRef.current.lang = effectiveSpeechLocale;
+          recognitionRef.current.start();
+          setIsListening(true);
+        } catch {
+          resetListeningState();
+        }
+      } else if (mode === "send") {
+        if (sendModeSilenceTimerRef.current) {
           try {
-            recognitionRef.current.continuous = true;
-            recognitionRef.current.interimResults = true;
+            if (!recognitionRef.current) {
+              return;
+            }
+            recognitionRef.current.continuous = false;
+            recognitionRef.current.interimResults = false;
             recognitionRef.current.lang = effectiveSpeechLocale;
             recognitionRef.current.start();
             setIsListening(true);
-          } catch (error) {
-            resetListeningState();
+          } catch {
+            // If restart fails, wait for silence timer
           }
-        } else if (mode === "send") {
-          if (sendModeSilenceTimerRef.current) {
-            try {
-              recognitionRef.current.continuous = false;
-              recognitionRef.current.interimResults = false;
-              recognitionRef.current.lang = effectiveSpeechLocale;
-              recognitionRef.current.start();
-              setIsListening(true);
-            } catch (error) {
-              // If restart fails, wait for silence timer
-            }
-            return;
-          }
-          resetListeningState();
-        } else {
-          resetListeningState();
+          return;
         }
-      };
-    }
+        resetListeningState();
+      } else {
+        resetListeningState();
+      }
+    };
+
+    return () => {
+      if (!recognitionRef.current) {
+        return;
+      }
+
+      recognitionRef.current.onresult = null;
+      recognitionRef.current.onerror = null;
+      recognitionRef.current.onend = null;
+    };
   }, [
     appendDictationChunk,
     buildDictationCombinedContent,
@@ -344,7 +399,11 @@ export const useVoiceRecognition = ({
           sendModeTranscriptRef.current = "";
         }
         stopRequestedRef.current = true;
-        recognitionRef.current.stop();
+        try {
+          recognitionRef.current.stop();
+        } catch {
+          // ignore stop errors
+        }
         return;
       }
 

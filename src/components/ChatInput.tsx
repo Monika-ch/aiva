@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
+import type {
+  SpeechRecognitionConstructorLike,
+  SpeechRecognitionEventLike,
+  SpeechRecognitionLike,
+  WindowWithSpeechRecognition,
+} from "../types/SpeechRecognition";
 
 interface EnhancedChatInputProps {
   onSend: (message: string) => void;
@@ -14,33 +20,59 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
 }) => {
   const [message, setMessage] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
-    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-      const SpeechRecognition =
-        (window as any).webkitSpeechRecognition ||
-        (window as any).SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = "en-US";
-
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setMessage(transcript);
-        setIsListening(false);
-      };
-
-      recognitionRef.current.onerror = () => {
-        setIsListening(false);
-      };
-
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
+    if (typeof window === "undefined") {
+      return;
     }
+
+    const { webkitSpeechRecognition, SpeechRecognition } =
+      window as WindowWithSpeechRecognition;
+    const RecognitionCtor: SpeechRecognitionConstructorLike | undefined =
+      webkitSpeechRecognition ?? SpeechRecognition;
+
+    if (!RecognitionCtor) {
+      return;
+    }
+
+    const recognition = new RecognitionCtor();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
+      const firstResult = event.results[0]?.[0];
+      if (!firstResult) {
+        return;
+      }
+
+      setMessage(firstResult.transcript);
+      setIsListening(false);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.onresult = null;
+      recognition.onerror = null;
+      recognition.onend = null;
+      try {
+        recognition.stop();
+      } catch {
+        // ignore cleanup errors
+      }
+      recognitionRef.current = null;
+    };
   }, []);
 
   const toggleVoiceInput = () => {
@@ -52,11 +84,21 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
     }
 
     if (isListening) {
-      recognitionRef.current.stop();
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        // ignore stop errors
+      }
       setIsListening(false);
     } else {
-      recognitionRef.current.start();
-      setIsListening(true);
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch {
+        alert(
+          "Voice recognition could not be started. Please check your browser settings."
+        );
+      }
     }
   };
 

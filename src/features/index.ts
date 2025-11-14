@@ -18,6 +18,7 @@ export * from "../constants/chatConstants";
 
 // Components
 export * from "./ClearChat";
+export * from "./clearConversationStorage";
 export * from "./ActionCards";
 export * from "./UIControls";
 export * from "./TypingIndicator";
