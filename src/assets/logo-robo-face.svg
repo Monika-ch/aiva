@@ -5,15 +5,16 @@
   <g transform="translate(20,28)">
     <rect x="5" y="2" width="84" height="180" rx="600" fill="#06b6d4"/>
     <!-- eyes -->
-    <circle cx="38" cy="36" r="6" fill="#071423"/>
-    <circle cx="84" cy="36" r="6" fill="#071423"/>
+    <circle cx="38" cy="39" r="8" fill="#071423"/>
+    <circle cx="84" cy="39" r="8" fill="#071423"/>
     <!-- mouth -->
-    <rect x="58" y="56" width="20" height="6" rx="3" fill="#071423"/>
+    <rect x="58" y="56" width="20" height="20" rx="3" fill="#8105a1"/>
     <!-- subtle antenna -->
-    <path d="M60 8 L78 -8" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="80" cy="-12" r="5" fill="#06b6d4"/>
+    <path d="M60 18 L78 -8" stroke="#8205a14e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="80" cy="-12" r="10" fill="#8105a1"/>
     <!-- feet -->
-    <rect x="78" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
-    <rect x="8" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
+    <rect x="78" y="144" width="20" height="8" rx="20" fill="#0018b5"/>
+    <rect x="10" y="144" width="20" height="8" rx="20" fill="#0018b5"/>
   </g>
 </svg>
+<!-- 0462ceff -->
