@@ -1,9 +1,10 @@
 /**
  * Message Bubble Component
  * Renders individual chat messages with actions
+ * Supports swipe-to-reply on mobile
  */
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import sparkIcon from "../assets/logo-robo-face.svg";
 import {
   ReadAloudButton,
@@ -59,12 +60,103 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
       : replyToMessage.content
     : null;
 
+  // Swipe-to-reply state
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [showReplyIcon, setShowReplyIcon] = useState(false);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+  const isSwiping = useRef<boolean>(false);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+
+  const SWIPE_THRESHOLD = 80; // Distance needed to trigger reply
+  const SWIPE_RESISTANCE = 2.5; // Dampening factor
+
+  // Handle touch start
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!onReply) return;
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false;
+  };
+
+  // Handle touch move
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!onReply) return;
+
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+    const deltaX = touchX - touchStartX.current;
+    const deltaY = touchY - touchStartY.current;
+
+    // Only allow right swipe, and ensure horizontal movement is primary
+    if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 10) {
+      isSwiping.current = true;
+      // Apply resistance for smoother feel
+      const offset = Math.min(deltaX / SWIPE_RESISTANCE, SWIPE_THRESHOLD);
+      setSwipeOffset(offset);
+      setShowReplyIcon(offset > 20);
+    }
+  };
+
+  // Handle touch end
+  const handleTouchEnd = () => {
+    if (!onReply) return;
+
+    if (isSwiping.current && swipeOffset >= SWIPE_THRESHOLD) {
+      // Trigger reply action
+      onReply(message, messageIndex);
+    }
+
+    // Reset swipe state with animation
+    setSwipeOffset(0);
+    setShowReplyIcon(false);
+    isSwiping.current = false;
+  };
+
+  // Reset on touch cancel
+  const handleTouchCancel = () => {
+    setSwipeOffset(0);
+    setShowReplyIcon(false);
+    isSwiping.current = false;
+  };
+
   return (
     <div
       className={`flex items-end ${
         isUser ? "justify-end" : "justify-start"
-      } group`}
+      } group relative`}
     >
+      {/* Reply icon shown during swipe */}
+      {showReplyIcon && onReply && (
+        <div
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-0 transition-opacity"
+          style={{
+            opacity: Math.min(swipeOffset / SWIPE_THRESHOLD, 1),
+          }}
+        >
+          <div
+            className={`flex items-center justify-center w-8 h-8 rounded-full ${
+              darkMode ? "bg-indigo-600" : "bg-indigo-500"
+            }`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
+
       {isAssistant && (
         <div
           className={`w-8 h-8 mr-1.5 flex-shrink-0 self-start mt-1 flex items-center justify-center rounded-full ${
@@ -75,7 +167,19 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         </div>
       )}
 
-      <div className="flex flex-col max-w-[80%]">
+      <div
+        ref={bubbleRef}
+        className="flex flex-col max-w-[80%] relative z-10"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
+        style={{
+          transform: `translateX(${swipeOffset}px)`,
+          transition: isSwiping.current ? "none" : "transform 0.3s ease-out",
+          touchAction: "pan-y", // Allow vertical scroll, enable horizontal swipe
+        }}
+      >
         <div
           className={`px-3 py-2 rounded-2xl text-sm shadow-sm ${
             isUser
