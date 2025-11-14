@@ -4,11 +4,13 @@
   <!-- internal robot face block (teal) -->
   <g transform="translate(20,28)">
     <rect x="5" y="2" width="84" height="180" rx="600" fill="#06b6d4"/>
+    <!-- left body -->
+    <rect x="5" y="26" width="24" height="180" rx="600" fill="#cc90deff"/>
     <!-- eyes -->
     <circle cx="38" cy="39" r="8" fill="#071423"/>
     <circle cx="84" cy="39" r="8" fill="#071423"/>
     <!-- mouth -->
-    <rect x="58" y="56" width="20" height="20" rx="3" fill="#8105a1"/>
+    <rect x="58" y="56" width="20" height="20" rx="8" fill="#2e0249"/>
     <!-- subtle antenna -->
     <path d="M60 18 L78 -8" stroke="#8205a14e" stroke-width="7" stroke-linecap="round"/>
     <circle cx="80" cy="-12" r="10" fill="#8105a1"/>

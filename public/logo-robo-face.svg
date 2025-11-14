@@ -5,15 +5,17 @@
   <g transform="translate(20,28)">
     <rect x="5" y="2" width="120" height="180" rx="600" fill="#06b6d4"/>
     <!-- eyes -->
-    <circle cx="38" cy="36" r="6" fill="#071423"/>
-    <circle cx="84" cy="36" r="6" fill="#071423"/>
+    <circle cx="38" cy="36" r="8" fill="#071423"/>
+    <circle cx="84" cy="36" r="8" fill="#071423"/>
     <!-- mouth -->
-    <rect x="58" y="56" width="20" height="6" rx="3" fill="#071423"/>
+    <rect x="58" y="56" width="20" height="16" rx="30" fill="#071423"/>
     <!-- subtle antenna -->
-    <path d="M60 8 L78 -8" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="80" cy="-12" r="5" fill="#06b6d4"/>
+    <path d="M60 18 L78 -18" stroke="#06b6d4" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="90" cy="-12" r="15" fill="#06b6d4"/>
+    <path d="M60 18 L48 -8" stroke="#06b6d4" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="50" cy="-14" r="15" fill="#06b6d4"/>
     <!-- feet -->
-    <rect x="78" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
-    <rect x="8" y="144" width="20" height="8" rx="20" fill="#0f1724"/>
+    <rect x="78" y="144" width="28" height="8" rx="5" fill="#0f1724"/>
+    <rect x="38" y="140" width="30" height="10" rx="5" fill="#0f1724"/>
   </g>
 </svg>
