@@ -87,10 +87,14 @@ import Hero from "./components/Hero";
 import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
 import { useDarkMode } from "./features/useDarkMode";
-import { MessageBubble, useTextToSpeech } from "./features";
+import {
+  MessageBubble,
+  useTextToSpeech,
+  TypingIndicator,
+  ActionCards,
+} from "./features";
 import {
   INTRO_SUGGESTIONS,
-  QUICK_ACTIONS,
   CHAT_PLACEHOLDERS,
 } from "./constants/chatConstants";
 import type { Message, SendMessageOptions } from "./types/Message";
@@ -118,11 +122,14 @@ const getResponseForLanguage = (locale: string | null | undefined) => {
 function App() {
   const [messages, setMessages] = useState<Message[]>([]); // Desktop messages
   const [mobileMessages, setMobileMessages] = useState<Message[]>([]); // Mobile widget messages
+  const [isTyping, setIsTyping] = useState(false); // Desktop typing indicator
+  const [isMobileTyping, setIsMobileTyping] = useState(false); // Mobile typing indicator
   const { darkMode, toggleDarkMode } = useDarkMode();
   const { isSpeaking, speakingMessageIndex, readAloud } = useTextToSpeech();
   const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
     new Set()
   );
+  const [clickedActions, setClickedActions] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [replyingTo, setReplyingTo] = useState<{
     message: Message;
@@ -154,6 +161,9 @@ function App() {
         clearReply();
       }
 
+      // Show typing indicator
+      setIsTyping(true);
+
       // Mock AI response
       setTimeout(() => {
         const preferredLanguage =
@@ -181,6 +191,9 @@ function App() {
 
           return nextMessages;
         });
+
+        // Hide typing indicator
+        setIsTyping(false);
       }, 1000);
     },
     [replyingTo, clearReply, readAloud]
@@ -231,6 +244,9 @@ function App() {
       };
       setMobileMessages((prev) => [...prev, userMessage]);
 
+      // Show typing indicator for mobile
+      setIsMobileTyping(true);
+
       // Mock AI response for mobile
       setTimeout(() => {
         const preferredLanguage =
@@ -250,6 +266,9 @@ function App() {
           };
           return [...prev, aiMessage];
         });
+
+        // Hide typing indicator for mobile
+        setIsMobileTyping(false);
       }, 1000);
     },
     []
@@ -300,6 +319,7 @@ function App() {
   // Handle quick action click
   const handleQuickAction = useCallback(
     (query: string) => {
+      setClickedActions((prev) => new Set(prev).add(query));
       handleSend(query);
     },
     [handleSend]
@@ -502,45 +522,10 @@ function App() {
                     </div>
 
                     {/* Quick action cards */}
-                    <div className="space-y-3 w-full max-w-xl px-4">
-                      <p
-                        className={`text-xs font-semibold uppercase tracking-wider ${
-                          darkMode ? "text-gray-400" : "text-gray-500"
-                        }`}
-                      >
-                        ⚡ Quick actions:
-                      </p>
-                      <div className="grid grid-cols-2 gap-3">
-                        {QUICK_ACTIONS.map((action, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleQuickAction(action.query)}
-                            className={`group p-4 rounded-xl text-left transition-all transform hover:scale-105 ${
-                              darkMode
-                                ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600"
-                                : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-md hover:shadow-lg"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={`text-3xl transform transition-transform group-hover:scale-110 ${
-                                  darkMode ? "drop-shadow-lg" : ""
-                                }`}
-                              >
-                                {action.icon}
-                              </div>
-                              <span
-                                className={`font-semibold text-sm ${
-                                  darkMode ? "text-gray-200" : "text-gray-800"
-                                }`}
-                              >
-                                {action.label}
-                              </span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    <ActionCards
+                      onActionClick={handleQuickAction}
+                      darkMode={darkMode}
+                    />
                   </div>
                 ) : (
                   <>
@@ -551,6 +536,7 @@ function App() {
                         messageIndex={index}
                         darkMode={darkMode}
                         clickedSuggestions={clickedSuggestions}
+                        clickedActions={clickedActions}
                         isSpeaking={isSpeaking}
                         speakingMessageIndex={speakingMessageIndex}
                         onReadAloud={readAloud}
@@ -566,6 +552,7 @@ function App() {
                         onReply={handleReply}
                       />
                     ))}
+                    {isTyping && <TypingIndicator darkMode={darkMode} />}
                     <div ref={messagesEndRef} />
                   </>
                 )}
@@ -599,6 +586,7 @@ function App() {
         onClearMessages={clearMobileMessages}
         onReaction={handleMobileReaction}
         darkMode={darkMode}
+        isTyping={isMobileTyping}
       />
     </div>
   );

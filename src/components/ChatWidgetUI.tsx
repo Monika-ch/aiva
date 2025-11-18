@@ -27,7 +27,6 @@ import type { Message, SendMessageOptions } from "../types/Message";
 // Import chat constants
 import {
   INTRO_SUGGESTIONS,
-  QUICK_ACTIONS,
   CHAT_PLACEHOLDERS,
 } from "../constants/chatConstants";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
@@ -77,6 +76,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
     new Set()
   );
+  const [clickedActions, setClickedActions] = useState<Set<string>>(new Set());
   const [voiceInputUsed, setVoiceInputUsed] = useState(false);
   const [showCopyNotification, setShowCopyNotification] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
@@ -283,6 +283,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
   const confirmClearChat = () => {
     setClickedSuggestions(new Set());
+    setClickedActions(new Set());
     clearConversationStorage();
     if (onClearMessages) {
       onClearMessages();
@@ -313,6 +314,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   };
 
   const handleQuickAction = (query: string) => {
+    setClickedActions((prev) => new Set(prev).add(query));
     handleSendWithDictation(query);
   };
 
@@ -362,13 +364,25 @@ const ChatWidgetUI: React.FC<Props> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`w-[90vw] max-w-[380px] ${theme.bg} shadow-2xl rounded-2xl overflow-hidden border ${theme.border} mb-3`}
+            className={`w-[90vw] max-w-[380px] shadow-2xl rounded-2xl overflow-hidden border mb-3`}
+            style={{
+              background: darkMode
+                ? "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%)"
+                : "linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%)",
+              borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
+            }}
             role="dialog"
             aria-label="AIVA chat"
           >
             {/* Header */}
             <div
-              className={`p-3 border-b ${theme.border} ${theme.headerBg} flex items-center justify-between`}
+              className={`p-3 border-b backdrop-blur-sm flex items-center justify-between`}
+              style={{
+                backgroundColor: darkMode
+                  ? "rgba(30, 27, 75, 0.8)"
+                  : "rgba(255, 255, 255, 0.7)",
+                borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
+              }}
             >
               <div className="flex items-center gap-2">
                 <div className="relative">
@@ -382,7 +396,9 @@ const ChatWidgetUI: React.FC<Props> = ({
                   />
                 </div>
                 <div>
-                  <span className={`text-sm font-semibold ${theme.text}`}>
+                  <span
+                    className={`text-sm font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     AIVA Chat
                   </span>
                   <p
@@ -401,13 +417,16 @@ const ChatWidgetUI: React.FC<Props> = ({
                   <button
                     onClick={() => setShowLanguageMenu(!showLanguageMenu)}
                     style={{
-                      backgroundColor: darkMode ? "#374151" : "#e5e7eb",
+                      backgroundColor: darkMode
+                        ? "rgba(55, 65, 81, 0.8)"
+                        : "rgba(229, 231, 235, 0.8)",
                       color: darkMode ? "#d1d5db" : "#6b7280",
                       padding: "8px",
                       borderRadius: "8px",
                       transition: "all 0.2s ease",
                       border: "none",
                       outline: "none",
+                      backdropFilter: "blur(8px)",
                     }}
                     className="hover:opacity-80"
                     aria-label="Language settings"
@@ -449,7 +468,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                           placeholder="Search languages..."
                           value={languageSearch}
                           onChange={(e) => setLanguageSearch(e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                          className="w-full px-3 py-2 rounded-lg border text-sm focus:ring-2 focus:ring-indigo-400"
                           style={{
                             backgroundColor: darkMode ? "#374151" : "#ffffff",
                             borderColor: darkMode ? "#4b5563" : "#d1d5db",
@@ -534,13 +553,16 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <button
                   onClick={handleClearChat}
                   style={{
-                    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
+                    backgroundColor: darkMode
+                      ? "rgba(55, 65, 81, 0.8)"
+                      : "rgba(229, 231, 235, 0.8)",
                     color: darkMode ? "#d1d5db" : "#6b7280",
                     padding: "8px",
                     borderRadius: "8px",
                     transition: "all 0.2s ease",
                     border: "none",
                     outline: "none",
+                    backdropFilter: "blur(8px)",
                   }}
                   className="hover:opacity-80"
                   aria-label="Clear chat"
@@ -566,13 +588,16 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <button
                   onClick={() => setIsOpen(false)}
                   style={{
-                    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
+                    backgroundColor: darkMode
+                      ? "rgba(55, 65, 81, 0.8)"
+                      : "rgba(229, 231, 235, 0.8)",
                     color: darkMode ? "#d1d5db" : "#6b7280",
                     padding: "8px",
                     borderRadius: "8px",
                     transition: "all 0.2s ease",
                     border: "none",
                     outline: "none",
+                    backdropFilter: "blur(8px)",
                   }}
                   className="hover:opacity-80"
                   aria-label="Close chat"
@@ -599,11 +624,12 @@ const ChatWidgetUI: React.FC<Props> = ({
             {/* Messages Container */}
             <div
               ref={messageContainerRef}
-              className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
-                darkMode
-                  ? "bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark"
-                  : "bg-gradient-to-b from-gray-50 to-white chat-messages-light"
-              }`}
+              className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4`}
+              style={{
+                background: darkMode
+                  ? "linear-gradient(to bottom, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.8))"
+                  : "linear-gradient(to bottom, rgba(249, 250, 251, 0.6), rgba(255, 255, 255, 0.9))",
+              }}
             >
               {messages.length === 0 && !isTyping ? (
                 // Empty state with welcome message, suggestions, and actions
@@ -658,47 +684,6 @@ const ChatWidgetUI: React.FC<Props> = ({
                       ))}
                     </div>
                   </div>
-
-                  {/* Quick action cards */}
-                  <div className="space-y-2.5 w-full">
-                    <p
-                      className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      ⚡ Quick actions:
-                    </p>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      {QUICK_ACTIONS.map((action, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleQuickAction(action.query)}
-                          className={`group p-3 rounded-lg text-left transition-all transform hover:scale-105 w-full ${
-                            darkMode
-                              ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600"
-                              : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 shadow-sm hover:shadow-md"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <div
-                              className={`text-xl transform transition-transform group-hover:scale-110 ${
-                                darkMode ? "drop-shadow-lg" : ""
-                              }`}
-                            >
-                              {action.icon}
-                            </div>
-                            <span
-                              className={`font-semibold text-[11px] ${
-                                darkMode ? "text-gray-200" : "text-gray-800"
-                              }`}
-                            >
-                              {action.label}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               ) : (
                 <>
@@ -709,6 +694,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       messageIndex={index}
                       darkMode={darkMode}
                       clickedSuggestions={clickedSuggestions}
+                      clickedActions={clickedActions}
                       isSpeaking={isSpeaking}
                       speakingMessageIndex={speakingMessageIndex}
                       onReadAloud={readAloud}
@@ -732,7 +718,15 @@ const ChatWidgetUI: React.FC<Props> = ({
             </div>
 
             {/* Input Container */}
-            <div className={`p-3 border-t ${theme.border} ${theme.bg}`}>
+            <div
+              className={`p-3 border-t backdrop-blur-sm`}
+              style={{
+                backgroundColor: darkMode
+                  ? "rgba(30, 27, 75, 0.8)"
+                  : "rgba(255, 255, 255, 0.7)",
+                borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
+              }}
+            >
               {/* Reply Preview */}
               {replyingTo && (
                 <ReplyPreview
@@ -769,7 +763,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
                       : "border-gray-200 placeholder-gray-400"
-                  } rounded-lg px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
+                  } rounded-lg px-4 py-3 text-sm leading-6 focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
                     theme.text
                   } resize-none`}
                   value={input}
@@ -807,13 +801,22 @@ const ChatWidgetUI: React.FC<Props> = ({
                   style={{
                     border: "none",
                     outline: "none",
-                    background: darkMode
-                      ? "linear-gradient(135deg, #4c1d95, #6d28d9)"
-                      : "#6366f1",
+                    background:
+                      "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
                     color: "#ffffff",
                     paddingInline: "clamp(12px, 1.8vw, 16px)",
+                    boxShadow:
+                      !input.trim() ||
+                      (isListening && listeningMode !== "dictate")
+                        ? "none"
+                        : "0 4px 12px rgba(99, 102, 241, 0.4)",
+                    opacity:
+                      !input.trim() ||
+                      (isListening && listeningMode !== "dictate")
+                        ? 0.5
+                        : 1,
                   }}
-                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all"
+                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg hover:brightness-110 transform transition-all active:scale-95 disabled:cursor-not-allowed"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -854,16 +857,24 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`relative p-3 rounded-full shadow-lg hover:shadow-xl transition-all ${
-            darkMode
-              ? "bg-gradient-to-r from-indigo-500 to-purple-500"
-              : "bg-gradient-to-r from-indigo-400 to-purple-400"
-          }`}
+          className="relative p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
+          style={{
+            background: darkMode
+              ? "linear-gradient(135deg, #818cf8 0%, #a78bfa 100%)"
+              : "linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%)",
+            boxShadow: darkMode
+              ? "0 8px 32px rgba(129, 140, 248, 0.5), 0 4px 16px rgba(167, 139, 250, 0.4)"
+              : "0 8px 32px rgba(165, 180, 252, 0.6), 0 4px 16px rgba(196, 181, 253, 0.5)",
+            backdropFilter: "blur(10px)",
+          }}
         >
           <img
             src={sparkIcon}
             alt="Open AIVA chat"
-            className="w-8 h-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+            className="w-8 h-8"
+            style={{
+              filter: "drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5))",
+            }}
           />
         </motion.button>
 

@@ -14,6 +14,7 @@ interface ChatWidgetProps {
     reaction: "helpful" | "not-helpful"
   ) => void;
   darkMode?: boolean;
+  isTyping?: boolean;
 }
 
 const STORAGE_KEY = "aiva.chat.widget";
@@ -25,12 +26,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   onClearMessages,
   onReaction,
   darkMode = false,
+  isTyping = false,
 }) => {
   const { isOpen, setIsOpen, input, setInput, handleSend } =
     useChatWidget(onSend);
   const [lastSeenIndex, setLastSeenIndex] = useState(messages.length);
   const [autoOpened, setAutoOpened] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isInternalTyping, setIsInternalTyping] = useState(false);
 
   // Clear storage on mount
   useEffect(() => {
@@ -52,27 +54,27 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 • explore experience
 • tell me more about their journey
 • do a storytelling on Monika`;
-    const quickActionsPrompt = `${QUICK_ACTIONS_MARKER}Here are a few quick actions you can tap to jump in:`;
+    const quickActionsPrompt = `${QUICK_ACTIONS_MARKER}`;
 
     // Show typing indicator before greeting
-    setIsTyping(true);
+    setIsInternalTyping(true);
     setTimeout(() => {
-      setIsTyping(false);
+      setIsInternalTyping(false);
       onAssistantMessage(greeting);
       console.log("Greeting sent:", greeting);
 
       // Show typing for suggestions
       setTimeout(() => {
-        setIsTyping(true);
+        setIsInternalTyping(true);
         setTimeout(() => {
-          setIsTyping(false);
+          setIsInternalTyping(false);
           onAssistantMessage(suggestions);
           console.log("Suggestions sent:", suggestions);
 
           setTimeout(() => {
-            setIsTyping(true);
+            setIsInternalTyping(true);
             setTimeout(() => {
-              setIsTyping(false);
+              setIsInternalTyping(false);
               onAssistantMessage(quickActionsPrompt);
               console.log("Quick actions prompt sent:", quickActionsPrompt);
             }, 800);
@@ -127,7 +129,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       setInput={setInput}
       handleSend={handleSend}
       unreadCount={unreadCount}
-      isTyping={isTyping}
+      isTyping={isTyping || isInternalTyping}
       onClearMessages={onClearMessages}
       onReaction={onReaction}
       darkMode={darkMode}
