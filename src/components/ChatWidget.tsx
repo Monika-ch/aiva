@@ -49,7 +49,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
     const greeting =
       "Hi, I'm AIVA your personal AI Virtual Assistant to help you navigate the portfolio";
-    const suggestions = `You can ask me things like:
+    const suggestions = `Try asking me about:
 • learn top tech skills
 • explore experience
 • tell me more about their journey

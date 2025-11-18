@@ -123,7 +123,7 @@ export const SuggestionChip: React.FC<SuggestionChipProps> = ({
               : "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 border-0 shadow-lg shadow-indigo-400/20"
             : darkMode
               ? "bg-gradient-to-br from-gray-800 to-gray-900 text-gray-200 border border-gray-700 shadow-sm"
-              : "bg-gradient-to-br from-white to-gray-50 text-gray-700 border border-gray-200 shadow-sm"
+              : "bg-gradient-to-br from-white to-gray-50 text-gray-600 border border-gray-200 shadow-sm"
         }
       `}
       onMouseEnter={(e) => {
@@ -167,7 +167,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
         {!description && (
           <div
             className={`text-[14px] font-medium leading-relaxed mb-2 ${
-              darkMode ? "text-gray-400" : "text-gray-600"
+              darkMode ? "text-gray-400" : "text-gray-500"
             }`}
           >
             A few quick actions you can tap:
