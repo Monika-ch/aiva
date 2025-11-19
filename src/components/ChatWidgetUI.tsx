@@ -21,6 +21,7 @@ import {
   VoiceSendButton,
   DictateButton,
   filterLanguageOptions,
+  useSmoothScroll,
 } from "../features";
 import type { Message, SendMessageOptions } from "../types/Message";
 
@@ -67,10 +68,18 @@ const ChatWidgetUI: React.FC<Props> = ({
   darkMode = false,
 }) => {
   // Refs
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const messageContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
+
+  // Enhanced scroll behavior
+  const { scrollElementRef: messageContainerRef } = useSmoothScroll({
+    enabled: true,
+    delay: 100,
+    dependencies: [messages, isTyping],
+  });
+
+  // Legacy ref for compatibility
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // State
   const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
@@ -220,13 +229,6 @@ const ChatWidgetUI: React.FC<Props> = ({
       startVoiceRecognition,
     ]
   );
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, isTyping]);
 
   // Auto-read response if voice input was used
   useEffect(() => {

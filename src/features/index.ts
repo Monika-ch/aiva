@@ -12,6 +12,7 @@ export * from "./useLanguageSettings";
 export * from "./useTextToSpeech";
 export * from "./useDictation";
 export * from "./useVoiceRecognition";
+export * from "./useSmoothScroll";
 
 // Constants
 export * from "../constants/chatConstants";
@@ -24,3 +25,4 @@ export * from "./UIControls";
 export * from "./TypingIndicator";
 export * from "./MessageBubble";
 export * from "./VoiceControls";
+export * from "./SkeletonLoader";

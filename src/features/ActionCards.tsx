@@ -73,7 +73,7 @@ export const ActionCards: React.FC<ActionCardsProps> = ({
                       : darkMode
                         ? "text-gray-200"
                         : isMobile
-                          ? "text-gray-600"
+                          ? "text-gray-500"
                           : "text-gray-800"
                   }`}
                 >
@@ -110,8 +110,12 @@ export const SuggestionChip: React.FC<SuggestionChipProps> = ({
   return (
     <button
       onClick={onClick}
+      style={{
+        fontSize: "12px",
+        fontWeight: 600,
+      }}
       className={`
-        px-3 py-2 rounded-[14px] text-left cursor-pointer font-medium text-[13px] 
+        px-3 py-2 rounded-[14px] text-left cursor-pointer
         inline-block whitespace-pre-wrap transition-all duration-200
         hover:opacity-90 hover:shadow-md active:scale-[0.98] active:opacity-80
         focus:outline-none focus-visible:outline-none
@@ -123,7 +127,7 @@ export const SuggestionChip: React.FC<SuggestionChipProps> = ({
               : "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 border-0 shadow-lg shadow-indigo-400/20"
             : darkMode
               ? "bg-gradient-to-br from-gray-800 to-gray-900 text-gray-200 border border-gray-700 shadow-sm"
-              : "bg-gradient-to-br from-white to-gray-50 text-gray-600 border border-gray-200 shadow-sm"
+              : "bg-gradient-to-br from-white to-gray-50 text-gray-500 border border-gray-200 shadow-sm"
         }
       `}
       onMouseEnter={(e) => {
@@ -164,20 +168,13 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
     const description = content.substring(QUICK_ACTIONS_MARKER.length).trim();
     return (
       <div className="w-full">
-        {!description && (
-          <div
-            className={`text-[14px] font-medium leading-relaxed mb-2 ${
-              darkMode ? "text-gray-400" : "text-gray-500"
-            }`}
-          >
-            A few quick actions you can tap:
-          </div>
-        )}
-        {description && (
-          <div className="text-[14px] font-medium leading-relaxed mb-2">
-            {description}
-          </div>
-        )}
+        <div
+          className={`text-[14px] font-medium leading-relaxed mb-3 ${
+            darkMode ? "text-gray-200" : "text-gray-500"
+          }`}
+        >
+          {description || "Quick actions you can tap:"}
+        </div>
         <ActionCards
           onActionClick={onActionClick}
           darkMode={darkMode}
@@ -226,7 +223,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
               key={i}
               style={{ whiteSpace: "pre-wrap" }}
               className={`text-[14px] font-medium mb-3 ${
-                darkMode ? "text-gray-400" : "text-gray-600"
+                darkMode ? "text-gray-400" : "text-gray-500"
               }`}
             >
               {line}

@@ -92,6 +92,7 @@ import {
   useTextToSpeech,
   TypingIndicator,
   ActionCards,
+  useSmoothScroll,
 } from "./features";
 import {
   INTRO_SUGGESTIONS,
@@ -130,6 +131,15 @@ function App() {
     new Set()
   );
   const [clickedActions, setClickedActions] = useState<Set<string>>(new Set());
+
+  // Enhanced scroll behavior for desktop chat
+  const { scrollElementRef: messagesContainerRef } = useSmoothScroll({
+    enabled: true,
+    delay: 150,
+    dependencies: [messages, isTyping],
+  });
+
+  // Legacy ref for compatibility
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [replyingTo, setReplyingTo] = useState<{
     message: Message;
@@ -335,13 +345,6 @@ function App() {
     return map;
   }, [messages]);
 
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
   // Focus input when replying (desktop)
   useEffect(() => {
     if (replyingTo) {
@@ -461,6 +464,7 @@ function App() {
                 darkMode={darkMode}
               />
               <div
+                ref={messagesContainerRef}
                 className={`flex-1 overflow-y-auto p-3 text-sm space-y-4 ${
                   darkMode
                     ? "bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark"

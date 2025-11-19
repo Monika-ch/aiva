@@ -188,7 +188,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-none"
               : darkMode
                 ? "bg-gray-700 text-gray-200 rounded-bl-none border border-gray-600"
-                : "bg-white text-gray-600 rounded-bl-none border border-gray-100"
+                : "bg-white text-gray-500 rounded-bl-none border border-gray-100"
           }`}
         >
           {/* Reply Quote */}
