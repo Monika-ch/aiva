@@ -223,7 +223,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
               key={i}
               style={{ whiteSpace: "pre-wrap" }}
               className={`text-[14px] font-medium mb-3 ${
-                darkMode ? "text-gray-400" : "text-gray-500"
+                darkMode ? "text-gray-200" : "text-gray-500"
               }`}
             >
               {line}
