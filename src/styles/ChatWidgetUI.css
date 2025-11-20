@@ -55,19 +55,15 @@
 
 /* Messages Container */
 .chat-messages-dark {
-  background: linear-gradient(
-    to bottom,
-    rgba(31, 41, 55, 0.6),
-    rgba(17, 24, 39, 0.8)
-  );
+  background: linear-gradient(to bottom,
+      rgba(31, 41, 55, 0.6),
+      rgba(17, 24, 39, 0.8));
 }
 
 .chat-messages-light {
-  background: linear-gradient(
-    to bottom,
-    rgba(249, 250, 251, 0.6),
-    rgba(255, 255, 255, 0.9)
-  );
+  background: linear-gradient(to bottom,
+      rgba(249, 250, 251, 0.6),
+      rgba(255, 255, 255, 0.9));
 }
 
 /* Input Container */
