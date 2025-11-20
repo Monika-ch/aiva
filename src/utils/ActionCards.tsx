@@ -8,6 +8,7 @@ import {
   QUICK_ACTIONS,
   QUICK_ACTIONS_MARKER,
 } from "../constants/chatConstants";
+import "../styles/ActionCards.css";
 
 interface ActionCardsProps {
   onActionClick: (query: string) => void;
@@ -101,11 +102,7 @@ export const SuggestionChip: React.FC<SuggestionChipProps> = ({
   return (
     <button
       onClick={onClick}
-      style={{
-        fontSize: "12px",
-        fontWeight: 600,
-      }}
-      className={`
+      className={`suggestion-chip
         px-3 py-2 rounded-[14px] text-left cursor-pointer
         inline-block whitespace-pre-wrap transition-all duration-200
         hover:opacity-90 hover:shadow-md active:scale-[0.98] active:opacity-80
@@ -212,8 +209,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
           return (
             <div
               key={i}
-              style={{ whiteSpace: "pre-wrap" }}
-              className={`text-[14px] font-medium mb-3 ${
+              className={`message-content-prewrap text-[14px] font-medium mb-3 ${
                 darkMode ? "text-gray-200" : "text-gray-500"
               }`}
             >
@@ -226,5 +222,5 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
   }
 
   // Plain text rendering
-  return <div style={{ whiteSpace: "pre-wrap" }}>{content}</div>;
+  return <div className="message-content-prewrap">{content}</div>;
 };

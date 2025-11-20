@@ -1,0 +1,12 @@
+/* ActionCards Custom Styles */
+
+/* Suggestion Chip */
+.suggestion-chip {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Message Content - Pre-wrap */
+.message-content-prewrap {
+  white-space: pre-wrap;
+}

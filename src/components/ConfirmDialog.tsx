@@ -5,6 +5,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import "../styles/ConfirmDialog.css";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -86,11 +87,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               >
                 <button
                   onClick={onCancel}
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-                    color: darkMode ? "#d1d5db" : "#374151",
-                  }}
-                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-80 shadow-sm"
+                  className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-80 shadow-sm ${
+                    darkMode
+                      ? "confirm-dialog-cancel-btn-dark"
+                      : "confirm-dialog-cancel-btn-light"
+                  }`}
                 >
                   {cancelText}
                 </button>

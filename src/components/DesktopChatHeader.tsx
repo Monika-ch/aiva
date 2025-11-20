@@ -47,16 +47,6 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
     setLanguageSearch("");
   };
 
-  const buttonStyle: React.CSSProperties = {
-    backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-    color: darkMode ? "#d1d5db" : "#6b7280",
-    padding: "8px",
-    borderRadius: "8px",
-    transition: "all 0.2s ease",
-    border: "none",
-    outline: "none",
-  };
-
   return (
     <>
       {/* Confirm Dialog */}
@@ -105,14 +95,17 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
           <div className="relative" ref={languageMenuRef}>
             <button
               onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-              style={buttonStyle}
-              className="hover:opacity-80"
+              className={`hover:opacity-80 desktop-header-btn ${
+                darkMode
+                  ? "desktop-header-btn-dark"
+                  : "desktop-header-btn-light"
+              }`}
               aria-label="Language settings"
               title="Language settings"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                style={{ width: "16px", height: "16px" }}
+                className="desktop-header-btn-icon"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -143,14 +136,15 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
           {/* Clear Chat Button */}
           <button
             onClick={handleClearChat}
-            style={buttonStyle}
-            className="hover:opacity-80"
+            className={`hover:opacity-80 desktop-header-btn ${
+              darkMode ? "desktop-header-btn-dark" : "desktop-header-btn-light"
+            }`}
             aria-label="Clear chat history"
             title="Clear chat"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              style={{ width: "16px", height: "16px" }}
+              className="desktop-header-btn-icon"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
