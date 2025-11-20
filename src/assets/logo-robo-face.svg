@@ -3,9 +3,9 @@
 
   <!-- internal robot face block (teal) -->
   <g transform="translate(20,28)">
-    <rect x="5" y="2" width="84" height="180" rx="600" fill="#06b6d4"/>
-    <!-- left body -->
-    <rect x="-6" y="26" width="24" height="120" rx="600" fill="#8205a14e"/>
+    <rect x="5" y="2" width="86" height="180" rx="600" fill="#06b6d4"/>
+    <!-- left eye patch -->
+    <rect x="-16" y="10" width="70" height="74" rx="600" fill="#8205a14e"/>
     <!-- eyes -->
     <circle cx="38" cy="39" r="8" fill="#071423"/>
     <circle cx="84" cy="39" r="8" fill="#071423"/>
@@ -13,10 +13,13 @@
     <rect x="58" y="56" width="20" height="20" rx="8" fill="#2e0249"/>
     <!-- subtle antenna -->
     <path d="M60 18 L78 -8" stroke="#8205a14e" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="80" cy="-12" r="10" fill="#8105a1"/>
+    <circle cx="85" cy="-10" r="15" fill="#8105a1"/>
     <!-- feet -->
-    <rect x="78" y="144" width="20" height="8" rx="20" fill="#0018b5"/>
-    <rect x="10" y="144" width="20" height="8" rx="20" fill="#0018b5"/>
+    <rect x="-12" y="134" width="50" height="18" rx="20" fill="#06b5d491"/>
+    <rect x="44" y="140" width="90" height="14" rx="40" fill="#06b5d491"/>
+    <!-- wobbly legs -->
+    <rect x="1" y="130" width="50" height="40" rx="600" fill="#8205a133"/>
+    <rect x="27" y="120" width="85" height="80" rx="600" fill="#06b5d436"/>
   </g>
 </svg>
 <!-- 0462ceff -->
