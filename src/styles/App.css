@@ -1,0 +1,29 @@
+/* App.tsx Custom Styles */
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.dark-mode-toggle-dark {
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode-toggle-light {
+  background-color: #ffffff;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Toggle Icon */
+.dark-mode-toggle-icon {
+  width: 24px;
+  height: 24px;
+}
