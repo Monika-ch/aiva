@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import "../styles/SkeletonLoader.css";
 
 interface SkeletonActionCardsProps {
   darkMode: boolean;
@@ -83,11 +84,11 @@ export const SkeletonSuggestions: React.FC<SkeletonSuggestionsProps> = ({
           } ${idx === count - 1 ? "mb-0" : "mb-2"}`}
         >
           <div
-            className={`h-3 rounded ${
+            className={`h-3 rounded skeleton-random-width ${
               darkMode ? "bg-gray-600" : "bg-gray-300"
             }`}
             style={{
-              width: `${60 + Math.random() * 40}%`, // Random width between 60-100%
+              ["--skeleton-width" as string]: `${60 + Math.random() * 40}%`,
             }}
           />
         </div>
@@ -135,16 +136,14 @@ export const SkeletonMessage: React.FC<SkeletonMessageProps> = ({
           {/* Skeleton lines */}
           <div className="space-y-2">
             <div
-              className={`h-3 rounded ${
+              className={`h-3 rounded skeleton-width-85 ${
                 darkMode ? "bg-gray-500" : "bg-gray-300"
               }`}
-              style={{ width: "85%" }}
             />
             <div
-              className={`h-3 rounded ${
+              className={`h-3 rounded skeleton-width-60 ${
                 darkMode ? "bg-gray-500" : "bg-gray-300"
               }`}
-              style={{ width: "60%" }}
             />
           </div>
         </div>

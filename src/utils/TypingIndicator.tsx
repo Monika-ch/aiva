@@ -5,6 +5,7 @@
 
 import React from "react";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import "../styles/TypingIndicator.css";
 
 interface TypingIndicatorProps {
   darkMode: boolean;
@@ -29,22 +30,19 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
       >
         <div className="flex gap-1">
           <div
-            className={`w-2 h-2 rounded-full animate-bounce ${
+            className={`w-2 h-2 rounded-full animate-bounce typing-dot-1 ${
               darkMode ? "bg-gray-400" : "bg-gray-400"
             }`}
-            style={{ animationDelay: "0ms" }}
           ></div>
           <div
-            className={`w-2 h-2 rounded-full animate-bounce ${
+            className={`w-2 h-2 rounded-full animate-bounce typing-dot-2 ${
               darkMode ? "bg-gray-400" : "bg-gray-400"
             }`}
-            style={{ animationDelay: "150ms" }}
           ></div>
           <div
-            className={`w-2 h-2 rounded-full animate-bounce ${
+            className={`w-2 h-2 rounded-full animate-bounce typing-dot-3 ${
               darkMode ? "bg-gray-400" : "bg-gray-400"
             }`}
-            style={{ animationDelay: "300ms" }}
           ></div>
         </div>
       </div>

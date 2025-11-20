@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import "../styles/ClearChat.css";
 
 interface ClearChatButtonProps {
   onClear: () => void;
@@ -23,10 +24,9 @@ export const ClearChatButton: React.FC<ClearChatButtonProps> = ({
   return (
     <button
       onClick={handleClearChat}
-      className="p-2 rounded-lg transition-colors hover:bg-opacity-80"
-      style={{
-        color: darkMode ? "#9ca3af" : "#6b7280",
-      }}
+      className={`p-2 rounded-lg transition-colors hover:bg-opacity-80 ${
+        darkMode ? "clear-chat-btn-dark" : "clear-chat-btn-light"
+      }`}
       aria-label="Clear chat history"
       title="Clear chat"
     >
