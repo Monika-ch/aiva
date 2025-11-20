@@ -1,0 +1,139 @@
+/* ChatWidgetUI Custom Styles */
+
+/* Chat Dialog Container */
+.chat-dialog-dark {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%);
+  border-color: #4c1d95;
+}
+
+.chat-dialog-light {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+  border-color: #c7d2fe;
+}
+
+/* Header */
+.chat-header-dark {
+  background-color: rgba(30, 27, 75, 0.8);
+  border-color: #4c1d95;
+}
+
+.chat-header-light {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-color: #c7d2fe;
+}
+
+/* Header Logo */
+.chat-logo {
+  filter: drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35));
+}
+
+/* Header Buttons (Language, Clear, Close) */
+.chat-header-btn {
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+
+.chat-header-btn-dark {
+  background-color: rgba(55, 65, 81, 0.8);
+  color: #d1d5db;
+}
+
+.chat-header-btn-light {
+  background-color: rgba(229, 231, 235, 0.8);
+  color: #6b7280;
+}
+
+/* SVG Icons in Header Buttons */
+.chat-header-btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Messages Container */
+.chat-messages-dark {
+  background: linear-gradient(
+    to bottom,
+    rgba(31, 41, 55, 0.6),
+    rgba(17, 24, 39, 0.8)
+  );
+}
+
+.chat-messages-light {
+  background: linear-gradient(
+    to bottom,
+    rgba(249, 250, 251, 0.6),
+    rgba(255, 255, 255, 0.9)
+  );
+}
+
+/* Input Container */
+.chat-input-container-dark {
+  background-color: rgba(30, 27, 75, 0.8);
+  border-color: #4c1d95;
+}
+
+.chat-input-container-light {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-color: #c7d2fe;
+}
+
+/* Textarea */
+.chat-textarea {
+  min-height: 40px;
+  max-height: 140px;
+}
+
+.chat-textarea-dark {
+  caret-color: #f9fafb;
+}
+
+.chat-textarea-light {
+  caret-color: #4338ca;
+}
+
+/* Send Button */
+.chat-send-btn {
+  border: none;
+  outline: none;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  padding-inline: clamp(12px, 1.8vw, 16px);
+}
+
+.chat-send-btn-active {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  opacity: 1;
+}
+
+.chat-send-btn-disabled {
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+/* Floating Action Button */
+.chat-fab {
+  backdrop-filter: blur(10px);
+}
+
+.chat-fab-dark {
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  box-shadow:
+    0 8px 32px rgba(129, 140, 248, 0.5),
+    0 4px 16px rgba(167, 139, 250, 0.4);
+}
+
+.chat-fab-light {
+  background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
+  box-shadow:
+    0 8px 32px rgba(165, 180, 252, 0.6),
+    0 4px 16px rgba(196, 181, 253, 0.5);
+}
+
+/* FAB Logo */
+.chat-fab-logo {
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5));
+}

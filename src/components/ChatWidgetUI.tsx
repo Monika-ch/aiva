@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import "../styles/ChatWidgetUI.css";
 
 // Import all utils
 import {
@@ -346,35 +347,24 @@ const ChatWidgetUI: React.FC<Props> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`w-[90vw] max-w-[380px] shadow-2xl rounded-2xl overflow-hidden border mb-3`}
-            style={{
-              background: darkMode
-                ? "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%)"
-                : "linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%)",
-              borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
-            }}
+            className={`w-[90vw] max-w-[380px] shadow-2xl rounded-2xl overflow-hidden border mb-3 ${
+              darkMode ? "chat-dialog-dark" : "chat-dialog-light"
+            }`}
             role="dialog"
             aria-label="AIVA chat"
           >
             {/* Header */}
             <div
-              className={`p-3 border-b backdrop-blur-sm flex items-center justify-between`}
-              style={{
-                backgroundColor: darkMode
-                  ? "rgba(30, 27, 75, 0.8)"
-                  : "rgba(255, 255, 255, 0.7)",
-                borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
-              }}
+              className={`p-3 border-b backdrop-blur-sm flex items-center justify-between ${
+                darkMode ? "chat-header-dark" : "chat-header-light"
+              }`}
             >
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <img
                     src={sparkIcon}
                     alt="AIVA"
-                    className="w-8 h-8"
-                    style={{
-                      filter: "drop-shadow(0 2px 6px rgba(99, 102, 241, 0.35))",
-                    }}
+                    className="w-8 h-8 chat-logo"
                   />
                 </div>
                 <div>
@@ -399,25 +389,17 @@ const ChatWidgetUI: React.FC<Props> = ({
                   <button
                     ref={languageButtonRef}
                     onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                    style={{
-                      backgroundColor: darkMode
-                        ? "rgba(55, 65, 81, 0.8)"
-                        : "rgba(229, 231, 235, 0.8)",
-                      color: darkMode ? "#d1d5db" : "#6b7280",
-                      padding: "8px",
-                      borderRadius: "8px",
-                      transition: "all 0.2s ease",
-                      border: "none",
-                      outline: "none",
-                      backdropFilter: "blur(8px)",
-                    }}
-                    className="hover:opacity-80"
+                    className={`hover:opacity-80 chat-header-btn ${
+                      darkMode
+                        ? "chat-header-btn-dark"
+                        : "chat-header-btn-light"
+                    }`}
                     aria-label="Language settings"
                     title="Language settings"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      style={{ width: "16px", height: "16px" }}
+                      className="chat-header-btn-icon"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -450,25 +432,15 @@ const ChatWidgetUI: React.FC<Props> = ({
                 {/* Clear chat button */}
                 <button
                   onClick={handleClearChat}
-                  style={{
-                    backgroundColor: darkMode
-                      ? "rgba(55, 65, 81, 0.8)"
-                      : "rgba(229, 231, 235, 0.8)",
-                    color: darkMode ? "#d1d5db" : "#6b7280",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    transition: "all 0.2s ease",
-                    border: "none",
-                    outline: "none",
-                    backdropFilter: "blur(8px)",
-                  }}
-                  className="hover:opacity-80"
+                  className={`hover:opacity-80 chat-header-btn ${
+                    darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
+                  }`}
                   aria-label="Clear chat"
                   title="Clear chat history"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ width: "16px", height: "16px" }}
+                    className="chat-header-btn-icon"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -485,25 +457,15 @@ const ChatWidgetUI: React.FC<Props> = ({
                 {/* Close button */}
                 <button
                   onClick={() => setIsOpen(false)}
-                  style={{
-                    backgroundColor: darkMode
-                      ? "rgba(55, 65, 81, 0.8)"
-                      : "rgba(229, 231, 235, 0.8)",
-                    color: darkMode ? "#d1d5db" : "#6b7280",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    transition: "all 0.2s ease",
-                    border: "none",
-                    outline: "none",
-                    backdropFilter: "blur(8px)",
-                  }}
-                  className="hover:opacity-80"
+                  className={`hover:opacity-80 chat-header-btn ${
+                    darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
+                  }`}
                   aria-label="Close chat"
                   title="Close"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ width: "16px", height: "16px" }}
+                    className="chat-header-btn-icon"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -522,12 +484,9 @@ const ChatWidgetUI: React.FC<Props> = ({
             {/* Messages Container */}
             <div
               ref={messageContainerRef}
-              className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4`}
-              style={{
-                background: darkMode
-                  ? "linear-gradient(to bottom, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.8))"
-                  : "linear-gradient(to bottom, rgba(249, 250, 251, 0.6), rgba(255, 255, 255, 0.9))",
-              }}
+              className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
+                darkMode ? "chat-messages-dark" : "chat-messages-light"
+              }`}
             >
               {messages.length === 0 && !isTyping ? (
                 // Empty state with welcome message, suggestions, and actions
@@ -585,13 +544,11 @@ const ChatWidgetUI: React.FC<Props> = ({
 
             {/* Input Container */}
             <div
-              className={`p-3 border-t backdrop-blur-sm`}
-              style={{
-                backgroundColor: darkMode
-                  ? "rgba(30, 27, 75, 0.8)"
-                  : "rgba(255, 255, 255, 0.7)",
-                borderColor: darkMode ? "#4c1d95" : "#c7d2fe",
-              }}
+              className={`p-3 border-t backdrop-blur-sm ${
+                darkMode
+                  ? "chat-input-container-dark"
+                  : "chat-input-container-light"
+              }`}
             >
               {/* Reply Preview */}
               {replyingTo && (
@@ -623,8 +580,10 @@ const ChatWidgetUI: React.FC<Props> = ({
                       ? CHAT_PLACEHOLDERS.LISTENING
                       : CHAT_PLACEHOLDERS.ASK_AIVA
                   }
-                  className={`flex-1 min-w-0 ${theme.inputBg} ${
-                    darkMode ? "dark-scrollbar" : ""
+                  className={`flex-1 min-w-0 ${theme.inputBg} chat-textarea ${
+                    darkMode
+                      ? "dark-scrollbar chat-textarea-dark"
+                      : "chat-textarea-light"
                   } border ${
                     darkMode
                       ? "border-gray-700 placeholder-gray-300"
@@ -646,11 +605,6 @@ const ChatWidgetUI: React.FC<Props> = ({
                   readOnly={isListening && listeningMode === "send"}
                   rows={1}
                   spellCheck={false}
-                  style={{
-                    caretColor: darkMode ? "#f9fafb" : "#4338ca",
-                    minHeight: "40px",
-                    maxHeight: "140px",
-                  }}
                 />
 
                 <button
@@ -664,25 +618,12 @@ const ChatWidgetUI: React.FC<Props> = ({
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
                   }
-                  style={{
-                    border: "none",
-                    outline: "none",
-                    background:
-                      "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-                    color: "#ffffff",
-                    paddingInline: "clamp(12px, 1.8vw, 16px)",
-                    boxShadow:
-                      !input.trim() ||
-                      (isListening && listeningMode !== "dictate")
-                        ? "none"
-                        : "0 4px 12px rgba(99, 102, 241, 0.4)",
-                    opacity:
-                      !input.trim() ||
-                      (isListening && listeningMode !== "dictate")
-                        ? 0.5
-                        : 1,
-                  }}
-                  className="flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg hover:brightness-110 transform transition-all active:scale-95 disabled:cursor-not-allowed"
+                  className={`chat-send-btn flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg hover:brightness-110 transform transition-all active:scale-95 disabled:cursor-not-allowed ${
+                    !input.trim() ||
+                    (isListening && listeningMode !== "dictate")
+                      ? "chat-send-btn-disabled"
+                      : "chat-send-btn-active"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -723,24 +664,14 @@ const ChatWidgetUI: React.FC<Props> = ({
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
-          style={{
-            background: darkMode
-              ? "linear-gradient(135deg, #818cf8 0%, #a78bfa 100%)"
-              : "linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%)",
-            boxShadow: darkMode
-              ? "0 8px 32px rgba(129, 140, 248, 0.5), 0 4px 16px rgba(167, 139, 250, 0.4)"
-              : "0 8px 32px rgba(165, 180, 252, 0.6), 0 4px 16px rgba(196, 181, 253, 0.5)",
-            backdropFilter: "blur(10px)",
-          }}
+          className={`relative p-4 rounded-full shadow-lg hover:shadow-xl transition-all chat-fab ${
+            darkMode ? "chat-fab-dark" : "chat-fab-light"
+          }`}
         >
           <img
             src={sparkIcon}
             alt="Open AIVA chat"
-            className="w-8 h-8"
-            style={{
-              filter: "drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5))",
-            }}
+            className="w-8 h-8 chat-fab-logo"
           />
         </motion.button>
 
