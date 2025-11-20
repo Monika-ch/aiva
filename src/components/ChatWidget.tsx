@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ChatWidgetUI from "./ChatWidgetUI";
-import { QUICK_ACTIONS_MARKER } from "../features";
+import { QUICK_ACTIONS_MARKER } from "../utils";
 import useChatWidget from "../hooks/useChatWidget";
 import type { Message, SendMessageOptions } from "../types/Message";
 

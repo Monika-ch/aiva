@@ -4,10 +4,10 @@
  */
 
 import { useState, useEffect, useRef } from "react";
-import { VoiceSendButton, DictateButton } from "../features/VoiceControls";
-import { useVoiceRecognition } from "../features/useVoiceRecognition";
-import { useDictation } from "../features/useDictation";
-import { useLanguageSettings } from "../features/useLanguageSettings";
+import { VoiceSendButton, DictateButton } from "../utils/VoiceControls";
+import { useVoiceRecognition } from "../utils/useVoiceRecognition";
+import { useDictation } from "../utils/useDictation";
+import { useLanguageSettings } from "../utils/useLanguageSettings";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import type { SendMessageOptions } from "../types/Message";
 

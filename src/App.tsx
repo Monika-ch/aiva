@@ -89,13 +89,13 @@ import { QuickActionsSection } from "./components/QuickActionsSection";
 import Hero from "./components/Hero";
 import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
-import { useDarkMode } from "./features/useDarkMode";
+import { useDarkMode } from "./utils/useDarkMode";
 import {
   MessageBubble,
   useTextToSpeech,
   TypingIndicator,
   useSmoothScroll,
-} from "./features";
+} from "./utils";
 import type { Message, SendMessageOptions } from "./types/Message";
 
 const DEFAULT_AI_RESPONSE =

@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { ActionCards } from "../features";
+import { ActionCards } from "../utils";
 
 interface QuickActionsSectionProps {
   darkMode: boolean;
