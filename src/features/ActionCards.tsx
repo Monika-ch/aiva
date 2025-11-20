@@ -27,16 +27,7 @@ export const ActionCards: React.FC<ActionCardsProps> = ({
   clickedActions = new Set(),
 }) => {
   return (
-    <div className={`w-full ${isMobile ? "" : "max-w-xl px-4 space-y-3"}`}>
-      {!isMobile && (
-        <p
-          className={`text-xs font-semibold uppercase tracking-wider ${
-            darkMode ? "text-gray-400" : "text-gray-500"
-          }`}
-        >
-          ⚡ Quick actions:
-        </p>
-      )}
+    <div className="w-full">
       <div className="grid grid-cols-2 gap-3.5">
         {QUICK_ACTIONS.map((action, idx) => {
           const isClicked = clickedActions.has(action.query);

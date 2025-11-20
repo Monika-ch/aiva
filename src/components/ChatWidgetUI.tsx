@@ -26,15 +26,15 @@ import {
 import type { Message, SendMessageOptions } from "../types/Message";
 
 // Import chat constants
-import {
-  INTRO_SUGGESTIONS,
-  CHAT_PLACEHOLDERS,
-} from "../constants/chatConstants";
+import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 
 // Import confirm dialog
 import { ConfirmDialog } from "./ConfirmDialog";
 import { ReplyPreview } from "./ReplyPreview";
+import { SuggestionList } from "./SuggestionList";
+import { WelcomeMessage } from "./WelcomeMessage";
+import { QuickActionsSection } from "./QuickActionsSection";
 
 interface Props {
   messages: Message[];
@@ -635,57 +635,25 @@ const ChatWidgetUI: React.FC<Props> = ({
             >
               {messages.length === 0 && !isTyping ? (
                 // Empty state with welcome message, suggestions, and actions
-                <div className="flex flex-col h-full py-4 px-4">
+                <div className="flex flex-col h-full px-4 overflow-y-auto">
                   {/* Welcome greeting */}
-                  <div className="text-center space-y-1.5 mb-5">
-                    <h2
-                      className={`text-base font-semibold ${
-                        darkMode ? "text-gray-100" : "text-gray-800"
-                      }`}
-                    >
-                      {CHAT_PLACEHOLDERS.ASK_AIVA}
-                    </h2>
-                    <p
-                      className={`text-[11px] leading-relaxed ${
-                        darkMode ? "text-gray-400" : "text-gray-600"
-                      }`}
-                    >
-                      I'm your AI-Powered Portfolio Assistant. I can help you
-                      explore projects, discuss technical skills, and answer
-                      questions about experience.
-                    </p>
-                  </div>
+                  <WelcomeMessage darkMode={darkMode} variant="mobile" />
 
                   {/* Suggestion chips */}
-                  <div className="space-y-2.5 w-full mb-5">
-                    <p
-                      className={`text-[9px] font-semibold uppercase tracking-wider text-center ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      💡 Try asking about:
-                    </p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {INTRO_SUGGESTIONS.map((suggestion, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          disabled={clickedSuggestions.has(suggestion)}
-                          className={`px-3 py-2 rounded-full text-[11px] font-medium transition-all ${
-                            clickedSuggestions.has(suggestion)
-                              ? darkMode
-                                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : darkMode
-                                ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                                : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
-                          }`}
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <SuggestionList
+                    darkMode={darkMode}
+                    clickedSuggestions={clickedSuggestions}
+                    onSuggestionClick={handleSuggestionClick}
+                    variant="mobile"
+                  />
+
+                  {/* Quick action cards */}
+                  <QuickActionsSection
+                    darkMode={darkMode}
+                    clickedActions={clickedActions}
+                    onActionClick={handleQuickAction}
+                    variant="mobile"
+                  />
                 </div>
               ) : (
                 <>

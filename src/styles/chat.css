@@ -2,23 +2,27 @@
 
 /* Ensure chat container grows properly */
 .chat-scroll {
-	scrollbar-width: thin;
+  scrollbar-width: thin;
 }
 
 /* Smooth message transitions */
 .message-enter {
-	opacity: 0;
-	transform: translateY(6px);
+  opacity: 0;
+  transform: translateY(6px);
 }
 .message-enter-active {
-	opacity: 1;
-	transform: translateY(0);
-	transition: opacity 180ms ease, transform 180ms ease;
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	-ms-transform: translateY(0);
-	-o-transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
 }
 
 /* Small utility */
-.muted { color: #6b7280; }
+.muted {
+  color: #6b7280;
+}

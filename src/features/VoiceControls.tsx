@@ -29,8 +29,8 @@ const getVoiceButtonStyle = ({
           ? "linear-gradient(135deg, rgba(79, 70, 229, 0.45), rgba(126, 34, 206, 0.55))"
           : "linear-gradient(135deg, rgba(129, 140, 248, 0.7), rgba(99, 102, 241, 0.85))"
         : darkMode
-        ? "rgba(30, 41, 59, 0.65)"
-        : "rgba(255, 255, 255, 0.78)",
+          ? "rgba(30, 41, 59, 0.65)"
+          : "rgba(255, 255, 255, 0.78)",
       color: darkMode ? "#e0e7ff" : "#312e81",
       padding: "12px",
       borderRadius: "9999px",
@@ -125,22 +125,22 @@ export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
         </>
       )}
       <svg
-        xmlns='http://www.w3.org/2000/svg'
+        xmlns="http://www.w3.org/2000/svg"
         style={{
           width: "16px",
           height: "16px",
           position: "relative",
           zIndex: 10,
         }}
-        fill='none'
-        viewBox='0 0 24 24'
-        stroke='currentColor'
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
         strokeWidth={2}
       >
         <path
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          d='M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z'
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
         />
       </svg>
     </button>
@@ -211,39 +211,39 @@ export const DictateButton: React.FC<DictateButtonProps> = ({
       {isActive ? (
         // Stop icon when dictation is active
         <svg
-          xmlns='http://www.w3.org/2000/svg'
+          xmlns="http://www.w3.org/2000/svg"
           style={{
             width: "16px",
             height: "16px",
             position: "relative",
             zIndex: 10,
           }}
-          fill='currentColor'
-          viewBox='0 0 24 24'
+          fill="currentColor"
+          viewBox="0 0 24 24"
         >
-          <path d='M6 6h12v12H6z' />
+          <path d="M6 6h12v12H6z" />
         </svg>
       ) : (
         // Pen icon when dictation is not active
         <svg
-          xmlns='http://www.w3.org/2000/svg'
+          xmlns="http://www.w3.org/2000/svg"
           style={{
             width: "16px",
             height: "16px",
             position: "relative",
             zIndex: 10,
           }}
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
           strokeWidth={2}
         >
           <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5'
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5"
           />
-          <path strokeLinecap='round' strokeLinejoin='round' d='M10 21h11' />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 21h11" />
         </svg>
       )}
     </button>

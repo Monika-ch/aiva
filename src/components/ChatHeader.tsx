@@ -12,12 +12,18 @@ const ChatHeader = () => {
       <div className="flex items-center gap-4">
         <img src={sparkIcon} alt="AIVA logo" className="w-16 h-16" />
         <div>
-          <h2 className="font-semibold text-lg tracking-wide text-gray-900">AIVA</h2>
-          <p className="text-xs text-gray-500">AI-Powered Portfolio Assistant</p>
+          <h2 className="font-semibold text-lg tracking-wide text-gray-900">
+            AIVA
+          </h2>
+          <p className="text-xs text-gray-500">
+            AI-Powered Portfolio Assistant
+          </p>
         </div>
       </div>
 
-      <p className="text-xs italic text-gray-500">“An AI co-pilot for your professional story.”</p>
+      <p className="text-xs italic text-gray-500">
+        “An AI co-pilot for your professional story.”
+      </p>
     </motion.div>
   );
 };

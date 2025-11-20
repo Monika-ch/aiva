@@ -77,19 +77,19 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
   ];
 
   return (
-    <section className='relative overflow-hidden p-5'>
+    <section className="relative overflow-hidden p-5">
       {/* Floating AI blobs */}
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className='absolute -top-24 -left-24 w-[300px] h-[300px] bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30'
+        className="absolute -top-24 -left-24 w-[300px] h-[300px] bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className='absolute -bottom-20 -right-20 w-[350px] h-[350px] bg-gradient-to-r from-pink-400 to-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30'
+        className="absolute -bottom-20 -right-20 w-[350px] h-[350px] bg-gradient-to-r from-pink-400 to-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
 
       {/* Content */}
-      <div className='relative z-10'>
+      <div className="relative z-10">
         <motion.h1
           className={`text-2xl font-extrabold mb-3 ${
             darkMode ? "text-gray-100" : "text-gray-900"
@@ -114,7 +114,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           clients.
         </motion.p>
 
-        <div className='space-y-2.5'>
+        <div className="space-y-2.5">
           {features.map((item, index) => (
             <motion.div
               key={index}
@@ -147,7 +147,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
 
         {/* Tech Stack Badges */}
         <motion.div
-          className='flex flex-wrap gap-2.5 mt-5'
+          className="flex flex-wrap gap-2.5 mt-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}

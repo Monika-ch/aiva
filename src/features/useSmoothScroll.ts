@@ -98,6 +98,7 @@ export const useSmoothScroll = ({
   // Auto-scroll when dependencies change
   useEffect(() => {
     scrollToBottom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   // Cleanup timeouts

@@ -83,6 +83,9 @@ import ChatContainer from "./components/ChatContainer";
 import DesktopChatHeader from "./components/DesktopChatHeader";
 import DesktopChatInput from "./components/DesktopChatInput";
 import { ReplyPreview } from "./components/ReplyPreview";
+import { SuggestionList } from "./components/SuggestionList";
+import { WelcomeMessage } from "./components/WelcomeMessage";
+import { QuickActionsSection } from "./components/QuickActionsSection";
 import Hero from "./components/Hero";
 import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
@@ -91,13 +94,8 @@ import {
   MessageBubble,
   useTextToSpeech,
   TypingIndicator,
-  ActionCards,
   useSmoothScroll,
 } from "./features";
-import {
-  INTRO_SUGGESTIONS,
-  CHAT_PLACEHOLDERS,
-} from "./constants/chatConstants";
 import type { Message, SendMessageOptions } from "./types/Message";
 
 const DEFAULT_AI_RESPONSE =
@@ -475,60 +473,22 @@ function App() {
                   // Empty state with welcome message, suggestions, and actions
                   <div className="flex flex-col items-center justify-center h-full space-y-8 py-8">
                     {/* Welcome greeting */}
-                    <div className="text-center space-y-3 max-w-xl px-4">
-                      <h2
-                        className={`text-2xl font-semibold ${
-                          darkMode ? "text-gray-100" : "text-gray-800"
-                        }`}
-                      >
-                        {CHAT_PLACEHOLDERS.ASK_AIVA}
-                      </h2>
-                      <p
-                        className={`text-sm leading-relaxed ${
-                          darkMode ? "text-gray-400" : "text-gray-600"
-                        }`}
-                      >
-                        I'm your AI-Powered Portfolio Assistant. I can help you
-                        explore projects, discuss technical skills, and answer
-                        questions about experience.
-                      </p>
-                    </div>
+                    <WelcomeMessage darkMode={darkMode} variant="desktop" />
 
                     {/* Suggestion chips */}
-                    <div className="space-y-3 w-full max-w-xl px-4">
-                      <p
-                        className={`text-xs font-semibold uppercase tracking-wider ${
-                          darkMode ? "text-gray-400" : "text-gray-500"
-                        }`}
-                      >
-                        💡 Try asking about:
-                      </p>
-                      <div className="flex flex-wrap gap-2 justify-center">
-                        {INTRO_SUGGESTIONS.map((suggestion, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                            disabled={clickedSuggestions.has(suggestion)}
-                            className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                              clickedSuggestions.has(suggestion)
-                                ? darkMode
-                                  ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                : darkMode
-                                  ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                                  : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
-                            }`}
-                          >
-                            {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    <SuggestionList
+                      darkMode={darkMode}
+                      clickedSuggestions={clickedSuggestions}
+                      onSuggestionClick={handleSuggestionClick}
+                      variant="desktop"
+                    />
 
                     {/* Quick action cards */}
-                    <ActionCards
-                      onActionClick={handleQuickAction}
+                    <QuickActionsSection
                       darkMode={darkMode}
+                      clickedActions={clickedActions}
+                      onActionClick={handleQuickAction}
+                      variant="desktop"
                     />
                   </div>
                 ) : (
