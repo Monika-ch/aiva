@@ -1,10 +1,5 @@
 /* SkeletonLoader Custom Styles */
 
-/* Random width skeleton */
-.skeleton-random-width {
-  width: var(--skeleton-width);
-}
-
 /* Fixed width skeletons */
 .skeleton-width-85 {
   width: 85%;

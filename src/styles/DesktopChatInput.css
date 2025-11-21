@@ -1,0 +1,122 @@
+/* Desktop Chat Input Custom Styles */
+
+/* Textarea scrollbar - Dark theme */
+.dark-textarea-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-textarea-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark-textarea-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.dark-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Textarea scrollbar - Light theme */
+.light-textarea-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.light-textarea-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.light-textarea-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.light-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Textarea styles */
+.desktop-chat-textarea-dark {
+  caret-color: #f9fafb;
+  scrollbar-color: #475569 transparent;
+}
+
+.desktop-chat-textarea-light {
+  caret-color: #4338ca;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.desktop-chat-textarea {
+  min-height: 40px;
+  max-height: 160px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Dictation dot animation delays */
+.dictation-dot-delay-1 {
+  animation-delay: 0ms;
+}
+
+.dictation-dot-delay-2 {
+  animation-delay: 150ms;
+}
+
+.dictation-dot-delay-3 {
+  animation-delay: 300ms;
+}
+
+/* Send button */
+.desktop-send-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.desktop-send-btn-opacity-disabled-dark {
+  opacity: 0.6;
+}
+
+.desktop-send-btn-opacity-disabled-light {
+  opacity: 0.4;
+}
+
+.desktop-send-btn-opacity-enabled {
+  opacity: 1;
+}
+
+.desktop-send-btn-icon {
+  stroke-width: 2.5;
+}
+
+/* Quick prompt button */
+.quick-prompt-btn {
+  padding: 10px 14px;
+  font-size: 12px;
+  border: none;
+  outline: none;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-prompt-btn-dark {
+  background-color: #1e293b;
+  color: #cbd5e1;
+}
+
+.quick-prompt-btn-light {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.quick-prompt-btn:hover {
+  background-color: #6366f1;
+  color: #ffffff;
+}

@@ -10,6 +10,7 @@ import { useDictation } from "../utils/useDictation";
 import { useLanguageSettings } from "../utils/useLanguageSettings";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import type { SendMessageOptions } from "../types/Message";
+import "../styles/DesktopChatInput.css";
 
 const QUICK_PROMPTS = [
   {
@@ -202,18 +203,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             </span>
             {isListening && listeningMode === "dictate" && (
               <span className="flex items-center gap-0.5 ml-1">
-                <span
-                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
-                  style={{ animationDelay: "0ms" }}
-                />
-                <span
-                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
-                  style={{ animationDelay: "150ms" }}
-                />
-                <span
-                  className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse"
-                  style={{ animationDelay: "300ms" }}
-                />
+                <span className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse dictation-dot-delay-1" />
+                <span className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse dictation-dot-delay-2" />
+                <span className="inline-block h-1 w-1 rounded-full bg-slate-400 animate-pulse dictation-dot-delay-3" />
               </span>
             )}
           </div>
@@ -222,41 +214,13 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
             <div
               className={`group/input relative flex flex-col overflow-hidden rounded-xl border ${inputSurfaceClass} shadow-sm transition-all duration-200 focus-within:border-indigo-400 focus-within:shadow-md focus-within:shadow-indigo-500/20`}
             >
-              <style>{`
-                .dark-textarea-scrollbar::-webkit-scrollbar {
-                  width: 8px;
-                }
-                .dark-textarea-scrollbar::-webkit-scrollbar-track {
-                  background: transparent;
-                }
-                .dark-textarea-scrollbar::-webkit-scrollbar-thumb {
-                  background: #475569;
-                  border-radius: 4px;
-                }
-                .dark-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
-                  background: #64748b;
-                }
-                .light-textarea-scrollbar::-webkit-scrollbar {
-                  width: 8px;
-                }
-                .light-textarea-scrollbar::-webkit-scrollbar-track {
-                  background: transparent;
-                }
-                .light-textarea-scrollbar::-webkit-scrollbar-thumb {
-                  background: #cbd5e1;
-                  border-radius: 4px;
-                }
-                .light-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
-                  background: #94a3b8;
-                }
-              `}</style>
               <textarea
                 ref={inputRef}
                 placeholder={getPlaceholderText()}
-                className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm ${
+                className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm desktop-chat-textarea ${
                   darkMode
-                    ? "dark-textarea-scrollbar"
-                    : "light-textarea-scrollbar"
+                    ? "dark-textarea-scrollbar desktop-chat-textarea-dark"
+                    : "light-textarea-scrollbar desktop-chat-textarea-light"
                 }`}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -270,16 +234,6 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                 readOnly={isListening && listeningMode === "send"}
                 rows={1}
                 spellCheck={false}
-                style={{
-                  caretColor: darkMode ? "#f9fafb" : "#4338ca",
-                  minHeight: "40px",
-                  maxHeight: "160px",
-                  overflowY: "auto",
-                  scrollbarWidth: "thin",
-                  scrollbarColor: darkMode
-                    ? "#475569 transparent"
-                    : "#cbd5e1 transparent",
-                }}
               />
 
               <div className="pointer-events-none absolute right-1.5 bottom-1.5 flex items-center gap-1.5">
@@ -291,32 +245,21 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
                   }
-                  className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-                    color: "#ffffff",
-                    padding: "0",
-                    margin: "0",
-                    border: "none",
-                    outline: "none",
-                    boxShadow: "0 4px 12px rgba(99, 102, 241, 0.4)",
-                    opacity:
-                      !input.trim() ||
-                      (isListening && listeningMode !== "dictate")
-                        ? darkMode
-                          ? "0.6"
-                          : "0.4"
-                        : "1",
-                  }}
+                  className={`pointer-events-auto flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed desktop-send-btn ${
+                    !input.trim() ||
+                    (isListening && listeningMode !== "dictate")
+                      ? darkMode
+                        ? "desktop-send-btn-opacity-disabled-dark"
+                        : "desktop-send-btn-opacity-disabled-light"
+                      : "desktop-send-btn-opacity-enabled"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
+                    className="h-4 w-4 desktop-send-btn-icon"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    style={{ strokeWidth: "2.5" }}
                   >
                     <path
                       strokeWidth="2"
@@ -355,31 +298,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                 key={prompt.label}
                 type="button"
                 onClick={() => applyQuickPrompt(prompt.value)}
-                className="rounded-full font-medium transition-all hover:brightness-110"
-                style={{
-                  padding: "10px 14px",
-                  fontSize: "12px",
-                  backgroundColor: darkMode ? "#1e293b" : "#eef2ff",
-                  color: darkMode ? "#cbd5e1" : "#4338ca",
-                  border: "none",
-                  outline: "none",
-                  minHeight: "36px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#6366f1";
-                  e.currentTarget.style.color = "#ffffff";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = darkMode
-                    ? "#1e293b"
-                    : "#eef2ff";
-                  e.currentTarget.style.color = darkMode
-                    ? "#cbd5e1"
-                    : "#4338ca";
-                }}
+                className={`rounded-full font-medium transition-all hover:brightness-110 quick-prompt-btn ${
+                  darkMode ? "quick-prompt-btn-dark" : "quick-prompt-btn-light"
+                }`}
               >
                 {prompt.label}
               </button>

@@ -1,0 +1,95 @@
+/* Language Dropdown Custom Styles */
+
+/* Dropdown container */
+.lang-dropdown-dark {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.lang-dropdown-light {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.lang-dropdown-z {
+  z-index: 9999;
+}
+
+/* Portal positioning */
+.lang-dropdown-portal-pos {
+  position: fixed;
+  width: 260px;
+}
+
+/* Inline positioning */
+.lang-dropdown-inline-pos {
+  position: absolute;
+  right: 0;
+  margin-top: 4px;
+  width: 280px;
+}
+
+/* Search input */
+.lang-search-input-dark {
+  background-color: #374151;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+.lang-search-input-light {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+/* Options list scrollbar */
+.lang-options-scrollbar {
+  scrollbar-width: thin;
+}
+
+.lang-options-scrollbar-dark {
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+.lang-options-scrollbar-light {
+  scrollbar-color: #d1d5db #f9fafb;
+}
+
+.lang-options-maxheight-portal {
+  max-height: 216px;
+}
+
+.lang-options-maxheight-inline {
+  max-height: 256px;
+}
+
+/* Option button colors */
+.lang-option-selected-dark {
+  background-color: #312e81;
+  color: #c7d2fe;
+}
+
+.lang-option-selected-light {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.lang-option-unselected {
+  background-color: transparent;
+}
+
+.lang-option-unselected-dark {
+  color: #e5e7eb;
+}
+
+.lang-option-unselected-dark:hover {
+  background-color: #374151;
+}
+
+.lang-option-unselected-light {
+  color: #374151;
+}
+
+.lang-option-unselected-light:hover {
+  background-color: #f9fafb;
+}

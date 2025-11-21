@@ -6,6 +6,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { filterLanguageOptions } from "../utils/useLanguageSettings";
+import "../styles/LanguageDropdown.css";
 
 interface LanguageDropdownProps {
   darkMode: boolean;
@@ -69,89 +70,58 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   const dropdownContent = (
     <div
       ref={dropdownRef}
-      className="rounded-lg shadow-2xl border"
-      style={{
-        backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-        borderColor: darkMode ? "#374151" : "#e5e7eb",
-        zIndex: 9999,
-        ...(usePortal
+      className={`rounded-lg shadow-2xl border lang-dropdown-z ${
+        darkMode ? "lang-dropdown-dark" : "lang-dropdown-light"
+      } ${usePortal ? "lang-dropdown-portal-pos" : "lang-dropdown-inline-pos"}`}
+      style={
+        usePortal
           ? {
-              position: "fixed",
               top: `${position.top}px`,
               right: `${position.right}px`,
-              width: "260px",
             }
-          : {
-              position: "absolute",
-              right: 0,
-              marginTop: "4px",
-              width: "280px",
-            }),
-      }}
+          : undefined
+      }
     >
       <div
-        className="p-2.5 border-b"
-        style={{
-          borderColor: darkMode ? "#374151" : "#e5e7eb",
-        }}
+        className={`p-2.5 border-b ${
+          darkMode ? "lang-dropdown-dark" : "lang-dropdown-light"
+        }`}
       >
         <input
           type="text"
           placeholder="Search..."
           value={languageSearch}
           onChange={(e) => onLanguageSearchChange(e.target.value)}
-          className="w-full px-2.5 py-1.5 rounded-md border text-xs focus:outline-none focus:ring-1 focus:ring-indigo-400"
-          style={{
-            backgroundColor: darkMode ? "#374151" : "#ffffff",
-            borderColor: darkMode ? "#4b5563" : "#d1d5db",
-            color: darkMode ? "#f3f4f6" : "#111827",
-          }}
+          className={`w-full px-2.5 py-1.5 rounded-md border text-xs focus:outline-none focus:ring-1 focus:ring-indigo-400 ${
+            darkMode ? "lang-search-input-dark" : "lang-search-input-light"
+          }`}
         />
       </div>
 
       <div
-        className={`overflow-y-auto ${
-          darkMode ? "dark-scrollbar" : "light-scrollbar"
+        className={`overflow-y-auto lang-options-scrollbar ${
+          darkMode
+            ? "lang-options-scrollbar-dark dark-scrollbar"
+            : "lang-options-scrollbar-light light-scrollbar"
+        } ${
+          usePortal
+            ? "lang-options-maxheight-portal"
+            : "lang-options-maxheight-inline"
         }`}
-        style={{
-          scrollbarWidth: "thin",
-          scrollbarColor: darkMode ? "#4b5563 #1f2937" : "#d1d5db #f9fafb",
-          maxHeight: usePortal ? "208px" : "256px",
-        }}
       >
         {filteredOptions.map((option) => (
           <button
             key={option.code}
             onClick={() => onLanguageSelect(option.code)}
-            className="w-full text-left px-3 py-2 text-xs transition-colors"
-            style={{
-              backgroundColor:
-                speechLanguage === option.code
-                  ? darkMode
-                    ? "#312e81"
-                    : "#eef2ff"
-                  : "transparent",
-              color:
-                speechLanguage === option.code
-                  ? darkMode
-                    ? "#c7d2fe"
-                    : "#4338ca"
-                  : darkMode
-                    ? "#e5e7eb"
-                    : "#374151",
-            }}
-            onMouseEnter={(e) => {
-              if (speechLanguage !== option.code) {
-                e.currentTarget.style.backgroundColor = darkMode
-                  ? "#374151"
-                  : "#f9fafb";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (speechLanguage !== option.code) {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }
-            }}
+            className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+              speechLanguage === option.code
+                ? darkMode
+                  ? "lang-option-selected-dark"
+                  : "lang-option-selected-light"
+                : darkMode
+                  ? "lang-option-unselected lang-option-unselected-dark"
+                  : "lang-option-unselected lang-option-unselected-light"
+            }`}
           >
             <div className="flex items-center justify-between gap-2">
               <span className="flex-1 min-w-0">{option.label}</span>

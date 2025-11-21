@@ -84,11 +84,11 @@ export const SkeletonSuggestions: React.FC<SkeletonSuggestionsProps> = ({
           } ${idx === count - 1 ? "mb-0" : "mb-2"}`}
         >
           <div
-            className={`h-3 rounded skeleton-random-width ${
+            className={`h-3 rounded ${
               darkMode ? "bg-gray-600" : "bg-gray-300"
             }`}
             style={{
-              ["--skeleton-width" as string]: `${60 + Math.random() * 40}%`,
+              width: `${60 + Math.random() * 40}%`,
             }}
           />
         </div>
