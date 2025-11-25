@@ -4,10 +4,8 @@
  */
 
 import React from "react";
-import {
-  QUICK_ACTIONS,
-  QUICK_ACTIONS_MARKER,
-} from "../constants/chatConstants";
+import { QUICK_ACTIONS } from "../constants/chatConstants";
+import type { Message } from "../types/Message";
 import "../styles/ActionCards.css";
 
 interface ActionCardsProps {
@@ -140,6 +138,7 @@ interface MessageContentRendererProps {
   clickedActions?: Set<string>;
   onSuggestionClick: (suggestion: string) => void;
   onActionClick: (query: string) => void;
+  message?: Message;
 }
 
 export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
@@ -150,10 +149,10 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
   clickedActions = new Set(),
   onSuggestionClick,
   onActionClick,
+  message,
 }) => {
-  // Render quick action cards if marker is present
-  if (isAssistant && content.startsWith(QUICK_ACTIONS_MARKER)) {
-    const description = content.substring(QUICK_ACTIONS_MARKER.length).trim();
+  // Render quick action cards if message type is quick-actions
+  if (isAssistant && message?.type === "quick-actions") {
     return (
       <div className="w-full">
         <div
@@ -161,7 +160,7 @@ export const MessageContentRenderer: React.FC<MessageContentRendererProps> = ({
             darkMode ? "text-gray-200" : "text-gray-500"
           }`}
         >
-          {description || "Quick actions you can tap:"}
+          {content}
         </div>
         <ActionCards
           onActionClick={onActionClick}

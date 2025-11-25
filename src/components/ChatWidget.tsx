@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ChatWidgetUI from "./ChatWidgetUI";
-import { QUICK_ACTIONS_MARKER } from "../utils";
 import useChatWidget from "../hooks/useChatWidget";
 import type { Message, SendMessageOptions } from "../types/Message";
 
 interface ChatWidgetProps {
   messages: Message[];
   onSend: (msg: string, options?: SendMessageOptions) => void;
-  onAssistantMessage?: (msg: string) => void;
+  onAssistantMessage?: (msg: string, type?: "quick-actions" | "normal") => void;
   onClearMessages?: () => void;
   onReaction?: (
     messageIndex: number,
@@ -54,7 +53,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 • explore experience
 • tell me more about their journey
 • do a storytelling on Monika`;
-    const quickActionsPrompt = `${QUICK_ACTIONS_MARKER}`;
 
     // Show typing indicator before greeting
     setIsInternalTyping(true);
@@ -75,8 +73,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             setIsInternalTyping(true);
             setTimeout(() => {
               setIsInternalTyping(false);
-              onAssistantMessage(quickActionsPrompt);
-              console.log("Quick actions prompt sent:", quickActionsPrompt);
+              onAssistantMessage("Quick actions you can tap:", "quick-actions");
             }, 800);
           }, 500);
         }, 800);

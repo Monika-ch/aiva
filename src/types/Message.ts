@@ -7,6 +7,7 @@ export interface Message {
   timestamp?: number;
   reaction?: "helpful" | "not-helpful" | null;
   replyToId?: string;
+  type?: "quick-actions" | "normal";
 }
 
 export interface SendMessageOptions {

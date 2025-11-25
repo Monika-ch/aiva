@@ -129,7 +129,10 @@ function App() {
   );
 
   // Mobile: allow adding assistant messages (for welcome/intro messages)
-  const addMobileAssistantMessage = (text: string) => {
+  const addMobileAssistantMessage = (
+    text: string,
+    type?: "quick-actions" | "normal"
+  ) => {
     if (!text) return;
     const aiMessage: Message = {
       role: "assistant",
@@ -137,6 +140,7 @@ function App() {
       timestamp: Date.now(),
       id: `mobile-assistant-${Date.now()}`,
       reaction: null,
+      type: type || "normal",
     };
     setMobileMessages((prev) => [...prev, aiMessage]);
   };

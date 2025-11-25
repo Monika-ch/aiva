@@ -235,6 +235,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             clickedActions={clickedActions}
             onSuggestionClick={onSuggestionClick}
             onActionClick={onActionClick}
+            message={message}
           />
         </div>
 
