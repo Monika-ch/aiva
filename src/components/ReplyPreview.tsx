@@ -5,6 +5,7 @@
 
 import React from "react";
 import { CloseIcon } from "../constants/icons";
+import sparkIcon from "../assets/logo-robo-face.svg";
 
 interface ReplyPreviewProps {
   replyToContent: string;
@@ -27,29 +28,40 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-2 px-3 py-2.5 border-l-4 ${
-        replyToRole === "assistant"
-          ? darkMode
-            ? "border-gray-500"
-            : "border-gray-400"
-          : darkMode
-            ? "border-gray-500"
-            : "border-gray-400"
-      } ${
-        darkMode ? "bg-gray-800/60 text-gray-200" : "bg-gray-50 text-gray-800"
-      } rounded-lg mb-2`}
+      className={`flex items-center gap-3 px-3 py-1 rounded-full mb-2 border ${
+        darkMode
+          ? "bg-indigo-950/20 border-indigo-800/30 backdrop-blur-sm"
+          : "bg-indigo-50/50 border-indigo-200/50"
+      }`}
     >
+      <div
+        className={`w-1 h-10 rounded-full flex-shrink-0 ${
+          replyToRole === "assistant"
+            ? darkMode
+              ? "bg-gradient-to-b from-indigo-500 to-purple-600"
+              : "bg-gradient-to-b from-indigo-500 to-purple-600"
+            : darkMode
+              ? "bg-gradient-to-b from-blue-500 to-cyan-600"
+              : "bg-gradient-to-b from-blue-500 to-cyan-600"
+        }`}
+      />
       <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-0.5">
+          {replyToRole === "assistant" && (
+            <img src={sparkIcon} alt="AIVA" className="w-3.5 h-3.5" />
+          )}
+          {replyToRole === "user" && <span className="text-xs">👤</span>}
+          <p
+            className={`text-xs font-semibold ${
+              darkMode ? "text-indigo-300" : "text-indigo-700"
+            }`}
+          >
+            {replyToRole === "assistant" ? "AIVA" : "You"}
+          </p>
+        </div>
         <p
-          className={`text-xs font-semibold ${
+          className={`text-[13px] truncate ${
             darkMode ? "text-gray-300" : "text-gray-700"
-          }`}
-        >
-          {replyToRole === "assistant" ? "AIVA" : "You"}
-        </p>
-        <p
-          className={`text-sm truncate ${
-            darkMode ? "text-gray-400" : "text-gray-600"
           }`}
         >
           {truncatedContent}
@@ -57,7 +69,7 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
       </div>
       <button
         onClick={onClear}
-        className={`hover:opacity-80 chat-header-btn ${
+        className={`hover:opacity-80 chat-header-btn transition-all ${
           darkMode
             ? "chat-header-btn-dark-transparent"
             : "chat-header-btn-light-transparent"
