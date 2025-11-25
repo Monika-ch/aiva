@@ -5,6 +5,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { CheckIcon } from "../constants/icons";
 import { filterLanguageOptions } from "../utils/useLanguageSettings";
 import "../styles/LanguageDropdown.css";
 
@@ -126,20 +127,10 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
             <div className="flex items-center justify-between gap-2">
               <span className="flex-1 min-w-0">{option.label}</span>
               {speechLanguage === option.code && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                <CheckIcon
                   className="w-3.5 h-3.5 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                  strokeWidth={2.5}
+                />
               )}
             </div>
           </button>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { VoiceSendIcon, SendIcon } from "../constants/icons";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import type {
   SpeechRecognitionConstructorLike,
@@ -138,20 +139,11 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
             <span className="absolute -inset-0.5 rounded-lg bg-red-500/30 blur-sm"></span>
           </>
         )}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
+        <VoiceSendIcon
           className="w-4 h-4 relative z-10"
           fill={isListening ? "currentColor" : "none"}
-          viewBox="0 0 24 24"
-          stroke="currentColor"
           strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-          />
-        </svg>
+        />
       </button>
 
       {/* Text Input */}
@@ -172,26 +164,7 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
         aria-label="Send message"
         className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-4 h-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M22 2L11 13"
-          />
-          <path
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M22 2l-7 20-4-9-9-4 20-7z"
-          />
-        </svg>
+        <SendIcon className="w-4 h-4" />
         <span className="font-medium">Send</span>
       </button>
     </div>

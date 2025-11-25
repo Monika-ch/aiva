@@ -10,6 +10,7 @@ import { clearConversationStorage } from "../utils/clearConversationStorage";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 import { LanguageDropdown } from "../utils/LanguageDropdown";
+import { LanguageIcon, TrashIcon } from "../constants/icons";
 import sparkIcon from "../assets/logo-robo-face.svg";
 import "../styles/DesktopChatHeader.css";
 
@@ -103,20 +104,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
               aria-label="Language settings"
               title="Language settings"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="desktop-header-btn-icon"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                />
-              </svg>
+              <LanguageIcon className="desktop-header-btn-icon" />
             </button>
 
             {/* Language Dropdown Menu */}
@@ -142,20 +130,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
             aria-label="Clear chat history"
             title="Clear chat"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="desktop-header-btn-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
+            <TrashIcon className="desktop-header-btn-icon" />
           </button>
         </div>
       </div>
