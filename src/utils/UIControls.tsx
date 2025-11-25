@@ -12,8 +12,6 @@ import {
   ReplyIcon,
   ThumbUpIcon,
   ThumbDownIcon,
-  CloseIcon,
-  SendIcon,
 } from "../constants/icons";
 import { UI_CONTROL_LABELS } from "../constants/uiControlLabels";
 
@@ -160,56 +158,5 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
         />
       </button>
     </>
-  );
-};
-
-interface CloseButtonProps {
-  onClick: () => void;
-  darkMode: boolean;
-}
-
-export const CloseButton: React.FC<CloseButtonProps> = ({
-  onClick,
-  darkMode,
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`p-2 rounded-lg transition-colors hover:bg-opacity-80 ${darkMode ? "close-button-dark" : "close-button-light"}`}
-      aria-label={UI_CONTROL_LABELS.CLOSE.ARIA_LABEL}
-      title={UI_CONTROL_LABELS.CLOSE.TITLE}
-    >
-      <CloseIcon className="w-5 h-5" />
-    </button>
-  );
-};
-
-interface SendButtonProps {
-  onClick: () => void;
-  disabled?: boolean;
-  darkMode: boolean;
-  size?: "small" | "large";
-}
-
-export const SendButton: React.FC<SendButtonProps> = ({
-  onClick,
-  disabled = false,
-  darkMode,
-  size = "small",
-}) => {
-  const sizeClass = size === "large" ? "w-6 h-6" : "w-5 h-5";
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`p-2 rounded-lg transition-all ${
-        disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-110"
-      } ${disabled ? `control-btn ${darkMode ? "send-btn-disabled-dark" : "send-btn-disabled-light"}` : `control-btn ${darkMode ? "send-btn-dark" : "send-btn-light"}`} btn-text-white`}
-      aria-label={UI_CONTROL_LABELS.SEND.ARIA_LABEL}
-      title={UI_CONTROL_LABELS.SEND.TITLE}
-    >
-      <SendIcon className={sizeClass} />
-    </button>
   );
 };

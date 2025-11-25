@@ -185,7 +185,34 @@ export const CloseIcon: React.FC<IconProps> = ({ className, ...props }) => (
   </svg>
 );
 
-export const SendIcon: React.FC<IconProps> = ({ className, ...props }) => (
+export const SendIcon: React.FC<IconProps> = ({
+  className,
+  ...props
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M22 2L11 13"
+    />
+    <path
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M22 2l-7 20-4-9-9-4 20-7z"
+    />
+  </svg>
+);
+
+export const LanguageIcon: React.FC<IconProps> = ({ className, ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
@@ -198,7 +225,25 @@ export const SendIcon: React.FC<IconProps> = ({ className, ...props }) => (
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+    />
+  </svg>
+);
+
+export const TrashIcon: React.FC<IconProps> = ({ className, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
     />
   </svg>
 );
