@@ -122,7 +122,7 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
         onClick={() => onReaction("helpful")}
         className={`control-btn ${
           isHelpful
-            ? `reaction-helpful-active ${darkMode ? "reaction-helpful-active-dark" : "reaction-helpful-active-light"} btn-text-white`
+            ? `thumbs-up-active ${darkMode ? "thumbs-up-active-dark" : "thumbs-up-active-light"} btn-text-white`
             : darkMode
               ? "btn-inactive-dark"
               : "btn-inactive-light"
@@ -138,7 +138,7 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
         onClick={() => onReaction("not-helpful")}
         className={`control-btn ${
           isNotHelpful
-            ? `reaction-not-helpful-active ${darkMode ? "reaction-not-helpful-active-dark" : "reaction-not-helpful-active-light"} btn-text-white`
+            ? `thumbs-down-active ${darkMode ? "thumbs-down-active-dark" : "thumbs-down-active-light"} btn-text-white`
             : darkMode
               ? "btn-inactive-dark"
               : "btn-inactive-light"

@@ -46,19 +46,19 @@
 }
 
 /* Reaction Buttons */
-.reaction-helpful-active-dark {
+.thumbs-up-active-dark {
   background-color: #16a34a;
 }
 
-.reaction-helpful-active-light {
+.thumbs-up-active-light {
   background-color: #22c55e;
 }
 
-.reaction-not-helpful-active-dark {
+.thumbs-down-active-dark {
   background-color: #dc2626;
 }
 
-.reaction-not-helpful-active-light {
+.thumbs-down-active-light {
   background-color: #ef4444;
 }
 
