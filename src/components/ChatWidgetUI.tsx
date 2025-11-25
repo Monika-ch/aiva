@@ -16,7 +16,6 @@ import {
   useDictation,
   useVoiceRecognition,
   clearConversationStorage,
-  CopyNotification,
   TypingIndicator,
   MessageBubble,
   VoiceSendButton,
@@ -89,7 +88,6 @@ const ChatWidgetUI: React.FC<Props> = ({
   );
   const [clickedActions, setClickedActions] = useState<Set<string>>(new Set());
   const [voiceInputUsed, setVoiceInputUsed] = useState(false);
-  const [showCopyNotification, setShowCopyNotification] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [languageSearch, setLanguageSearch] = useState("");
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -278,10 +276,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setShowCopyNotification(true);
-      setTimeout(() => setShowCopyNotification(false), 2000);
-    });
+    navigator.clipboard.writeText(text);
   };
 
   const handleReaction = (
@@ -327,19 +322,7 @@ const ChatWidgetUI: React.FC<Props> = ({
         darkMode={darkMode}
       />
 
-      {/* Copy Notification */}
-      <AnimatePresence>
-        {showCopyNotification && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-          >
-            <CopyNotification show={showCopyNotification} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      {/* Messages Container */}
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -15,6 +15,7 @@ import {
   CloseIcon,
   SendIcon,
 } from "../constants/icons";
+import { UI_CONTROL_LABELS } from "../constants/uiControlLabels";
 
 interface ReadAloudButtonProps {
   onClick: () => void;
@@ -37,7 +38,11 @@ export const ReadAloudButton: React.FC<ReadAloudButtonProps> = ({
             ? "btn-inactive-dark"
             : "btn-inactive-light"
       } hover:opacity-80`}
-      title={isSpeaking ? "Stop reading" : "Read aloud"}
+      title={
+        isSpeaking
+          ? UI_CONTROL_LABELS.READ_ALOUD.SPEAKING
+          : UI_CONTROL_LABELS.READ_ALOUD.NOT_SPEAKING
+      }
     >
       <VolumeIcon className="control-icon" />
     </button>
@@ -71,7 +76,11 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
             ? "btn-inactive-dark"
             : "btn-inactive-light"
       } hover:opacity-80`}
-      title={copied ? "Copied!" : "Copy message"}
+      title={
+        copied
+          ? UI_CONTROL_LABELS.COPY.COPIED
+          : UI_CONTROL_LABELS.COPY.NOT_COPIED
+      }
     >
       {copied ? (
         <CheckIcon className="control-icon" />
@@ -95,7 +104,7 @@ export const ReplyButton: React.FC<ReplyButtonProps> = ({
     <button
       onClick={onClick}
       className={`control-btn ${darkMode ? "btn-inactive-dark" : "btn-inactive-light"} hover:opacity-80`}
-      title="Reply to message"
+      title={UI_CONTROL_LABELS.REPLY.TITLE}
     >
       <ReplyIcon className="control-icon" />
     </button>
@@ -127,7 +136,7 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
               ? "btn-inactive-dark"
               : "btn-inactive-light"
         } hover:opacity-80`}
-        title="Helpful"
+        title={UI_CONTROL_LABELS.REACTIONS.HELPFUL}
       >
         <ThumbUpIcon
           className="control-icon"
@@ -143,7 +152,7 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
               ? "btn-inactive-dark"
               : "btn-inactive-light"
         } hover:opacity-80`}
-        title="Not helpful"
+        title={UI_CONTROL_LABELS.REACTIONS.NOT_HELPFUL}
       >
         <ThumbDownIcon
           className="control-icon"
@@ -167,8 +176,8 @@ export const CloseButton: React.FC<CloseButtonProps> = ({
     <button
       onClick={onClick}
       className={`p-2 rounded-lg transition-colors hover:bg-opacity-80 ${darkMode ? "close-button-dark" : "close-button-light"}`}
-      aria-label="Close chat"
-      title="Close"
+      aria-label={UI_CONTROL_LABELS.CLOSE.ARIA_LABEL}
+      title={UI_CONTROL_LABELS.CLOSE.TITLE}
     >
       <CloseIcon className="w-5 h-5" />
     </button>
@@ -197,24 +206,10 @@ export const SendButton: React.FC<SendButtonProps> = ({
       className={`p-2 rounded-lg transition-all ${
         disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-110"
       } ${disabled ? `control-btn ${darkMode ? "send-btn-disabled-dark" : "send-btn-disabled-light"}` : `control-btn ${darkMode ? "send-btn-dark" : "send-btn-light"}`} btn-text-white`}
-      aria-label="Send message"
-      title="Send"
+      aria-label={UI_CONTROL_LABELS.SEND.ARIA_LABEL}
+      title={UI_CONTROL_LABELS.SEND.TITLE}
     >
       <SendIcon className={sizeClass} />
     </button>
-  );
-};
-
-interface CopyNotificationProps {
-  show: boolean;
-}
-
-export const CopyNotification: React.FC<CopyNotificationProps> = ({ show }) => {
-  if (!show) return null;
-
-  return (
-    <div className="mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg">
-      ✓ Copied to clipboard
-    </div>
   );
 };
