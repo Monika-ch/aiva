@@ -5,6 +5,8 @@
 
 import React from "react";
 import "../styles/VoiceControls.css";
+import { VOICE_BUTTON_CONFIG } from "../constants/voiceControlLabels";
+type VoiceButtonType = keyof typeof VOICE_BUTTON_CONFIG;
 
 interface VoiceButtonStyleProps {
   active: boolean;
@@ -14,19 +16,51 @@ interface VoiceButtonStyleProps {
 const getVoiceButtonStyle = ({
   active,
   darkMode,
-}: VoiceButtonStyleProps): string => {
-  const baseClasses = "voice-btn";
-  let specificClass = "";
+}: VoiceButtonStyleProps): string =>
+  `voice-btn ${
+    active
+      ? "voice-btn-active"
+      : darkMode
+        ? "voice-btn-inactive-dark"
+        : "voice-btn-inactive-light"
+  }`;
 
-  if (active) {
-    specificClass = "voice-btn-active";
-  } else {
-    specificClass = darkMode
-      ? "voice-btn-inactive-dark"
-      : "voice-btn-inactive-light";
-  }
+interface VoiceButtonProps {
+  type: VoiceButtonType;
+  isActive: boolean;
+  darkMode: boolean;
+  onClick: () => void;
+}
 
-  return `${baseClasses} ${specificClass}`;
+const VoiceButton: React.FC<VoiceButtonProps> = ({
+  onClick,
+  isActive,
+  darkMode,
+  type,
+}) => {
+  const config = VOICE_BUTTON_CONFIG[type];
+  const IconComponent = isActive ? config.icons.active : config.icons.inactive;
+  const label = isActive ? config.labels.ACTIVE : config.labels.INACTIVE;
+  const title = isActive
+    ? config.labels.TITLE_ACTIVE
+    : config.labels.TITLE_INACTIVE;
+
+  return (
+    <button
+      onClick={onClick}
+      className={`${getVoiceButtonStyle({ active: isActive, darkMode })} hover:opacity-90`}
+      aria-label={label}
+      title={title}
+    >
+      {isActive && (
+        <>
+          <span className="voice-pulse" />
+          <span className="voice-glow" />
+        </>
+      )}
+      <IconComponent className="voice-icon" />
+    </button>
+  );
 };
 
 interface VoiceSendButtonProps {
@@ -35,43 +69,9 @@ interface VoiceSendButtonProps {
   darkMode: boolean;
 }
 
-export const VoiceSendButton: React.FC<VoiceSendButtonProps> = ({
-  onClick,
-  isActive,
-  darkMode,
-}) => {
-  const buttonClass = "hover:opacity-90";
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${getVoiceButtonStyle({ active: isActive, darkMode })} ${buttonClass}`}
-      aria-label={isActive ? "Stop voice input" : "Voice input and send"}
-      title={isActive ? "Stop" : "Voice Send"}
-    >
-      {isActive && (
-        <>
-          <span className="voice-pulse" />
-          <span className="voice-glow" />
-        </>
-      )}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="voice-icon"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-        />
-      </svg>
-    </button>
-  );
-};
+export const VoiceSendButton: React.FC<VoiceSendButtonProps> = (props) => (
+  <VoiceButton {...props} type="voice-send" />
+);
 
 interface DictateButtonProps {
   onClick: () => void;
@@ -79,54 +79,6 @@ interface DictateButtonProps {
   darkMode: boolean;
 }
 
-export const DictateButton: React.FC<DictateButtonProps> = ({
-  onClick,
-  isActive,
-  darkMode,
-}) => {
-  const buttonClass = "hover:opacity-90";
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${getVoiceButtonStyle({ active: isActive, darkMode })} ${buttonClass}`}
-      aria-label={isActive ? "Stop dictation" : "Dictate message"}
-      title={isActive ? "Stop dictation" : "Dictate"}
-    >
-      {isActive && (
-        <>
-          <span className="voice-pulse" />
-          <span className="voice-glow" />
-        </>
-      )}
-      {isActive ? (
-        // Stop icon when dictation is active
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="voice-icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path d="M6 6h12v12H6z" />
-        </svg>
-      ) : (
-        // Pen icon when dictation is not active
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="voice-icon"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.862 3.487l3.651 3.651-10.95 10.95a3 3 0 01-1.271.749l-4.106 1.23 1.23-4.106a3 3 0 01.749-1.271l10.95-10.95zM15 5l3.5 3.5"
-          />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M10 21h11" />
-        </svg>
-      )}
-    </button>
-  );
-};
+export const DictateButton: React.FC<DictateButtonProps> = (props) => (
+  <VoiceButton {...props} type="dictate" />
+);
