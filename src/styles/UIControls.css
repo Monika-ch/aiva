@@ -1,0 +1,89 @@
+/* UI Controls Custom Styles */
+
+.control-btn {
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.control-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* --- Shared Base Styles --- */
+.btn-inactive-dark {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+.btn-inactive-light {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.btn-text-white {
+  color: #ffffff;
+}
+
+/* Read Aloud Button */
+.read-aloud-btn-speaking-dark {
+  background-color: #4338ca;
+}
+
+.read-aloud-btn-speaking-light {
+  background-color: #6366f1;
+}
+
+/* Copy Button */
+.copy-btn-copied-dark {
+  background-color: #059669;
+}
+
+.copy-btn-copied-light {
+  background-color: #10b981;
+}
+
+/* Reaction Buttons */
+.reaction-helpful-active-dark {
+  background-color: #16a34a;
+}
+
+.reaction-helpful-active-light {
+  background-color: #22c55e;
+}
+
+.reaction-not-helpful-active-dark {
+  background-color: #dc2626;
+}
+
+.reaction-not-helpful-active-light {
+  background-color: #ef4444;
+}
+
+/* Close Button */
+.close-button-dark {
+  color: #9ca3af;
+}
+
+.close-button-light {
+  color: #6b7280;
+}
+
+/* Send Button */
+.send-btn-dark {
+  background-color: #4f46e5;
+}
+
+.send-btn-light {
+  background-color: #6366f1;
+}
+
+.send-btn-disabled-dark {
+  background-color: #374151;
+}
+
+.send-btn-disabled-light {
+  background-color: #e5e7eb;
+}

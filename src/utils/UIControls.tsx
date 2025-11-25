@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import "../styles/UIControls.css";
 
 interface ReadAloudButtonProps {
   onClick: () => void;
@@ -19,27 +20,18 @@ export const ReadAloudButton: React.FC<ReadAloudButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      style={{
-        backgroundColor: isSpeaking
-          ? darkMode
-            ? "#4338ca"
-            : "#6366f1"
+      className={`control-btn ${
+        isSpeaking
+          ? `read-aloud-btn-speaking ${darkMode ? "read-aloud-btn-speaking-dark" : "read-aloud-btn-speaking-light"} btn-text-white`
           : darkMode
-            ? "#374151"
-            : "#e5e7eb",
-        color: isSpeaking ? "#ffffff" : darkMode ? "#d1d5db" : "#6b7280",
-        padding: "6px",
-        borderRadius: "8px",
-        transition: "all 0.2s ease",
-        border: "none",
-        outline: "none",
-      }}
-      className="hover:opacity-80"
+            ? "btn-inactive-dark"
+            : "btn-inactive-light"
+      } hover:opacity-80`}
       title={isSpeaking ? "Stop reading" : "Read aloud"}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        style={{ width: "14px", height: "14px" }}
+        className="control-icon"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -75,28 +67,19 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
   return (
     <button
       onClick={handleClick}
-      style={{
-        backgroundColor: copied
-          ? darkMode
-            ? "#059669"
-            : "#10b981"
+      className={`control-btn ${
+        copied
+          ? `copy-btn-copied ${darkMode ? "copy-btn-copied-dark" : "copy-btn-copied-light"} btn-text-white`
           : darkMode
-            ? "#374151"
-            : "#e5e7eb",
-        color: copied ? "#ffffff" : darkMode ? "#d1d5db" : "#6b7280",
-        padding: "6px",
-        borderRadius: "8px",
-        transition: "all 0.2s ease",
-        border: "none",
-        outline: "none",
-      }}
-      className="hover:opacity-80"
+            ? "btn-inactive-dark"
+            : "btn-inactive-light"
+      } hover:opacity-80`}
       title={copied ? "Copied!" : "Copy message"}
     >
       {copied ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          style={{ width: "14px", height: "14px" }}
+          className="control-icon"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -111,7 +94,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
       ) : (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          style={{ width: "14px", height: "14px" }}
+          className="control-icon"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -140,21 +123,12 @@ export const ReplyButton: React.FC<ReplyButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      style={{
-        backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-        color: darkMode ? "#d1d5db" : "#6b7280",
-        padding: "6px",
-        borderRadius: "8px",
-        transition: "all 0.2s ease",
-        border: "none",
-        outline: "none",
-      }}
-      className="hover:opacity-80"
+      className={`control-btn ${darkMode ? "btn-inactive-dark" : "btn-inactive-light"} hover:opacity-80`}
       title="Reply to message"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        style={{ width: "14px", height: "14px" }}
+        className="control-icon"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -181,37 +155,25 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
   currentReaction,
   darkMode,
 }) => {
+  const isHelpful = currentReaction === "helpful";
+  const isNotHelpful = currentReaction === "not-helpful";
+
   return (
     <>
       <button
         onClick={() => onReaction("helpful")}
-        style={{
-          backgroundColor:
-            currentReaction === "helpful"
-              ? darkMode
-                ? "#16a34a"
-                : "#22c55e"
-              : darkMode
-                ? "#374151"
-                : "#e5e7eb",
-          color:
-            currentReaction === "helpful"
-              ? "#ffffff"
-              : darkMode
-                ? "#d1d5db"
-                : "#6b7280",
-          padding: "6px",
-          borderRadius: "8px",
-          transition: "all 0.2s ease",
-          border: "none",
-          outline: "none",
-        }}
-        className="hover:opacity-80"
+        className={`control-btn ${
+          isHelpful
+            ? `reaction-helpful-active ${darkMode ? "reaction-helpful-active-dark" : "reaction-helpful-active-light"} btn-text-white`
+            : darkMode
+              ? "btn-inactive-dark"
+              : "btn-inactive-light"
+        } hover:opacity-80`}
         title="Helpful"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          style={{ width: "14px", height: "14px" }}
+          className="control-icon"
           fill={currentReaction === "helpful" ? "currentColor" : "none"}
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -226,33 +188,18 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
       </button>
       <button
         onClick={() => onReaction("not-helpful")}
-        style={{
-          backgroundColor:
-            currentReaction === "not-helpful"
-              ? darkMode
-                ? "#dc2626"
-                : "#ef4444"
-              : darkMode
-                ? "#374151"
-                : "#e5e7eb",
-          color:
-            currentReaction === "not-helpful"
-              ? "#ffffff"
-              : darkMode
-                ? "#d1d5db"
-                : "#6b7280",
-          padding: "6px",
-          borderRadius: "8px",
-          transition: "all 0.2s ease",
-          border: "none",
-          outline: "none",
-        }}
-        className="hover:opacity-80"
+        className={`control-btn ${
+          isNotHelpful
+            ? `reaction-not-helpful-active ${darkMode ? "reaction-not-helpful-active-dark" : "reaction-not-helpful-active-light"} btn-text-white`
+            : darkMode
+              ? "btn-inactive-dark"
+              : "btn-inactive-light"
+        } hover:opacity-80`}
         title="Not helpful"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          style={{ width: "14px", height: "14px" }}
+          className="control-icon"
           fill={currentReaction === "not-helpful" ? "currentColor" : "none"}
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -281,10 +228,7 @@ export const CloseButton: React.FC<CloseButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className="p-2 rounded-lg transition-colors hover:bg-opacity-80"
-      style={{
-        color: darkMode ? "#9ca3af" : "#6b7280",
-      }}
+      className={`p-2 rounded-lg transition-colors hover:bg-opacity-80 ${darkMode ? "close-button-dark" : "close-button-light"}`}
       aria-label="Close chat"
       title="Close"
     >
@@ -327,17 +271,7 @@ export const SendButton: React.FC<SendButtonProps> = ({
       disabled={disabled}
       className={`p-2 rounded-lg transition-all ${
         disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-110"
-      }`}
-      style={{
-        backgroundColor: disabled
-          ? darkMode
-            ? "#374151"
-            : "#e5e7eb"
-          : darkMode
-            ? "#4f46e5"
-            : "#6366f1",
-        color: "#ffffff",
-      }}
+      } ${disabled ? `control-btn ${darkMode ? "send-btn-disabled-dark" : "send-btn-disabled-light"}` : `control-btn ${darkMode ? "send-btn-dark" : "send-btn-light"}`} btn-text-white`}
       aria-label="Send message"
       title="Send"
     >
