@@ -5,6 +5,8 @@
 
 import React from "react";
 import { TrashIcon } from "../constants/icons";
+import { ARIA_LABELS, TITLES } from "../constants/accessibilityLabels";
+import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 import "../styles/ClearChat.css";
 
 interface ClearChatButtonProps {
@@ -17,7 +19,8 @@ export const ClearChatButton: React.FC<ClearChatButtonProps> = ({
   darkMode,
 }) => {
   const handleClearChat = () => {
-    if (window.confirm("Are you sure you want to clear the chat history?")) {
+    const confirmMessage = DIALOG_MESSAGES.CLEAR_CHAT.message;
+    if (window.confirm(confirmMessage)) {
       onClear();
     }
   };
@@ -28,8 +31,8 @@ export const ClearChatButton: React.FC<ClearChatButtonProps> = ({
       className={`p-2 rounded-lg transition-colors hover:bg-opacity-80 ${
         darkMode ? "clear-chat-btn-dark" : "clear-chat-btn-light"
       }`}
-      aria-label="Clear chat history"
-      title="Clear chat"
+      aria-label={ARIA_LABELS.CLEAR_CHAT.BUTTON}
+      title={TITLES.CLEAR_CHAT.BUTTON}
     >
       <TrashIcon className="w-5 h-5" />
     </button>

@@ -10,11 +10,10 @@ import { useVoiceRecognition } from "../utils/useVoiceRecognition";
 import { useDictation } from "../utils/useDictation";
 import { useLanguageSettings } from "../utils/useLanguageSettings";
 import {
-  CHAT_PLACEHOLDERS,
   DICTATION_MESSAGES,
   LISTENING_MESSAGES,
 } from "../constants/chatConstants";
-import { ARIA_LABELS } from "../constants/accessibilityLabels";
+import { ARIA_LABELS, PLACEHOLDERS } from "../constants/accessibilityLabels";
 import type { SendMessageOptions } from "../types/Message";
 import "../styles/DesktopChatInput.css";
 
@@ -45,7 +44,7 @@ interface DesktopChatInputProps {
 const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
   onSend,
   darkMode = false,
-  placeholder = CHAT_PLACEHOLDERS.ASK_AIVA,
+  placeholder = PLACEHOLDERS.CHAT.ASK_AIVA,
 }) => {
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -153,10 +152,10 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
 
   const getPlaceholderText = () => {
     if (isListening && listeningMode === "send") {
-      return `${CHAT_PLACEHOLDERS.LISTENING} ${DICTATION_MESSAGES.AUTO_SEND_HINT}`;
+      return `${PLACEHOLDERS.CHAT.LISTENING} ${PLACEHOLDERS.CHAT.AUTO_SEND_HINT}`;
     }
     if (isListening && listeningMode === "dictate") {
-      return DICTATION_MESSAGES.PLACEHOLDER;
+      return PLACEHOLDERS.CHAT.DICTATION;
     }
     return placeholder;
   };

@@ -16,15 +16,8 @@ export const INTRO_SUGGESTIONS = [
   "Learn about recent achievements",
 ];
 
-export const CHAT_PLACEHOLDERS = {
-  ASK_AIVA: "Ask AIVA...",
-  LISTENING: "Listening...",
-} as const;
-
 export const DICTATION_MESSAGES = {
-  PLACEHOLDER: "Dictating... (say 'send' or 'enter' to submit)",
   STATUS_LABEL: "Dictation in progress",
-  AUTO_SEND_HINT: "(auto-send after 5s pause)",
 } as const;
 
 export const LISTENING_MESSAGES = {

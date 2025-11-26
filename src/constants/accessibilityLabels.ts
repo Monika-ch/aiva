@@ -23,11 +23,13 @@ export const ARIA_LABELS = {
     START_VOICE: "Start voice input",
     VOICE_INPUT: "Voice input",
   },
-  DARK_MODE: {
-    TOGGLE: "Toggle dark mode",
-  },
   MESSAGE_INPUT: {
     TYPE_MESSAGE: "Type your message",
+  },
+  TOGGLE: {
+    DARK_MODE: "Toggle dark mode",
+    OPEN: "Open chat",
+    CLOSE: "Close chat",
   },
 } as const;
 
@@ -63,12 +65,13 @@ export const ALT_TEXT = {
 } as const;
 
 export const PLACEHOLDERS = {
-  SEARCH: "Search...",
-} as const;
-
-export const TOGGLE_TEXT = {
   CHAT: {
-    OPEN: "Open chat",
-    CLOSE: "Close chat",
+    ASK_AIVA: "Ask AIVA...",
+    LISTENING: "Listening...",
+    DICTATION: "Dictating... (say 'send' or 'enter' to submit)",
+    AUTO_SEND_HINT: "(auto-send after 5s pause)",
+  },
+  LANGUAGE: {
+    SEARCH: "Search...",
   },
 } as const;

@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
+import { PLACEHOLDERS } from "../constants/accessibilityLabels";
 
 interface WelcomeMessageProps {
   darkMode: boolean;
@@ -27,7 +27,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           darkMode ? "text-gray-100" : "text-gray-800"
         }`}
       >
-        {CHAT_PLACEHOLDERS.ASK_AIVA}
+        {PLACEHOLDERS.CHAT.ASK_AIVA}
       </h2>
       <p
         className={`leading-relaxed ${isMobile ? "text-[12px]" : "text-sm"} ${

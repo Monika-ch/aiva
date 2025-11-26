@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { VoiceSendIcon, SendIcon } from "../constants/icons";
-import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
-import { ARIA_LABELS } from "../constants/accessibilityLabels";
+import { ARIA_LABELS, PLACEHOLDERS } from "../constants/accessibilityLabels";
 import type {
   SpeechRecognitionConstructorLike,
   SpeechRecognitionEventLike,
@@ -18,7 +17,7 @@ interface EnhancedChatInputProps {
 const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
   onSend,
   darkMode = false,
-  placeholder = CHAT_PLACEHOLDERS.ASK_AIVA,
+  placeholder = PLACEHOLDERS.CHAT.ASK_AIVA,
 }) => {
   const [message, setMessage] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -162,7 +161,7 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSend()}
         className={`flex-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all ${inputClass}`}
-        placeholder={isListening ? CHAT_PLACEHOLDERS.LISTENING : placeholder}
+        placeholder={isListening ? PLACEHOLDERS.CHAT.LISTENING : placeholder}
         disabled={isListening}
       />
 

@@ -301,7 +301,7 @@ function App() {
             className={`hover:opacity-80 dark-mode-toggle ${
               darkMode ? "dark-mode-toggle-dark" : "dark-mode-toggle-light"
             }`}
-            aria-label={ARIA_LABELS.DARK_MODE.TOGGLE}
+            aria-label={ARIA_LABELS.TOGGLE.DARK_MODE}
             title={darkMode ? TITLES.DARK_MODE.LIGHT : TITLES.DARK_MODE.DARK}
           >
             {darkMode ? (

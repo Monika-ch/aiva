@@ -91,7 +91,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
       >
         <input
           type="text"
-          placeholder={PLACEHOLDERS.SEARCH}
+          placeholder={PLACEHOLDERS.LANGUAGE.SEARCH}
           value={languageSearch}
           onChange={(e) => onLanguageSearchChange(e.target.value)}
           className={`w-full px-2.5 py-1.5 rounded-md border text-xs focus:outline-none focus:ring-1 focus:ring-indigo-400 ${

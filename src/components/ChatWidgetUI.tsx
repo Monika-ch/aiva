@@ -25,13 +25,12 @@ import {
 import type { Message, SendMessageOptions } from "../types/Message";
 
 // Import chat constants
-import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 import {
   ARIA_LABELS,
   TITLES,
   ALT_TEXT,
-  TOGGLE_TEXT,
+  PLACEHOLDERS,
 } from "../constants/accessibilityLabels";
 
 // Import icons
@@ -154,6 +153,7 @@ const ChatWidgetUI: React.FC<Props> = ({
 
       if (options?.triggeredByVoice) {
         console.log("[DEBUG] Recording voice language preference");
+        recordVoiceLanguagePreference();
         // Only auto-read response for "send" mode, not "dictate" mode
         if (options?.voiceMode === "send") {
           setVoiceInputUsed(true);
@@ -430,7 +430,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                   className={`hover:opacity-80 chat-header-btn ${
                     darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
                   }`}
-                  aria-label={TOGGLE_TEXT.CHAT.CLOSE}
+                  aria-label={ARIA_LABELS.TOGGLE.CLOSE}
                   title={TITLES.CLOSE.BUTTON}
                 >
                   <CloseIcon className="chat-header-btn-icon" />
@@ -534,8 +534,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                   ref={inputRef}
                   placeholder={
                     isListening
-                      ? CHAT_PLACEHOLDERS.LISTENING
-                      : CHAT_PLACEHOLDERS.ASK_AIVA
+                      ? PLACEHOLDERS.CHAT.LISTENING
+                      : PLACEHOLDERS.CHAT.ASK_AIVA
                   }
                   className={`flex-1 min-w-0 ${theme.inputBg} chat-textarea ${
                     darkMode
@@ -596,12 +596,12 @@ const ChatWidgetUI: React.FC<Props> = ({
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
             isOpen
-              ? TOGGLE_TEXT.CHAT.CLOSE
+              ? ARIA_LABELS.TOGGLE.CLOSE
               : unreadCount > 0
-                ? `${TOGGLE_TEXT.CHAT.OPEN} (${unreadCount} unread ${
+                ? `${ARIA_LABELS.TOGGLE.OPEN} (${unreadCount} unread ${
                     unreadCount === 1 ? "message" : "messages"
                   })`
-                : TOGGLE_TEXT.CHAT.OPEN
+                : ARIA_LABELS.TOGGLE.OPEN
           }
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
