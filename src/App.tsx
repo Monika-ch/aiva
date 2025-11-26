@@ -11,6 +11,7 @@ import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
 import { useDarkMode } from "./utils/useDarkMode";
 import { SunIcon, MoonIcon } from "./constants/icons";
+import { ARIA_LABELS, TITLES, ALT_TEXT } from "./constants/accessibilityLabels";
 import {
   MessageBubble,
   useTextToSpeech,
@@ -300,8 +301,8 @@ function App() {
             className={`hover:opacity-80 dark-mode-toggle ${
               darkMode ? "dark-mode-toggle-dark" : "dark-mode-toggle-light"
             }`}
-            aria-label="Toggle dark mode"
-            title={darkMode ? "Light mode" : "Dark mode"}
+            aria-label={ARIA_LABELS.DARK_MODE.TOGGLE}
+            title={darkMode ? TITLES.DARK_MODE.LIGHT : TITLES.DARK_MODE.DARK}
           >
             {darkMode ? (
               <SunIcon className="dark-mode-toggle-icon" />
@@ -321,7 +322,7 @@ function App() {
             <div className="flex items-center gap-3 mb-4">
               <img
                 src={sparkIcon}
-                alt="AIVA"
+                alt={ALT_TEXT.AIVA.LOGO}
                 className="w-14 h-14 hero-logo cursor-pointer"
               />
               <div>

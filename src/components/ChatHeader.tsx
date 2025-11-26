@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import { ALT_TEXT } from "../constants/accessibilityLabels";
 
 const ChatHeader = () => {
   return (
@@ -10,7 +11,7 @@ const ChatHeader = () => {
       className="flex items-center justify-between px-6 py-4 border-b bg-white"
     >
       <div className="flex items-center gap-4">
-        <img src={sparkIcon} alt="AIVA logo" className="w-16 h-16" />
+        <img src={sparkIcon} alt={ALT_TEXT.AIVA.LOGO} className="w-16 h-16" />
         <div>
           <h2 className="font-semibold text-lg tracking-wide text-gray-900">
             AIVA

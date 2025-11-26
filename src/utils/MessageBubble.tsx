@@ -6,6 +6,7 @@
 
 import React, { useRef, useState } from "react";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import { ALT_TEXT } from "../constants/accessibilityLabels";
 import { ReplyIcon } from "../constants/icons";
 import {
   ReadAloudButton,
@@ -153,7 +154,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             darkMode ? "bg-indigo-900" : "bg-indigo-50"
           }`}
         >
-          <img src={sparkIcon} alt="AIVA" className="w-5 h-5" />
+          <img src={sparkIcon} alt={ALT_TEXT.AIVA.LOGO} className="w-5 h-5" />
         </div>
       )}
 

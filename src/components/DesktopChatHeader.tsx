@@ -11,6 +11,11 @@ import { ConfirmDialog } from "./ConfirmDialog";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
 import { LanguageDropdown } from "../utils/LanguageDropdown";
 import { LanguageIcon, TrashIcon } from "../constants/icons";
+import {
+  ARIA_LABELS,
+  TITLES,
+  ALT_TEXT,
+} from "../constants/accessibilityLabels";
 import sparkIcon from "../assets/logo-robo-face.svg";
 import "../styles/DesktopChatHeader.css";
 
@@ -70,7 +75,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
         <div className="flex items-center gap-2">
           <img
             src={sparkIcon}
-            alt="AIVA"
+            alt={ALT_TEXT.AIVA.LOGO}
             className="w-8 h-8 logo-animate cursor-pointer"
           />
           <div>
@@ -101,8 +106,8 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
                   ? "desktop-header-btn-dark"
                   : "desktop-header-btn-light"
               }`}
-              aria-label="Language settings"
-              title="Language settings"
+              aria-label={ARIA_LABELS.LANGUAGE.SETTINGS}
+              title={TITLES.LANGUAGE.SETTINGS}
             >
               <LanguageIcon className="desktop-header-btn-icon" />
             </button>
@@ -127,8 +132,8 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
             className={`hover:opacity-80 desktop-header-btn ${
               darkMode ? "desktop-header-btn-dark" : "desktop-header-btn-light"
             }`}
-            aria-label="Clear chat history"
-            title="Clear chat"
+            aria-label={ARIA_LABELS.CLEAR_CHAT.BUTTON}
+            title={TITLES.CLEAR_CHAT.BUTTON}
           >
             <TrashIcon className="desktop-header-btn-icon" />
           </button>

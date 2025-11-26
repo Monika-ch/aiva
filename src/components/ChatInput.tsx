@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { VoiceSendIcon, SendIcon } from "../constants/icons";
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
+import { ARIA_LABELS } from "../constants/accessibilityLabels";
 import type {
   SpeechRecognitionConstructorLike,
   SpeechRecognitionEventLike,
@@ -130,8 +131,16 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
       <button
         onClick={toggleVoiceInput}
         className={`relative flex-shrink-0 p-2.5 rounded-lg transition-all focus:outline-none ${voiceButtonClass}`}
-        aria-label={isListening ? "Stop listening" : "Start voice input"}
-        title={isListening ? "Stop listening" : "Voice input"}
+        aria-label={
+          isListening
+            ? ARIA_LABELS.VOICE.STOP_LISTENING
+            : ARIA_LABELS.VOICE.START_VOICE
+        }
+        title={
+          isListening
+            ? ARIA_LABELS.VOICE.STOP_LISTENING
+            : ARIA_LABELS.VOICE.VOICE_INPUT
+        }
       >
         {isListening && (
           <>
@@ -148,7 +157,7 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
 
       {/* Text Input */}
       <input
-        aria-label="Type your message"
+        aria-label={ARIA_LABELS.MESSAGE_INPUT.TYPE_MESSAGE}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSend()}
@@ -161,7 +170,7 @@ const EnhancedChatInput: React.FC<EnhancedChatInputProps> = ({
       <button
         onClick={handleSend}
         disabled={!message.trim() || isListening}
-        aria-label="Send message"
+        aria-label={ARIA_LABELS.CHAT.SEND}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-[1.02] transform transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         <SendIcon className="w-4 h-4" />

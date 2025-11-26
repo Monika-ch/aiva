@@ -41,6 +41,11 @@
 
 import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  HERO_CONTENT,
+  HERO_FEATURES,
+  HERO_TECH_STACK,
+} from "../constants/heroConstants";
 
 interface HeroProps {
   darkMode?: boolean;
@@ -60,21 +65,6 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [x, y]);
-
-  const features = [
-    {
-      title: "Resume & Portfolio Review",
-      desc: "Get concise suggestions to improve clarity and impact.",
-    },
-    {
-      title: "Project Storytelling",
-      desc: "Transform technical projects into compelling case studies.",
-    },
-    {
-      title: "Tech Stack Optimization",
-      desc: "Highlight your strongest tools and frameworks with clarity.",
-    },
-  ];
 
   return (
     <section className="relative overflow-hidden p-5">
@@ -98,7 +88,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          AIVA — AI Portfolio Assistant
+          {HERO_CONTENT.TITLE}
         </motion.h1>
 
         <motion.p
@@ -109,13 +99,11 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          Create a professional narrative from your work history, tailor your
-          portfolio, and get custom suggestions to impress recruiters and
-          clients.
+          {HERO_CONTENT.DESCRIPTION}
         </motion.p>
 
         <div className="space-y-2.5">
-          {features.map((item, index) => (
+          {HERO_FEATURES.map((item, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -30 }}
@@ -152,21 +140,19 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
         >
-          {["React", "TypeScript", "AWS", "Tailwind", "Framer Motion"].map(
-            (tech, idx) => (
-              <motion.span
-                key={idx}
-                className={`px-2.5 py-1 text-xs font-medium rounded-full shadow-sm transition-all ${
-                  darkMode
-                    ? "bg-gray-700 text-gray-200 hover:bg-gray-600"
-                    : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                }`}
-                whileHover={{ scale: 1.05 }}
-              >
-                {tech}
-              </motion.span>
-            )
-          )}
+          {HERO_TECH_STACK.map((tech, idx) => (
+            <motion.span
+              key={idx}
+              className={`px-2.5 py-1 text-xs font-medium rounded-full shadow-sm transition-all ${
+                darkMode
+                  ? "bg-gray-700 text-gray-200 hover:bg-gray-600"
+                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              }`}
+              whileHover={{ scale: 1.05 }}
+            >
+              {tech}
+            </motion.span>
+          ))}
         </motion.div>
       </div>
     </section>

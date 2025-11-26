@@ -5,6 +5,11 @@
 
 import React from "react";
 import { CloseIcon } from "../constants/icons";
+import {
+  ARIA_LABELS,
+  TITLES,
+  ALT_TEXT,
+} from "../constants/accessibilityLabels";
 import sparkIcon from "../assets/logo-robo-face.svg";
 
 interface ReplyPreviewProps {
@@ -48,7 +53,11 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-0.5">
           {replyToRole === "assistant" && (
-            <img src={sparkIcon} alt="AIVA" className="w-3.5 h-3.5" />
+            <img
+              src={sparkIcon}
+              alt={ALT_TEXT.AIVA.LOGO}
+              className="w-3.5 h-3.5"
+            />
           )}
           {replyToRole === "user" && <span className="text-xs">👤</span>}
           <p
@@ -74,8 +83,8 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
             ? "chat-header-btn-dark-transparent"
             : "chat-header-btn-light-transparent"
         }`}
-        aria-label="Clear reply"
-        title="Clear reply"
+        aria-label={ARIA_LABELS.REPLY.CLEAR}
+        title={TITLES.REPLY.CLEAR}
       >
         <CloseIcon className="chat-header-btn-icon" />
       </button>

@@ -5,6 +5,7 @@
 
 import React from "react";
 import sparkIcon from "../assets/logo-robo-face.svg";
+import { ALT_TEXT } from "../constants/accessibilityLabels";
 import "../styles/TypingIndicator.css";
 
 interface TypingIndicatorProps {
@@ -21,7 +22,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
           darkMode ? "bg-indigo-900" : "bg-indigo-50"
         }`}
       >
-        <img src={sparkIcon} alt="AIVA" className="w-3 h-3" />
+        <img src={sparkIcon} alt={ALT_TEXT.AIVA.LOGO} className="w-3 h-3" />
       </div>
       <div
         className={`px-4 py-2 rounded-2xl rounded-bl-none shadow-sm ${

@@ -27,6 +27,12 @@ import type { Message, SendMessageOptions } from "../types/Message";
 // Import chat constants
 import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
 import { DIALOG_MESSAGES } from "../constants/dialogMessages";
+import {
+  ARIA_LABELS,
+  TITLES,
+  ALT_TEXT,
+  TOGGLE_TEXT,
+} from "../constants/accessibilityLabels";
 
 // Import icons
 import {
@@ -148,7 +154,6 @@ const ChatWidgetUI: React.FC<Props> = ({
 
       if (options?.triggeredByVoice) {
         console.log("[DEBUG] Recording voice language preference");
-        recordVoiceLanguagePreference();
         // Only auto-read response for "send" mode, not "dictate" mode
         if (options?.voiceMode === "send") {
           setVoiceInputUsed(true);
@@ -354,7 +359,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                 <div className="relative">
                   <img
                     src={sparkIcon}
-                    alt="AIVA"
+                    alt={ALT_TEXT.AIVA.LOGO}
                     className="w-8 h-8 chat-logo"
                   />
                 </div>
@@ -385,8 +390,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                         ? "chat-header-btn-dark"
                         : "chat-header-btn-light"
                     }`}
-                    aria-label="Language settings"
-                    title="Language settings"
+                    aria-label={ARIA_LABELS.LANGUAGE.SETTINGS}
+                    title={TITLES.LANGUAGE.SETTINGS}
                   >
                     <LanguageIcon className="chat-header-btn-icon" />
                   </button>
@@ -413,8 +418,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                   className={`hover:opacity-80 chat-header-btn ${
                     darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
                   }`}
-                  aria-label="Clear chat"
-                  title="Clear chat history"
+                  aria-label={ARIA_LABELS.CLEAR_CHAT.BUTTON}
+                  title={TITLES.CLEAR_CHAT.HISTORY}
                 >
                   <TrashIcon className="chat-header-btn-icon" />
                 </button>
@@ -425,8 +430,8 @@ const ChatWidgetUI: React.FC<Props> = ({
                   className={`hover:opacity-80 chat-header-btn ${
                     darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
                   }`}
-                  aria-label="Close chat"
-                  title="Close"
+                  aria-label={TOGGLE_TEXT.CHAT.CLOSE}
+                  title={TITLES.CLOSE.BUTTON}
                 >
                   <CloseIcon className="chat-header-btn-icon" />
                 </button>
@@ -553,7 +558,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       });
                     }
                   }}
-                  aria-label="Type your question to AIVA"
+                  aria-label={ARIA_LABELS.CHAT.INPUT}
                   readOnly={isListening && listeningMode === "send"}
                   rows={1}
                   spellCheck={false}
@@ -565,7 +570,7 @@ const ChatWidgetUI: React.FC<Props> = ({
                       triggeredByVoice: false,
                     })
                   }
-                  aria-label="Send message"
+                  aria-label={ARIA_LABELS.CHAT.SEND}
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
@@ -590,9 +595,13 @@ const ChatWidgetUI: React.FC<Props> = ({
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
-            unreadCount
-              ? `Open chat, ${unreadCount} unread messages`
-              : "Open chat"
+            isOpen
+              ? TOGGLE_TEXT.CHAT.CLOSE
+              : unreadCount > 0
+                ? `${TOGGLE_TEXT.CHAT.OPEN} (${unreadCount} unread ${
+                    unreadCount === 1 ? "message" : "messages"
+                  })`
+                : TOGGLE_TEXT.CHAT.OPEN
           }
           aria-expanded={isOpen}
           whileHover={{ scale: 1.05 }}
@@ -603,7 +612,7 @@ const ChatWidgetUI: React.FC<Props> = ({
         >
           <img
             src={sparkIcon}
-            alt="Open AIVA chat"
+            alt={ALT_TEXT.AIVA.OPEN_CHAT}
             className="w-8 h-8 chat-fab-logo"
           />
         </motion.button>

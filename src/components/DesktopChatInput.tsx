@@ -9,7 +9,12 @@ import { VoiceSendButton, DictateButton } from "../utils/VoiceControls";
 import { useVoiceRecognition } from "../utils/useVoiceRecognition";
 import { useDictation } from "../utils/useDictation";
 import { useLanguageSettings } from "../utils/useLanguageSettings";
-import { CHAT_PLACEHOLDERS } from "../constants/chatConstants";
+import {
+  CHAT_PLACEHOLDERS,
+  DICTATION_MESSAGES,
+  LISTENING_MESSAGES,
+} from "../constants/chatConstants";
+import { ARIA_LABELS } from "../constants/accessibilityLabels";
 import type { SendMessageOptions } from "../types/Message";
 import "../styles/DesktopChatInput.css";
 
@@ -148,10 +153,10 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
 
   const getPlaceholderText = () => {
     if (isListening && listeningMode === "send") {
-      return `${CHAT_PLACEHOLDERS.LISTENING} (auto-send after 5s pause)`;
+      return `${CHAT_PLACEHOLDERS.LISTENING} ${DICTATION_MESSAGES.AUTO_SEND_HINT}`;
     }
     if (isListening && listeningMode === "dictate") {
-      return "Dictating... (say 'send' or 'enter' to submit)";
+      return DICTATION_MESSAGES.PLACEHOLDER;
     }
     return placeholder;
   };
@@ -162,9 +167,9 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
 
   const statusLabel = isListening
     ? listeningMode === "send"
-      ? "Listening to send"
-      : "Dictation in progress"
-    : "AIVA is ready";
+      ? LISTENING_MESSAGES.STATUS_LABEL
+      : DICTATION_MESSAGES.STATUS_LABEL
+    : LISTENING_MESSAGES.READY_STATUS;
 
   const statusTone = isListening ? "bg-rose-400" : "bg-emerald-400";
 
@@ -231,7 +236,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                     handleSend();
                   }
                 }}
-                aria-label="Type your question to AIVA"
+                aria-label={ARIA_LABELS.CHAT.INPUT}
                 readOnly={isListening && listeningMode === "send"}
                 rows={1}
                 spellCheck={false}
@@ -241,7 +246,7 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                 <button
                   type="button"
                   onClick={handleSend}
-                  aria-label="Send message"
+                  aria-label={ARIA_LABELS.CHAT.SEND}
                   disabled={
                     !input.trim() ||
                     (isListening && listeningMode !== "dictate")
