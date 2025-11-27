@@ -4,11 +4,13 @@
 .chat-dialog-dark {
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%);
   border-color: #4c1d95;
+  border-radius: 1.3rem;
 }
 
 .chat-dialog-light {
   background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
   border-color: #c7d2fe;
+  border-radius: 1.3rem;
 }
 
 /* Header */
@@ -29,12 +31,21 @@
 
 /* Header Buttons (Language, Clear, Close) */
 .chat-header-btn {
-  padding: 8px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 10px;
+  border-radius: 10px;
   transition: all 0.2s ease;
   border: none;
   outline: none;
   backdrop-filter: blur(8px);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
 }
 
 .chat-header-btn-dark {
@@ -61,6 +72,7 @@
 .chat-header-btn-icon {
   width: 16px;
   height: 16px;
+  transform: translateY(-0.5px);
 }
 
 /* Messages Container */
@@ -123,23 +135,38 @@
 /* Floating Action Button */
 .chat-fab {
   backdrop-filter: blur(10px);
+  margin: 2px;
 }
 
 .chat-fab-dark {
   background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
   box-shadow:
-    0 8px 32px rgba(129, 140, 248, 0.5),
-    0 4px 16px rgba(167, 139, 250, 0.4);
+    0 12px 28px rgba(129, 140, 248, 0.45),
+    0 6px 18px rgba(167, 139, 250, 0.35);
 }
 
 .chat-fab-light {
   background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
   box-shadow:
-    0 8px 32px rgba(165, 180, 252, 0.6),
-    0 4px 16px rgba(196, 181, 253, 0.5);
+    0 12px 28px rgba(165, 180, 252, 0.5),
+    0 6px 18px rgba(196, 181, 253, 0.35);
 }
 
 /* FAB Logo */
 .chat-fab-logo {
   filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5));
+}
+
+/* Scroll Area Tweaks */
+.chat-scroll-area {
+  scrollbar-gutter: stable both-edges;
+  padding-right: 0.35rem;
+}
+
+.chat-scroll-area.chat-messages-dark {
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.chat-scroll-area.chat-messages-light {
+  border-right: 1px solid rgba(196, 181, 253, 0.45);
 }

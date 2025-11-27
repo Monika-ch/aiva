@@ -3,11 +3,16 @@
 /* --- Base Button Style --- */
 .voice-btn {
   padding: 10px;
+  width: 40px;
+  height: 40px;
   border-radius: 9999px;
   position: relative;
   flex-shrink: 0;
   transition: all 0.3s ease;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* --- State Styles --- */
@@ -54,8 +59,8 @@
 
 /* SVG icon */
 .voice-icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   position: relative;
   z-index: 10;
 }

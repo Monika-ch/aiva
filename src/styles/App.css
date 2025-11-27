@@ -6,20 +6,21 @@
   border-radius: 10px;
   transition: all 0.2s ease;
   outline: none;
+  border: none;
 }
 
 .dark-mode-toggle-dark {
   background-color: #374151;
   color: #d1d5db;
-  border: 1px solid #4b5563;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .dark-mode-toggle-light {
   background-color: #ffffff;
   color: #6b7280;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 8px 20px rgba(79, 70, 229, 0.15),
+    0 2px 6px rgba(15, 23, 42, 0.08);
 }
 
 /* Dark Mode Toggle Icon */

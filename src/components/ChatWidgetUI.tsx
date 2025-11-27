@@ -320,7 +320,7 @@ const ChatWidgetUI: React.FC<Props> = ({
   // JSX Rendering
   return (
     <div
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-end md:hidden"
+      className="fixed bottom-5 right-4 z-50 flex flex-col items-end gap-3 md:hidden"
       aria-live="polite"
     >
       {/* Confirm Dialog */}
@@ -343,7 +343,7 @@ const ChatWidgetUI: React.FC<Props> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`w-[90vw] max-w-[380px] shadow-2xl rounded-2xl overflow-hidden border mb-3 ${
+            className={`mx-3 w-[92vw] max-w-[392px] shadow-2xl rounded-2xl overflow-hidden border mb-4 ${
               darkMode ? "chat-dialog-dark" : "chat-dialog-light"
             }`}
             role="dialog"
@@ -441,7 +441,7 @@ const ChatWidgetUI: React.FC<Props> = ({
             {/* Messages Container */}
             <div
               ref={messageContainerRef}
-              className={`p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
+              className={`chat-scroll-area p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
                 darkMode ? "chat-messages-dark" : "chat-messages-light"
               }`}
             >
@@ -591,7 +591,7 @@ const ChatWidgetUI: React.FC<Props> = ({
       </AnimatePresence>
 
       {/* Floating Action Button */}
-      <div className="relative">
+      <div className="relative pr-1 pt-1">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={

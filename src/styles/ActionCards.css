@@ -4,9 +4,25 @@
 .suggestion-chip {
   font-size: 12px;
   font-weight: 600;
+  line-height: 1.45;
+  border-radius: 9999px;
+}
+
+.suggestion-chip-mobile {
+  flex: 1 1 calc(50% - 0.5rem);
+  min-width: 140px;
+  min-height: 42px;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  ;
+}
+
+.suggestion-chip-desktop {
+  min-height: 46px;
 }
 
 /* Message Content - Pre-wrap */
 .message-content-prewrap {
   white-space: pre-wrap;
+  line-height: 1.65;
 }

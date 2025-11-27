@@ -6,6 +6,7 @@
 
 import React from "react";
 import { INTRO_SUGGESTIONS } from "../constants/chatConstants";
+import "../styles/ActionCards.css";
 
 interface SuggestionListProps {
   darkMode: boolean;
@@ -21,6 +22,9 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
   variant = "mobile",
 }) => {
   const isMobile = variant === "mobile";
+  const chipVariantClass = isMobile
+    ? "suggestion-chip-mobile"
+    : "suggestion-chip-desktop";
 
   return (
     <div
@@ -35,14 +39,14 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
       >
         💡 Try asking about:
       </p>
-      <div className="flex flex-wrap gap-2 justify-center">
+      <div className="flex flex-wrap gap-3 justify-center">
         {INTRO_SUGGESTIONS.map((suggestion, index) => (
           <button
             key={index}
             onClick={() => onSuggestionClick(suggestion)}
             disabled={clickedSuggestions.has(suggestion)}
-            className={`rounded-full font-medium transition-all ${
-              isMobile ? "px-3 py-2 text-[11px]" : "px-4 py-2.5 text-sm"
+            className={`suggestion-chip ${chipVariantClass} font-medium transition-all ${
+              isMobile ? "text-[11px]" : "px-4 py-2.5 text-sm"
             } ${
               clickedSuggestions.has(suggestion)
                 ? darkMode
@@ -50,7 +54,7 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
                   : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 : darkMode
                   ? "bg-gradient-to-r from-gray-800 to-gray-700 text-gray-200 hover:from-gray-700 hover:to-gray-600 border border-gray-600 hover:border-gray-500"
-                  : "bg-gradient-to-r from-white to-gray-50 text-gray-700 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
+                  : "bg-gradient-to-r from-white to-gray-50 text-gray-500 hover:from-gray-50 hover:to-white border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300"
             }`}
           >
             {suggestion}
