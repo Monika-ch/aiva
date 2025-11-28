@@ -11,6 +11,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* For Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
