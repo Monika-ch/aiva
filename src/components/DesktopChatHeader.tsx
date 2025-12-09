@@ -71,7 +71,7 @@ const DesktopChatHeader: React.FC<DesktopChatHeaderProps> = ({
         className={`p-3 border-b flex items-center justify-between ${
           darkMode
             ? "bg-gray-800 border-gray-700"
-            : "bg-gradient-to-r from-white via-[#faf8ff] to-[#f5f0ff] border-indigo-100/50"
+            : "bg-gradient-to-r from-white via-[#faf8ff] to-[#f5f0ff23] border-indigo-100/50"
         }`}
       >
         <div className="flex items-center gap-2">

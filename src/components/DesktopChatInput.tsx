@@ -12,28 +12,11 @@ import { useLanguageSettings } from "../utils/useLanguageSettings";
 import {
   DICTATION_MESSAGES,
   LISTENING_MESSAGES,
+  QUICK_PROMPTS,
 } from "../constants/chatConstants";
 import { ARIA_LABELS, PLACEHOLDERS } from "../constants/accessibilityLabels";
 import type { SendMessageOptions } from "../types/Message";
 import "../styles/DesktopChatInput.css";
-
-const QUICK_PROMPTS = [
-  {
-    label: "DeepThink",
-    value:
-      "Engage DeepThink mode and provide a structured, step-by-step response.",
-  },
-  {
-    label: "Search",
-    value:
-      "Search the portfolio for stand-out case studies that match this request.",
-  },
-  {
-    label: "Summarize",
-    value:
-      "Summarize Monika's background and latest projects in two sentences.",
-  },
-] as const;
 
 interface DesktopChatInputProps {
   onSend: (message: string, options?: SendMessageOptions) => void;
@@ -183,10 +166,10 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
           darkMode
             ? "border-slate-800/70 bg-slate-950/70"
             : "border-indigo-100/60 bg-gradient-to-br from-white via-[#faf8ff] to-[#f5f0ff]/80"
-        } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.25)] backdrop-blur-xl transition-colors`}
+        } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.5)] backdrop-blur-xl transition-colors`}
       >
-        <div className="pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-400/8 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-400/8 blur-3xl" />
+        <div className="pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-200/8 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-200/8 blur-3xl" />
         <div className="relative z-10 flex flex-col gap-3 p-4">
           <div className="flex items-center gap-2">
             <span

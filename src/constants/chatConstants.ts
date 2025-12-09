@@ -16,6 +16,24 @@ export const INTRO_SUGGESTIONS = [
   "Learn about recent achievements",
 ];
 
+export const QUICK_PROMPTS = [
+  {
+    label: "DeepThink",
+    value:
+      "Engage DeepThink mode and provide a structured, step-by-step response.",
+  },
+  {
+    label: "Search",
+    value:
+      "Search the portfolio for stand-out case studies that match this request.",
+  },
+  {
+    label: "Summarize",
+    value:
+      "Summarize Monika's background and latest projects in two sentences.",
+  },
+] as const;
+
 export const DICTATION_MESSAGES = {
   STATUS_LABEL: "Dictation in progress",
 } as const;

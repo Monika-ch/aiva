@@ -29,7 +29,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
 
   return (
     <section
-      className={`relative overflow-hidden w-full max-w-md mx-auto px-4 py-5 pb-12 sm:px-6 sm:py-6 rounded-[32px] border shadow-[0_25px_70px_rgba(15,23,42,0.18)] ${
+      className={`relative overflow-hidden w-full max-w-md mx-auto px-4 py-5 pb-12 sm:px-6 sm:py-6 rounded-[32px] border shadow-[0_45px_70px_rgba(15,23,42,0.12)] ${
         darkMode
           ? "bg-gradient-to-b from-[#0d1426] via-[#0f182d] to-[#0d1426] border-gray-800"
           : "bg-gradient-to-b from-white via-white to-[#eef2ff] border-white"
@@ -37,11 +37,11 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
     >
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className="absolute -top-24 -left-24 w-[280px] h-[280px] bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
+        className="absolute -top-24 -left-24 w-[280px] h-[280px] bg-gradient-to-r from-blue-200 to-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
       />
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className="absolute -bottom-24 -right-24 w-[320px] h-[320px] bg-gradient-to-r from-pink-400 to-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
+        className="absolute -bottom-24 -right-24 w-[320px] h-[320px] bg-gradient-to-r from-pink-400 to-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
       />
 
       <div className="relative z-10 space-y-5">
@@ -53,7 +53,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           }`}
         >
           <div className="w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center">
-            <img src={sparkIcon} alt="AIVA" className="w-7 h-7" />
+            <img src={sparkIcon} alt="AIVA" className="w-15 h-15" />
           </div>
           <div>
             <p
@@ -73,7 +73,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
           className={`rounded-[30px] px-5 py-6 border ${
             darkMode
               ? "bg-gradient-to-b from-[#19213b] via-[#131a2d] to-[#0d1426] border-indigo-900/40 shadow-[0_25px_70px_rgba(5,8,20,0.55)]"
-              : "bg-gradient-to-b from-[#f5f0ff] via-[#f3e8ff] to-[#f3f4ff] border-white shadow-[0_25px_60px_rgba(109,95,255,0.25)]"
+              : "bg-gradient-to-b from-[#f5f0ff] via-[#f3e8ff] to-[#f3e8ff] border-white shadow-[0_25px_60px_rgba(109,95,255,0.2)]"
           }`}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
             className={`inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold text-sm leading-tight text-center text-white ${
               darkMode
                 ? "bg-gradient-to-r from-[#7c6bff] via-[#7156ff] to-[#a47fff] shadow-[0_15px_45px_rgba(85,71,255,0.45)]"
-                : "bg-gradient-to-r from-[#6e5bff] to-[#9f7bff] shadow-[0_12px_30px_rgba(91,33,182,0.35)]"
+                : "bg-gradient-to-r from-[#6e5bff] to-[#9f7bff] shadow-[0_12px_20px_rgba(91,33,182,0.3)]"
             }`}
           >
             <span className="whitespace-normal">{HERO_CTA}</span>
