@@ -34,37 +34,37 @@ export const ActionCards: React.FC<ActionCardsProps> = ({
             <button
               key={idx}
               onClick={() => onActionClick(action.query)}
-              className={`group ${isMobile ? "p-3" : "p-4"} rounded-[14px] text-${isMobile ? "center" : "left"} transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+              className={`group action-card-surface ${
+                isMobile ? "p-4" : "p-4"
+              } rounded-2xl text-center transition-all duration-300 border backdrop-blur-sm active:scale-95 ${
                 isClicked
                   ? darkMode
-                    ? "bg-gradient-to-br from-indigo-900 to-indigo-800 border border-indigo-600 shadow-lg shadow-indigo-500/20"
-                    : "bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-300 shadow-lg shadow-indigo-400/20"
+                    ? "bg-gradient-to-br from-[#1a2744] to-[#0f1a2e] border-indigo-500/30 shadow-lg shadow-indigo-500/10 opacity-70"
+                    : "bg-gradient-to-br from-indigo-50 to-white border-indigo-200 shadow-lg shadow-indigo-200/30 opacity-70"
                   : darkMode
-                    ? "bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 hover:border-indigo-600 active:border-indigo-500"
-                    : "bg-gradient-to-br from-white to-gray-50 hover:from-gray-50 hover:to-white border border-gray-200 hover:border-indigo-400 active:border-indigo-500 shadow-md hover:shadow-lg"
-              }`}
+                    ? isMobile
+                      ? "bg-gradient-to-br from-[#1a2642] to-[#0f1628] hover:from-[#1f2b4a] hover:to-[#131a30] border-indigo-400/40 hover:border-indigo-300/60 shadow-xl shadow-black/40 hover:shadow-2xl hover:shadow-indigo-500/20"
+                      : "bg-gradient-to-br from-[#151d30] to-[#0c1322] hover:from-[#1a2540] hover:to-[#101828] border-[#2a3a55]/60 hover:border-indigo-500/40"
+                    : "bg-gradient-to-br from-white to-gray-50/80 hover:from-white hover:to-white border-gray-200/80 hover:border-gray-300"
+              } ${darkMode ? "action-card-dark" : "action-card-light"}`}
             >
-              <div
-                className={`flex ${isMobile ? "flex-col items-center gap-1.5" : "items-center gap-3"}`}
-              >
+              <div className="flex flex-col items-center gap-2.5">
                 <div
-                  className={`${isMobile ? "text-2xl" : "text-3xl"} transform transition-transform group-hover:scale-110 ${
-                    darkMode ? "drop-shadow-lg" : ""
+                  className={`text-4xl transform transition-transform group-hover:scale-110 group-active:scale-105 ${
+                    darkMode ? "drop-shadow-xl" : ""
                   }`}
                 >
                   {action.icon}
                 </div>
                 <span
-                  className={`font-semibold ${isMobile ? "text-xs" : "text-sm"} ${
+                  className={`font-bold ${isMobile ? "text-xs" : "text-sm"} ${
                     isClicked
                       ? darkMode
-                        ? "text-indigo-200"
-                        : "text-indigo-700"
+                        ? "text-gray-400"
+                        : "text-gray-500"
                       : darkMode
-                        ? "text-gray-200"
-                        : isMobile
-                          ? "text-gray-500"
-                          : "text-gray-800"
+                        ? "text-white"
+                        : "text-gray-700"
                   }`}
                 >
                   {action.label}

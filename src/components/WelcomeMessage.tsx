@@ -6,6 +6,7 @@
 
 import React from "react";
 import { PLACEHOLDERS } from "../constants/accessibilityLabels";
+import { UI_TEXT } from "../constants/chatConstants";
 
 interface WelcomeMessageProps {
   darkMode: boolean;
@@ -20,23 +21,29 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
 
   return (
     <div
-      className={`text-center space-y-${isMobile ? "1.5" : "3"} ${isMobile ? "mb-5" : "max-w-xl px-4"}`}
+      className={`text-center ${isMobile ? "space-y-3 mb-6 mt-2" : "space-y-3 max-w-xl px-4"}`}
     >
       <h2
-        className={`font-semibold ${isMobile ? "text-base" : "text-2xl"} ${
-          darkMode ? "text-gray-100" : "text-gray-800"
+        className={`font-extrabold tracking-tight ${isMobile ? "text-xl" : "text-2xl"} ${
+          darkMode
+            ? isMobile
+              ? "text-white drop-shadow-lg"
+              : "bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent"
+            : "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent"
         }`}
       >
         {PLACEHOLDERS.CHAT.ASK_AIVA}
       </h2>
       <p
-        className={`leading-relaxed ${isMobile ? "text-[12px]" : "text-sm"} ${
-          darkMode ? "text-gray-300" : "text-gray-600"
+        className={`leading-relaxed ${isMobile ? "text-sm leading-[1.65] px-4" : "text-sm"} ${
+          darkMode
+            ? isMobile
+              ? "text-gray-300"
+              : "text-gray-400"
+            : "text-gray-600"
         }`}
       >
-        I'm your AI-Powered Portfolio Assistant. I can help you explore
-        projects, discuss technical skills, and answer questions about
-        experience.
+        {UI_TEXT.WELCOME_DESCRIPTION}
       </p>
     </div>
   );

@@ -21,6 +21,11 @@ html {
   scrollbar-width: none;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -83,27 +88,8 @@ button:focus-visible {
   }
 }
 
-/* Custom Scrollbar Styles for Dark/Light Mode */
-/* Light mode scrollbar */
-textarea::-webkit-scrollbar {
-  width: 8px;
-}
-
-textarea::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-textarea::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-textarea::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Dark mode scrollbar - apply to textarea with dark theme */
+/* Custom Scrollbar Styles for Dark Mode */
+/* Dark mode scrollbar */
 .dark-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
@@ -120,50 +106,4 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 .dark-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
-}
-
-/* Only show scrollbar when content overflows */
-textarea.overflow-auto {
-  overflow-y: hidden;
-}
-
-textarea.overflow-auto.has-overflow {
-  overflow-y: auto;
-}
-
-/* Chat messages container scrollbar styles */
-.chat-messages-light::-webkit-scrollbar {
-  width: 10px;
-}
-
-.chat-messages-light::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 5px;
-}
-
-.chat-messages-light::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 5px;
-}
-
-.chat-messages-light::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-.chat-messages-dark::-webkit-scrollbar {
-  width: 10px;
-}
-
-.chat-messages-dark::-webkit-scrollbar-track {
-  background: #1f2937;
-  border-radius: 5px;
-}
-
-.chat-messages-dark::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 5px;
-}
-
-.chat-messages-dark::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
 }

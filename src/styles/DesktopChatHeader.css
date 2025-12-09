@@ -77,41 +77,6 @@
   filter: drop-shadow(0 4px 10px rgba(99, 102, 241, 0.5));
 }
 
-/* Language Menu Scrollbar Styles */
-.dark-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dark-scrollbar::-webkit-scrollbar-track {
-  background: #1f2937;
-}
-
-.dark-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 4px;
-}
-
-.dark-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
-}
-
-.light-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.light-scrollbar::-webkit-scrollbar-track {
-  background: #f9fafb;
-}
-
-.light-scrollbar::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 4px;
-}
-
-.light-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
 /* Desktop Chat Header Buttons */
 .desktop-header-btn {
   padding: 8px;

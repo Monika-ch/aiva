@@ -7,6 +7,7 @@
 import React, { useRef, useState } from "react";
 import sparkIcon from "../assets/logo-robo-face.svg";
 import { ALT_TEXT } from "../constants/accessibilityLabels";
+import { UI_TEXT, SWIPE_CONFIG } from "../constants/chatConstants";
 import { ReplyIcon } from "../constants/icons";
 import {
   ReadAloudButton,
@@ -55,8 +56,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   const isUser = message.role === "user";
   const repliedRoleLabel = replyToMessage
     ? replyToMessage.role === "assistant"
-      ? "AIVA"
-      : "You"
+      ? UI_TEXT.ROLE_LABELS.AIVA
+      : UI_TEXT.ROLE_LABELS.YOU
     : null;
   const repliedContentSnippet = replyToMessage
     ? replyToMessage.content.length > 160
@@ -71,9 +72,6 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   const touchStartY = useRef<number>(0);
   const isSwiping = useRef<boolean>(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
-
-  const SWIPE_THRESHOLD = 80; // Distance needed to trigger reply
-  const SWIPE_RESISTANCE = 2.5; // Dampening factor
 
   // Handle touch start
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -93,12 +91,18 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     const deltaY = touchY - touchStartY.current;
 
     // Only allow right swipe, and ensure horizontal movement is primary
-    if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 10) {
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      deltaX > SWIPE_CONFIG.MIN_HORIZONTAL_DELTA
+    ) {
       isSwiping.current = true;
       // Apply resistance for smoother feel
-      const offset = Math.min(deltaX / SWIPE_RESISTANCE, SWIPE_THRESHOLD);
+      const offset = Math.min(
+        deltaX / SWIPE_CONFIG.RESISTANCE,
+        SWIPE_CONFIG.THRESHOLD
+      );
       setSwipeOffset(offset);
-      setShowReplyIcon(offset > 20);
+      setShowReplyIcon(offset > SWIPE_CONFIG.ICON_SHOW_OFFSET);
     }
   };
 
@@ -106,7 +110,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   const handleTouchEnd = () => {
     if (!onReply) return;
 
-    if (isSwiping.current && swipeOffset >= SWIPE_THRESHOLD) {
+    if (isSwiping.current && swipeOffset >= SWIPE_CONFIG.THRESHOLD) {
       // Trigger reply action
       onReply(message, messageIndex);
     }
@@ -135,7 +139,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div
           className="absolute left-2 top-1/2 -translate-y-1/2 z-0 transition-opacity"
           style={{
-            opacity: Math.min(swipeOffset / SWIPE_THRESHOLD, 1),
+            opacity: Math.min(swipeOffset / SWIPE_CONFIG.THRESHOLD, 1),
           }}
         >
           <div
@@ -160,7 +164,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
       <div
         ref={bubbleRef}
-        className="inline-flex flex-col max-w-[80%] md:max-w-[85%] relative z-10"
+        className="inline-flex flex-col max-w-[88%] md:max-w-[85%] relative z-10"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -172,11 +176,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         }}
       >
         <div
-          className={`px-3 py-2 rounded-2xl text-[14px] font-medium leading-relaxed shadow-sm break-words overflow-wrap-anywhere ${
+          className={`px-3.5 py-2.5 rounded-xl text-[14px] font-medium leading-relaxed shadow-sm break-words overflow-wrap-anywhere ${
             isUser
               ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-none"
               : darkMode
-                ? "bg-gray-700 text-gray-200 rounded-bl-none border border-gray-600"
+                ? "bg-gray-800 text-gray-200 rounded-bl-none border border-gray-700"
                 : "bg-white text-gray-500 rounded-bl-none border border-gray-100"
           }`}
         >
@@ -228,9 +232,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           />
         </div>
 
-        {/* Timestamp and actions - Always visible */}
+        {/* Timestamp & Actions */}
         <div
-          className={`flex items-center gap-1 mt-1 px-1 ${
+          className={`flex items-center gap-1.5 mt-1.5 ${
             isUser ? "justify-end" : "justify-start"
           }`}
         >

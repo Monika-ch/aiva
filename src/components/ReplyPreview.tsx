@@ -1,7 +1,6 @@
 /**
  * Reply Preview Component
- * Shows a preview of the message being replied to (WhatsApp-style)
- */
+ * Shows a preview of the message being replied to */
 
 import React from "react";
 import { CloseIcon } from "../constants/icons";
@@ -17,6 +16,7 @@ interface ReplyPreviewProps {
   replyToRole: "user" | "assistant";
   darkMode: boolean;
   onClear: () => void;
+  variant?: "mobile" | "desktop";
 }
 
 export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
@@ -24,7 +24,10 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
   replyToRole,
   darkMode,
   onClear,
+  variant = "mobile",
 }) => {
+  const isDesktop = variant === "desktop";
+
   // Truncate long messages
   const truncatedContent =
     replyToContent.length > 100
@@ -33,14 +36,16 @@ export const ReplyPreview: React.FC<ReplyPreviewProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-3 px-3 py-1 rounded-full mb-2 border ${
+      className={`flex items-center gap-3 px-3 py-2 mb-2 border ${
+        isDesktop ? "rounded-xl" : "rounded-2xl"
+      } ${
         darkMode
           ? "bg-indigo-950/20 border-indigo-800/30 backdrop-blur-sm"
           : "bg-indigo-50/50 border-indigo-200/50"
       }`}
     >
       <div
-        className={`w-1 h-10 rounded-full flex-shrink-0 ${
+        className={`w-1 h-8 rounded-full flex-shrink-0 ${
           replyToRole === "assistant"
             ? darkMode
               ? "bg-gradient-to-b from-indigo-500 to-purple-600"

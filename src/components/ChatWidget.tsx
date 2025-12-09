@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ChatWidgetUI from "./ChatWidgetUI";
+import { WELCOME_MESSAGES } from "../constants/chatConstants";
 import useChatWidget from "../hooks/useChatWidget";
 import type { Message, SendMessageOptions } from "../types/Message";
 
@@ -46,13 +47,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const sendWelcomeMessages = useCallback(() => {
     if (!onAssistantMessage) return;
 
-    const greeting =
-      "Hi, I'm AIVA your personal AI Virtual Assistant to help you navigate the portfolio";
-    const suggestions = `Try asking me about:
-• learn top tech skills
-• explore experience
-• tell me more about their journey
-• do a storytelling on Monika`;
+    const greeting = WELCOME_MESSAGES.GREETING;
+    const suggestions = WELCOME_MESSAGES.SUGGESTIONS;
 
     // Show typing indicator before greeting
     setIsInternalTyping(true);

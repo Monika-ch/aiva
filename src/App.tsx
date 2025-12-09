@@ -7,11 +7,10 @@ import { SuggestionList } from "./components/SuggestionList";
 import { WelcomeMessage } from "./components/WelcomeMessage";
 import { QuickActionsSection } from "./components/QuickActionsSection";
 import Hero from "./components/Hero";
-import sparkIcon from "./assets/logo-robo-face.svg";
 import ChatWidget from "./components/ChatWidget";
 import { useDarkMode } from "./utils/useDarkMode";
 import { SunIcon, MoonIcon } from "./constants/icons";
-import { ARIA_LABELS, TITLES, ALT_TEXT } from "./constants/accessibilityLabels";
+import { ARIA_LABELS, TITLES } from "./constants/accessibilityLabels";
 import {
   MessageBubble,
   useTextToSpeech,
@@ -19,21 +18,11 @@ import {
   useSmoothScroll,
 } from "./utils";
 import type { Message, SendMessageOptions } from "./types/Message";
+import {
+  DEFAULT_AI_RESPONSE,
+  AI_RESPONSE_TRANSLATIONS,
+} from "./constants/chatConstants";
 import "./styles/App.css";
-
-const DEFAULT_AI_RESPONSE =
-  "That's interesting! Tell me more about your portfolio goals.";
-
-const AI_RESPONSE_TRANSLATIONS: Record<string, string> = {
-  en: DEFAULT_AI_RESPONSE,
-  es: "¡Eso es interesante! Cuéntame más sobre tus objetivos de portafolio.",
-  fr: "C'est intéressant ! Parle-moi davantage de tes objectifs de portfolio.",
-  de: "Das ist interessant! Erzähl mir mehr über deine Portfolio-Ziele.",
-  hi: "यह दिलचस्प है! कृपया अपने पोर्टफोलियो लक्ष्यों के बारे में और बताएं।",
-  ja: "それは興味深いですね！ポートフォリオの目標についてもっと教えてください。",
-  ko: "흥미로운데요! 포트폴리오 목표에 대해 더 이야기해 주세요.",
-  zh: "这很有意思！请再多告诉我一些你的作品集目标。",
-};
 
 const getResponseForLanguage = (locale: string | null | undefined) => {
   if (!locale) return DEFAULT_AI_RESPONSE;
@@ -287,13 +276,13 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen w-full py-8 relative ${
+      className={`min-h-screen w-full py-3 sm:py-8 relative ${
         darkMode
           ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
           : "bg-gray-50"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
         {/* Dark Mode Toggle - Top Right, Outside Chat Area */}
         <div className="fixed top-6 right-6 z-50">
           <button
@@ -314,34 +303,7 @@ function App() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-10">
           {/* Left column - Hero Section */}
-          <div
-            className={`lg:col-span-4 rounded-xl shadow-lg p-5 ${
-              darkMode ? "bg-gray-800 border border-gray-700" : "bg-white"
-            }`}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src={sparkIcon}
-                alt={ALT_TEXT.AIVA.LOGO}
-                className="w-14 h-14 hero-logo cursor-pointer"
-              />
-              <div>
-                <h2
-                  className={`text-lg font-bold ${
-                    darkMode ? "text-gray-100" : "text-gray-900"
-                  }`}
-                >
-                  AIVA
-                </h2>
-                <p
-                  className={`text-xs ${
-                    darkMode ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  AI-Powered Portfolio Assistant
-                </p>
-              </div>
-            </div>
+          <div className="lg:col-span-4 flex justify-center">
             <Hero darkMode={darkMode} />
           </div>
 
@@ -354,10 +316,10 @@ function App() {
               />
               <div
                 ref={messagesContainerRef}
-                className={`flex-1 overflow-y-auto p-3 text-sm space-y-4 ${
+                className={`flex-1 overflow-y-auto p-4 text-sm space-y-4 ${
                   darkMode
-                    ? "bg-gradient-to-b from-gray-800 to-gray-900 chat-messages-dark"
-                    : "bg-gradient-to-b from-gray-50 to-white chat-messages-light"
+                    ? "bg-gradient-to-b from-gray-800/50 to-gray-900/50"
+                    : "bg-gradient-to-b from-[#fdfcff] via-white to-[#f8f5ff]"
                 }`}
               >
                 {messages.length === 0 ? (
@@ -421,11 +383,12 @@ function App() {
                     replyToRole={replyingTo.message.role}
                     darkMode={darkMode}
                     onClear={clearReply}
+                    variant="desktop"
                   />
                 </div>
               )}
 
-              <div className="desktop-chat-input">
+              <div className="desktop-chat-input flex-shrink-0">
                 <DesktopChatInput onSend={handleSend} darkMode={darkMode} />
               </div>
             </ChatContainer>

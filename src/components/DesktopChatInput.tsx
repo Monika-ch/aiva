@@ -117,13 +117,6 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
 
     textarea.style.height = `${newHeight}px`;
 
-    // Show scrollbar only when content overflows
-    if (textarea.scrollHeight > maxHeight) {
-      textarea.classList.add("has-overflow");
-    } else {
-      textarea.classList.remove("has-overflow");
-    }
-
     // Scroll to bottom to keep cursor visible
     textarea.scrollTop = textarea.scrollHeight;
   }, [input]);
@@ -189,8 +182,8 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
         className={`group relative overflow-hidden rounded-2xl border ${
           darkMode
             ? "border-slate-800/70 bg-slate-950/70"
-            : "border-slate-200 bg-white/80"
-        } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.3)] backdrop-blur-xl transition-colors`}
+            : "border-indigo-100/60 bg-gradient-to-br from-white via-[#faf8ff] to-[#f5f0ff]/80"
+        } shadow-[0_8px_24px_-8px_rgba(79,70,229,0.25)] backdrop-blur-xl transition-colors`}
       >
         <div className="pointer-events-none absolute -top-20 right-8 h-40 w-40 rounded-full bg-indigo-400/8 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-purple-400/8 blur-3xl" />
@@ -224,8 +217,8 @@ const DesktopChatInput: React.FC<DesktopChatInputProps> = ({
                 placeholder={getPlaceholderText()}
                 className={`w-full resize-none bg-transparent px-3 py-3 pr-14 text-sm leading-relaxed text-inherit focus:outline-none focus:ring-0 placeholder:text-sm desktop-chat-textarea ${
                   darkMode
-                    ? "dark-textarea-scrollbar desktop-chat-textarea-dark"
-                    : "light-textarea-scrollbar desktop-chat-textarea-light"
+                    ? "dark-scrollbar desktop-chat-textarea-dark"
+                    : "desktop-chat-textarea-light"
                 }`}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

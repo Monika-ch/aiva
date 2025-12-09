@@ -34,12 +34,7 @@ import {
 } from "../constants/accessibilityLabels";
 
 // Import icons
-import {
-  LanguageIcon,
-  TrashIcon,
-  CloseIcon,
-  SendIcon,
-} from "../constants/icons";
+import { LanguageIcon, TrashIcon, SendIcon } from "../constants/icons";
 
 // Import confirm dialog
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -48,6 +43,7 @@ import { SuggestionList } from "./SuggestionList";
 import { WelcomeMessage } from "./WelcomeMessage";
 import { QuickActionsSection } from "./QuickActionsSection";
 import { LanguageDropdown } from "../utils/LanguageDropdown";
+import { UI_TEXT } from "../constants/chatConstants";
 
 interface Props {
   messages: Message[];
@@ -319,10 +315,24 @@ const ChatWidgetUI: React.FC<Props> = ({
 
   // JSX Rendering
   return (
-    <div
-      className="fixed bottom-5 right-4 z-50 flex flex-col items-end gap-3 md:hidden"
-      aria-live="polite"
-    >
+    <>
+      {/* Backdrop - Rendered as sibling outside widget container */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className={`fixed inset-0 backdrop-blur-sm z-40 md:hidden ${
+              darkMode ? "bg-black/60" : "bg-white/30"
+            }`}
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Confirm Dialog */}
       <ConfirmDialog
         isOpen={showClearConfirm}
@@ -335,300 +345,308 @@ const ChatWidgetUI: React.FC<Props> = ({
         darkMode={darkMode}
       />
 
-      {/* Messages Container */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`mx-3 w-[92vw] max-w-[392px] shadow-2xl rounded-2xl overflow-hidden border mb-4 ${
-              darkMode ? "chat-dialog-dark" : "chat-dialog-light"
-            }`}
-            role="dialog"
-            aria-label="AIVA chat"
-          >
-            {/* Header */}
-            <div
-              className={`p-3 border-b backdrop-blur-sm flex items-center justify-between ${
-                darkMode ? "chat-header-dark" : "chat-header-light"
+      {/* Chat Widget Container */}
+      <div
+        className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-6 sm:pb-8 pointer-events-none md:hidden"
+        aria-live="polite"
+      >
+        {/* Chat Dialog - Centered overlay taking full viewport */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.95 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className={`w-full max-w-[420px] max-h-[82dvh] shadow-xl rounded-[24px] overflow-hidden border flex flex-col pointer-events-auto transition-all mb-8 sm:mb-0 ${
+                darkMode ? "chat-dialog-dark" : "chat-dialog-light"
               }`}
+              role="dialog"
+              aria-label="AIVA chat"
             >
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <img
-                    src={sparkIcon}
-                    alt={ALT_TEXT.AIVA.LOGO}
-                    className="w-8 h-8 chat-logo"
-                  />
+              {/* Header */}
+              <div
+                className={`px-4 py-3 border-b backdrop-blur-sm flex items-center justify-between ${
+                  darkMode ? "chat-header-dark" : "chat-header-light"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <img
+                      src={sparkIcon}
+                      alt={ALT_TEXT.AIVA.LOGO}
+                      className="w-8 h-8 chat-logo"
+                    />
+                  </div>
+                  <div>
+                    <span
+                      className={`text-sm font-semibold tracking-tight ${darkMode ? "text-gray-100" : "text-gray-900"}`}
+                    >
+                      AIVA Chat
+                    </span>
+                    <p
+                      className={`text-[11px] ${
+                        darkMode ? "text-gray-300" : "text-gray-600"
+                      }`}
+                    >
+                      AI Portfolio Assistant
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <span
-                    className={`text-sm font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}
-                  >
-                    AIVA Chat
-                  </span>
-                  <p
-                    className={`text-xs ${
-                      darkMode ? "text-gray-300" : "text-gray-500"
-                    }`}
-                  >
-                    AI Portfolio Assistant
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-1.5">
-                {/* Language Button */}
-                <div className="relative" ref={languageMenuRef}>
+                <div className="flex items-center gap-2">
+                  {/* Language Button */}
+                  <div className="relative" ref={languageMenuRef}>
+                    <button
+                      ref={languageButtonRef}
+                      onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                      className={`hover:opacity-80 chat-header-btn ${
+                        darkMode
+                          ? "chat-header-btn-dark"
+                          : "chat-header-btn-light"
+                      }`}
+                      aria-label={ARIA_LABELS.LANGUAGE.SETTINGS}
+                      title={TITLES.LANGUAGE.SETTINGS}
+                    >
+                      <LanguageIcon className="chat-header-btn-icon" />
+                    </button>
+
+                    {/* Language Dropdown Menu */}
+                    {showLanguageMenu && (
+                      <LanguageDropdown
+                        darkMode={darkMode}
+                        speechLanguage={speechLanguage}
+                        languageSearch={languageSearch}
+                        onLanguageSearchChange={setLanguageSearch}
+                        onLanguageSelect={handleLanguageSelect}
+                        buttonRef={languageButtonRef}
+                        usePortal={true}
+                        onClose={() => setShowLanguageMenu(false)}
+                        containerRef={languageMenuRef}
+                      />
+                    )}
+                  </div>
+
+                  {/* Clear chat button */}
                   <button
-                    ref={languageButtonRef}
-                    onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                    onClick={handleClearChat}
                     className={`hover:opacity-80 chat-header-btn ${
                       darkMode
                         ? "chat-header-btn-dark"
                         : "chat-header-btn-light"
                     }`}
-                    aria-label={ARIA_LABELS.LANGUAGE.SETTINGS}
-                    title={TITLES.LANGUAGE.SETTINGS}
+                    aria-label={ARIA_LABELS.CLEAR_CHAT.BUTTON}
+                    title={TITLES.CLEAR_CHAT.BUTTON}
                   >
-                    <LanguageIcon className="chat-header-btn-icon" />
+                    <TrashIcon className="chat-header-btn-icon" />
                   </button>
-
-                  {/* Language Dropdown Menu */}
-                  {showLanguageMenu && (
-                    <LanguageDropdown
-                      darkMode={darkMode}
-                      speechLanguage={speechLanguage}
-                      languageSearch={languageSearch}
-                      onLanguageSearchChange={setLanguageSearch}
-                      onLanguageSelect={handleLanguageSelect}
-                      buttonRef={languageButtonRef}
-                      usePortal={true}
-                      onClose={() => setShowLanguageMenu(false)}
-                      containerRef={languageMenuRef}
-                    />
-                  )}
                 </div>
-
-                {/* Clear chat button */}
-                <button
-                  onClick={handleClearChat}
-                  className={`hover:opacity-80 chat-header-btn ${
-                    darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
-                  }`}
-                  aria-label={ARIA_LABELS.CLEAR_CHAT.BUTTON}
-                  title={TITLES.CLEAR_CHAT.HISTORY}
-                >
-                  <TrashIcon className="chat-header-btn-icon" />
-                </button>
-
-                {/* Close button */}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className={`hover:opacity-80 chat-header-btn ${
-                    darkMode ? "chat-header-btn-dark" : "chat-header-btn-light"
-                  }`}
-                  aria-label={ARIA_LABELS.TOGGLE.CLOSE}
-                  title={TITLES.CLOSE.BUTTON}
-                >
-                  <CloseIcon className="chat-header-btn-icon" />
-                </button>
               </div>
-            </div>
 
-            {/* Messages Container */}
-            <div
-              ref={messageContainerRef}
-              className={`chat-scroll-area p-3 h-[380px] overflow-y-auto text-sm space-y-4 ${
-                darkMode ? "chat-messages-dark" : "chat-messages-light"
-              }`}
-            >
-              {messages.length === 0 && !isTyping ? (
-                // Empty state with welcome message, suggestions, and actions
-                <div className="flex flex-col h-full px-4 overflow-y-auto">
-                  {/* Welcome greeting */}
-                  <WelcomeMessage darkMode={darkMode} variant="mobile" />
+              {/* Messages Container */}
+              <div
+                ref={messageContainerRef}
+                className={`px-4 pt-3 pb-4 flex-1 min-h-0 overflow-y-auto text-[15px] leading-6 space-y-4 ${
+                  darkMode ? "chat-messages-dark" : "chat-messages-light"
+                }`}
+              >
+                {messages.length === 0 && !isTyping ? (
+                  // Empty state with welcome message, suggestions, and actions
+                  <div className="flex flex-col h-full px-4 overflow-y-auto">
+                    {/* Welcome greeting */}
+                    <WelcomeMessage darkMode={darkMode} variant="mobile" />
 
-                  {/* Suggestion chips */}
-                  <SuggestionList
-                    darkMode={darkMode}
-                    clickedSuggestions={clickedSuggestions}
-                    onSuggestionClick={handleSuggestionClick}
-                    variant="mobile"
-                  />
-
-                  {/* Quick action cards */}
-                  <QuickActionsSection
-                    darkMode={darkMode}
-                    clickedActions={clickedActions}
-                    onActionClick={handleQuickAction}
-                    variant="mobile"
-                  />
-                </div>
-              ) : (
-                <>
-                  {messages.map((message, index) => (
-                    <MessageBubble
-                      key={message.id || index}
-                      message={message}
-                      messageIndex={index}
+                    {/* Suggestion chips */}
+                    <SuggestionList
                       darkMode={darkMode}
                       clickedSuggestions={clickedSuggestions}
-                      clickedActions={clickedActions}
-                      isSpeaking={isSpeaking}
-                      speakingMessageIndex={speakingMessageIndex}
-                      onReadAloud={readAloud}
-                      onCopy={copyToClipboard}
-                      onReaction={handleReaction}
                       onSuggestionClick={handleSuggestionClick}
-                      onActionClick={handleQuickAction}
-                      onReply={handleReply}
-                      replyToMessage={
-                        message.replyToId
-                          ? messages.find((m) => m.id === message.replyToId)
-                          : undefined
-                      }
+                      variant="mobile"
                     />
-                  ))}
 
-                  {isTyping && <TypingIndicator darkMode={darkMode} />}
-                  <div ref={messagesEndRef} />
-                </>
-              )}
-            </div>
+                    {/* Quick action cards */}
+                    <QuickActionsSection
+                      darkMode={darkMode}
+                      clickedActions={clickedActions}
+                      onActionClick={handleQuickAction}
+                      variant="mobile"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    {messages.map((message, index) => (
+                      <MessageBubble
+                        key={message.id || index}
+                        message={message}
+                        messageIndex={index}
+                        darkMode={darkMode}
+                        clickedSuggestions={clickedSuggestions}
+                        clickedActions={clickedActions}
+                        isSpeaking={isSpeaking}
+                        speakingMessageIndex={speakingMessageIndex}
+                        onReadAloud={readAloud}
+                        onCopy={copyToClipboard}
+                        onReaction={handleReaction}
+                        onSuggestionClick={handleSuggestionClick}
+                        onActionClick={handleQuickAction}
+                        onReply={handleReply}
+                        replyToMessage={
+                          message.replyToId
+                            ? messages.find((m) => m.id === message.replyToId)
+                            : undefined
+                        }
+                      />
+                    ))}
 
-            {/* Input Container */}
-            <div
-              className={`p-3 border-t backdrop-blur-sm ${
-                darkMode
-                  ? "chat-input-container-dark"
-                  : "chat-input-container-light"
-              }`}
-            >
-              {/* Reply Preview */}
-              {replyingTo && (
-                <ReplyPreview
-                  replyToContent={replyingTo.message.content}
-                  replyToRole={replyingTo.message.role}
-                  darkMode={darkMode}
-                  onClear={clearReply}
-                />
-              )}
+                    {isTyping && <TypingIndicator darkMode={darkMode} />}
+                    <div ref={messagesEndRef} />
+                  </>
+                )}
+              </div>
 
-              <div className="flex items-end gap-1.5 mb-2">
-                <VoiceSendButton
-                  onClick={() => startVoiceRecognition("send")}
-                  isActive={isVoiceSendActive}
-                  darkMode={darkMode}
-                />
+              {/* Input Container */}
+              <div
+                className={`px-4 pt-3 pb-4 pb-safe border-t backdrop-blur-sm ${
+                  darkMode
+                    ? "chat-input-container-dark"
+                    : "chat-input-container-light"
+                }`}
+              >
+                {/* Reply Preview */}
+                {replyingTo && (
+                  <ReplyPreview
+                    replyToContent={replyingTo.message.content}
+                    replyToRole={replyingTo.message.role}
+                    darkMode={darkMode}
+                    onClear={clearReply}
+                  />
+                )}
 
-                <DictateButton
-                  onClick={() => startVoiceRecognition("dictate")}
-                  isActive={isDictateActive}
-                  darkMode={darkMode}
-                />
-
-                <textarea
-                  ref={inputRef}
-                  placeholder={
-                    isListening
-                      ? PLACEHOLDERS.CHAT.LISTENING
-                      : PLACEHOLDERS.CHAT.ASK_AIVA
-                  }
-                  className={`flex-1 min-w-0 ${theme.inputBg} chat-textarea ${
+                <div
+                  className={`mb-2 rounded-[26px] border px-3 py-2.5 flex items-end gap-2 shadow-[0_12px_30px_rgba(15,23,42,0.08)] ${
                     darkMode
-                      ? "dark-scrollbar chat-textarea-dark"
-                      : "chat-textarea-light"
-                  } border ${
-                    darkMode
-                      ? "border-gray-700 placeholder-gray-300"
-                      : "border-gray-200 placeholder-gray-400"
-                  } rounded-lg px-4 py-3 text-sm leading-6 focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all ${
-                    theme.text
-                  } resize-none`}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendWithDictation(undefined, {
-                        triggeredByVoice: false,
-                      });
-                    }
-                  }}
-                  aria-label={ARIA_LABELS.CHAT.INPUT}
-                  readOnly={isListening && listeningMode === "send"}
-                  rows={1}
-                  spellCheck={false}
-                />
-
-                <button
-                  onClick={() =>
-                    handleSendWithDictation(undefined, {
-                      triggeredByVoice: false,
-                    })
-                  }
-                  aria-label={ARIA_LABELS.CHAT.SEND}
-                  disabled={
-                    !input.trim() ||
-                    (isListening && listeningMode !== "dictate")
-                  }
-                  className={`chat-send-btn flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-lg hover:brightness-110 transform transition-all active:scale-95 disabled:cursor-not-allowed ${
-                    !input.trim() ||
-                    (isListening && listeningMode !== "dictate")
-                      ? "chat-send-btn-disabled"
-                      : "chat-send-btn-active"
+                      ? "bg-[#0f172a]/80 border-gray-700"
+                      : "bg-white/90 border-gray-200"
                   }`}
                 >
-                  <SendIcon className="w-4 h-4" />
-                </button>
+                  <div className="flex items-center gap-1.5 pr-1.5">
+                    <VoiceSendButton
+                      onClick={() => startVoiceRecognition("send")}
+                      isActive={isVoiceSendActive}
+                      darkMode={darkMode}
+                    />
+
+                    <DictateButton
+                      onClick={() => startVoiceRecognition("dictate")}
+                      isActive={isDictateActive}
+                      darkMode={darkMode}
+                    />
+                  </div>
+
+                  <textarea
+                    ref={inputRef}
+                    placeholder={
+                      isListening
+                        ? PLACEHOLDERS.CHAT.LISTENING
+                        : PLACEHOLDERS.CHAT.ASK_AIVA
+                    }
+                    className={`flex-1 min-w-0 ${theme.inputBg} chat-textarea ${
+                      darkMode
+                        ? "dark-scrollbar chat-textarea-dark"
+                        : "chat-textarea-light"
+                    } border-0 rounded-2xl px-4 py-3 text-[15px] leading-7 focus:ring-0 focus:border-transparent transition-all ${
+                      theme.text
+                    } resize-none`}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendWithDictation(undefined, {
+                          triggeredByVoice: false,
+                        });
+                      }
+                    }}
+                    aria-label={ARIA_LABELS.CHAT.INPUT}
+                    readOnly={isListening && listeningMode === "send"}
+                    rows={1}
+                    spellCheck={false}
+                  />
+
+                  <button
+                    onClick={() =>
+                      handleSendWithDictation(undefined, {
+                        triggeredByVoice: false,
+                      })
+                    }
+                    aria-label={ARIA_LABELS.CHAT.SEND}
+                    disabled={
+                      !input.trim() ||
+                      (isListening && listeningMode !== "dictate")
+                    }
+                    className={`chat-send-btn flex-shrink-0 inline-flex items-center justify-center h-10 px-0 rounded-xl hover:brightness-110 transform transition-all active:scale-95 disabled:cursor-not-allowed ${
+                      !input.trim() ||
+                      (isListening && listeningMode !== "dictate")
+                        ? "chat-send-btn-disabled"
+                        : "chat-send-btn-active"
+                    }`}
+                  >
+                    <SendIcon className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Floating Action Button */}
-      <div className="relative pr-1 pt-1">
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={
-            isOpen
-              ? ARIA_LABELS.TOGGLE.CLOSE
-              : unreadCount > 0
-                ? `${ARIA_LABELS.TOGGLE.OPEN} (${unreadCount} unread ${
-                    unreadCount === 1 ? "message" : "messages"
-                  })`
-                : ARIA_LABELS.TOGGLE.OPEN
-          }
-          aria-expanded={isOpen}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`relative p-4 rounded-full shadow-lg hover:shadow-xl transition-all chat-fab ${
-            darkMode ? "chat-fab-dark" : "chat-fab-light"
-          }`}
+        {/* Floating Action Button (FAB)- Always visible on mobile */}
+        <motion.div
+          className="fixed bottom-6 right-6 pointer-events-auto md:hidden z-50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
         >
-          <img
-            src={sparkIcon}
-            alt={ALT_TEXT.AIVA.OPEN_CHAT}
-            className="w-8 h-8 chat-fab-logo"
-          />
-        </motion.button>
-
-        {/* Unread Badge */}
-        {!isOpen && typeof unreadCount === "number" && unreadCount > 0 && (
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-md"
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={
+              isOpen ? ARIA_LABELS.TOGGLE.CLOSE : ARIA_LABELS.TOGGLE.OPEN
+            }
+            aria-expanded={isOpen}
+            initial={false}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 450, damping: 28 }}
+            className={`group relative flex items-center justify-center chat-fab overflow-hidden ${darkMode ? "chat-fab-dark" : "chat-fab-light"}`}
           >
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </motion.span>
-        )}
+            <div className="flex w-full items-center justify-center gap-2">
+              <img
+                src={sparkIcon}
+                alt={ALT_TEXT.AIVA.OPEN_CHAT}
+                className="w-6 h-6 chat-fab-logo flex-shrink-0"
+              />
+              <span
+                className={`text-[13px] font-semibold tracking-tight leading-tight whitespace-nowrap text-center ${
+                  darkMode ? "text-gray-100" : "text-gray-800"
+                }`}
+              >
+                {isOpen ? UI_TEXT.FAB_CLOSE : UI_TEXT.FAB_OPEN}
+              </span>
+            </div>
+          </motion.button>
+
+          {/* Unread Badge */}
+          {!isOpen && typeof unreadCount === "number" && unreadCount > 0 && (
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-1.5 -left-1.5 inline-flex items-center justify-center min-w-[20px] h-[20px] px-1.5 text-[10px] font-bold leading-none text-white bg-red-500 rounded-full shadow-md border border-white dark:border-gray-800"
+            >
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </motion.span>
+          )}
+        </motion.div>
       </div>
-    </div>
+    </>
   );
 };
 

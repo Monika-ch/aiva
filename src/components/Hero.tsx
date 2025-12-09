@@ -1,50 +1,11 @@
-// import React from "react";
-
-// const Hero: React.FC = () => {
-//   return (
-//     <section className='p-8'>
-//       <h1 className='text-3xl font-extrabold text-gray-900 mb-3'>
-//         AIVA — AI Portfolio Assistant
-//       </h1>
-//       <p className='text-gray-700 mb-6'>
-//         Create a professional narrative from your work history, tailor your
-//         portfolio, and get custom suggestions to impress recruiters and clients.
-//       </p>
-
-//       <div className='space-y-3'>
-//         <div>
-//           <h3 className='font-semibold text-gray-900'>
-//             Resume & Portfolio Review
-//           </h3>
-//           <p className='text-gray-600 text-sm'>
-//             Get concise suggestions to improve clarity and impact.
-//           </p>
-//         </div>
-
-//         <div>
-//           <h3 className='font-semibold text-gray-900'>Project Storytelling</h3>
-//           <p className='text-gray-600 text-sm'>
-//             Transform technical projects into compelling case studies.
-//           </p>
-//         </div>
-
-//         {/* <div>
-//           <h3 className="font-semibold text-gray-900">Interview Prep</h3>
-//           <p className="text-gray-600 text-sm">Practice common interview questions and receive tailored feedback.</p>
-//         </div> */}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default Hero;
-
 import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import sparkIcon from "../assets/logo-robo-face.svg";
 import {
   HERO_CONTENT,
   HERO_FEATURES,
   HERO_TECH_STACK,
+  HERO_CTA,
 } from "../constants/heroConstants";
 
 interface HeroProps {
@@ -67,92 +28,159 @@ const Hero: React.FC<HeroProps> = ({ darkMode = false }) => {
   }, [x, y]);
 
   return (
-    <section className="relative overflow-hidden p-5">
-      {/* Floating AI blobs */}
+    <section
+      className={`relative overflow-hidden w-full max-w-md mx-auto px-4 py-5 pb-12 sm:px-6 sm:py-6 rounded-[32px] border shadow-[0_25px_70px_rgba(15,23,42,0.18)] ${
+        darkMode
+          ? "bg-gradient-to-b from-[#0d1426] via-[#0f182d] to-[#0d1426] border-gray-800"
+          : "bg-gradient-to-b from-white via-white to-[#eef2ff] border-white"
+      }`}
+    >
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className="absolute -top-24 -left-24 w-[300px] h-[300px] bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute -top-24 -left-24 w-[280px] h-[280px] bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
       />
       <motion.div
         style={{ x: moveX, y: moveY }}
-        className="absolute -bottom-20 -right-20 w-[350px] h-[350px] bg-gradient-to-r from-pink-400 to-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute -bottom-24 -right-24 w-[320px] h-[320px] bg-gradient-to-r from-pink-400 to-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
       />
 
-      {/* Content */}
-      <div className="relative z-10">
-        <motion.h1
-          className={`text-2xl font-extrabold mb-3 ${
-            darkMode ? "text-gray-100" : "text-gray-900"
+      <div className="relative z-10 space-y-5">
+        <div
+          className={`flex items-center gap-3 rounded-3xl px-4 py-3 border shadow-[0_10px_30px_rgba(15,23,42,0.08)] ${
+            darkMode
+              ? "bg-[#101a32]/90 border-gray-800"
+              : "bg-white border-white"
           }`}
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {HERO_CONTENT.TITLE}
-        </motion.h1>
+          <div className="w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center">
+            <img src={sparkIcon} alt="AIVA" className="w-7 h-7" />
+          </div>
+          <div>
+            <p
+              className={`text-sm font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}
+            >
+              AIVA
+            </p>
+            <p
+              className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {HERO_CONTENT.SUBTITLE}
+            </p>
+          </div>
+        </div>
 
-        <motion.p
-          className={`text-sm mb-5 leading-relaxed ${
-            darkMode ? "text-gray-300" : "text-gray-700"
+        <motion.div
+          className={`rounded-[30px] px-5 py-6 border ${
+            darkMode
+              ? "bg-gradient-to-b from-[#19213b] via-[#131a2d] to-[#0d1426] border-indigo-900/40 shadow-[0_25px_70px_rgba(5,8,20,0.55)]"
+              : "bg-gradient-to-b from-[#f5f0ff] via-[#f3e8ff] to-[#f3f4ff] border-white shadow-[0_25px_60px_rgba(109,95,255,0.25)]"
           }`}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {HERO_CONTENT.DESCRIPTION}
-        </motion.p>
+          <h1
+            className={`text-[28px] leading-[34px] font-extrabold mb-3 ${
+              darkMode ? "text-gray-100" : "text-gray-900"
+            }`}
+          >
+            {HERO_CONTENT.TITLE}
+          </h1>
+          <p
+            className={`text-[15px] mb-5 leading-relaxed ${
+              darkMode ? "text-gray-200" : "text-gray-700"
+            }`}
+          >
+            {HERO_CONTENT.DESCRIPTION}
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            className={`inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold text-sm leading-tight text-center text-white ${
+              darkMode
+                ? "bg-gradient-to-r from-[#7c6bff] via-[#7156ff] to-[#a47fff] shadow-[0_15px_45px_rgba(85,71,255,0.45)]"
+                : "bg-gradient-to-r from-[#6e5bff] to-[#9f7bff] shadow-[0_12px_30px_rgba(91,33,182,0.35)]"
+            }`}
+          >
+            <span className="whitespace-normal">{HERO_CTA}</span>
+            <span className="text-base shrink-0">↗</span>
+          </motion.button>
+        </motion.div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {HERO_FEATURES.map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -25 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 + index * 0.2, duration: 0.6 }}
-              className={`border p-3 rounded-lg shadow-sm backdrop-blur-sm hover:shadow-md transition-all ${
+              transition={{ delay: 0.4 + index * 0.15, duration: 0.5 }}
+              className={`relative border p-4 rounded-2xl shadow-sm backdrop-blur-sm hover:shadow-xl transition-all flex gap-3 items-start ${
                 darkMode
-                  ? "border-gray-700 bg-gray-800/70"
-                  : "border-gray-200 bg-white/70"
+                  ? "border-gray-800 bg-[#111b33]/80"
+                  : "border-gray-200 bg-white/95"
               }`}
             >
-              <h3
-                className={`text-sm font-semibold mb-1 ${
-                  darkMode ? "text-gray-100" : "text-gray-900"
+              <div
+                className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl font-semibold ${
+                  darkMode
+                    ? "bg-gradient-to-br from-indigo-800 to-indigo-500 text-indigo-100"
+                    : "bg-gradient-to-br from-indigo-50 to-indigo-200 text-indigo-600"
                 }`}
               >
-                {item.title}
-              </h3>
-              <p
-                className={`text-xs leading-relaxed ${
-                  darkMode ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                {item.desc}
-              </p>
+                {item.icon}
+              </div>
+              <div className="flex-1">
+                <span
+                  className={`block text-[15px] font-semibold leading-tight mb-1 ${
+                    darkMode ? "text-gray-100" : "text-gray-900"
+                  }`}
+                >
+                  {item.title}
+                </span>
+                <span
+                  className={`text-[13px] leading-relaxed ${
+                    darkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  {item.desc}
+                </span>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Tech Stack Badges */}
         <motion.div
-          className="flex flex-wrap gap-2.5 mt-5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          className={`rounded-3xl border px-4 py-4 ${
+            darkMode
+              ? "border-gray-800 bg-[#0c1324]/80"
+              : "border-gray-100 bg-white/85"
+          }`}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
         >
-          {HERO_TECH_STACK.map((tech, idx) => (
-            <motion.span
-              key={idx}
-              className={`px-2.5 py-1 text-xs font-medium rounded-full shadow-sm transition-all ${
-                darkMode
-                  ? "bg-gray-700 text-gray-200 hover:bg-gray-600"
-                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-              }`}
-              whileHover={{ scale: 1.05 }}
-            >
-              {tech}
-            </motion.span>
-          ))}
+          <p
+            className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-3 ${
+              darkMode ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            Powered by
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {HERO_TECH_STACK.map((tech, idx) => (
+              <div
+                key={idx}
+                className={`flex items-center gap-2 rounded-2xl px-3 py-2 text-[13px] font-medium shadow-sm ${
+                  darkMode
+                    ? "bg-[#1a2440] text-gray-100"
+                    : "bg-white text-gray-800"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-400 to-sky-400" />
+                {tech}
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

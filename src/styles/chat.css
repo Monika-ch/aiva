@@ -1,15 +1,11 @@
 /* Custom chat styles for improved layout and typography */
 
-/* Ensure chat container grows properly */
-.chat-scroll {
-  scrollbar-width: thin;
-}
-
 /* Smooth message transitions */
 .message-enter {
   opacity: 0;
   transform: translateY(6px);
 }
+
 .message-enter-active {
   opacity: 1;
   transform: translateY(0);

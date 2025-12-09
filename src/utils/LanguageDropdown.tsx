@@ -104,7 +104,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
         className={`overflow-y-auto lang-options-scrollbar ${
           darkMode
             ? "lang-options-scrollbar-dark dark-scrollbar"
-            : "lang-options-scrollbar-light light-scrollbar"
+            : "lang-options-scrollbar-light"
         } ${
           usePortal
             ? "lang-options-maxheight-portal"

@@ -1,41 +1,5 @@
 /* Desktop Chat Input Custom Styles */
 
-/* Textarea scrollbar - Dark theme */
-.dark-textarea-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dark-textarea-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.dark-textarea-scrollbar::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 4px;
-}
-
-.dark-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Textarea scrollbar - Light theme */
-.light-textarea-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.light-textarea-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.light-textarea-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-.light-textarea-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
 /* Textarea styles */
 .desktop-chat-textarea-dark {
   caret-color: #f9fafb;

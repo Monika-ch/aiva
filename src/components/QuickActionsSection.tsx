@@ -6,6 +6,7 @@
 
 import React from "react";
 import { ActionCards } from "../utils";
+import { UI_TEXT } from "../constants/chatConstants";
 
 interface QuickActionsSectionProps {
   darkMode: boolean;
@@ -24,14 +25,20 @@ export const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
 
   return (
     <div
-      className={`w-full ${isMobile ? "space-y-2.5 mt-3 mb-5" : "max-w-xl px-4 space-y-3"}`}
+      className={`w-full ${isMobile ? "space-y-3 mt-4 mb-6" : "max-w-xl px-4 space-y-3"}`}
     >
       <p
-        className={`font-semibold uppercase tracking-wider ${
-          isMobile ? "text-[11px] text-center" : "text-xs"
-        } ${darkMode ? "text-gray-300" : "text-gray-500"}`}
+        className={`font-bold uppercase tracking-[0.15em] ${
+          isMobile ? "text-[11px] text-center" : "text-[11px]"
+        } ${
+          darkMode
+            ? isMobile
+              ? "text-yellow-300/90"
+              : "text-gray-500"
+            : "text-gray-500"
+        }`}
       >
-        ⚡ Quick actions:
+        <span className="opacity-80">⚡</span> {UI_TEXT.QUICK_ACTIONS_HEADER}
       </p>
       <ActionCards
         onActionClick={onActionClick}
