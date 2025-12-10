@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "aiva-backend"
+version = "0.1.0"
+description = "AIVA Portfolio Assistant - Backend API"
+authors = ["Monika"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.32.0"}
+sqlalchemy = "^2.0.35"
+alembic = "^1.13.3"
+psycopg2-binary = "^2.9.9"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.12"
+openai = "^1.54.3"
+langchain = "^0.3.7"
+langchain-openai = "^0.2.8"
+python-dotenv = "^1.0.1"
+pydantic-settings = "^2.6.0"
+httpx = "^0.27.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+black = "^24.10.0"
+ruff = "^0.7.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
