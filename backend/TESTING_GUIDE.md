@@ -8,11 +8,12 @@ Complete guide to testing your FastAPI backend with examples and explanations.
 
 1. [Health Check Tests](#1-health-check-tests)
 2. [Database Connection Test](#2-database-connection-test)
-3. [API Testing Methods](#3-api-testing-methods)
-4. [Testing with Swagger UI](#4-testing-with-swagger-ui)
-5. [Testing with curl (Terminal)](#5-testing-with-curl-terminal)
-6. [Testing with Python](#6-testing-with-python)
-7. [Database Inspection](#7-database-inspection)
+3. [Authentication Testing](#3-authentication-testing)
+4. [API Testing Methods](#4-api-testing-methods)
+5. [Testing with Swagger UI](#5-testing-with-swagger-ui)
+6. [Testing with curl (Terminal)](#6-testing-with-curl-terminal)
+7. [Testing with Python](#7-testing-with-python)
+8. [Database Inspection](#8-database-inspection)
 
 ---
 
@@ -102,7 +103,304 @@ for table in tables:
 
 ---
 
-## 3. API Testing Methods
+## 3. Authentication Testing
+
+### 🔐 Overview
+
+The authentication system provides 5 endpoints:
+
+- 🔓 `POST /api/auth/signup` - Register new user (public)
+- 🔓 `POST /api/auth/login` - Login and get tokens (public)
+- 🔓 `POST /api/auth/refresh` - Refresh access token (public)
+- 🔒 `GET /api/auth/me` - Get current user info (protected)
+- 🔒 `POST /api/auth/logout` - Logout (protected)
+
+**Key Concepts:**
+
+- **Access Token**: Short-lived (30 minutes), used for API requests
+- **Refresh Token**: Long-lived (7 days), used to get new access tokens
+- **Protected Endpoints** (🔒): Require valid access token in Authorization header
+
+---
+
+### ✅ Test 1: User Signup
+
+**Open Swagger UI:** http://127.0.0.1:8000/docs
+
+**Steps:**
+
+1. Find `POST /api/auth/signup` (green box)
+2. Click "Try it out"
+3. Replace example JSON with:
+
+```json
+{
+  "email": "demo@example.com",
+  "username": "demouser",
+  "password": "SecurePass123!",
+  "full_name": "Demo User",
+  "role": "candidate"
+}
+```
+
+4. Click "Execute"
+
+**Expected Response (200 OK):**
+
+```json
+{
+  "id": 1,
+  "email": "demo@example.com",
+  "username": "demouser",
+  "full_name": "Demo User",
+  "role": "candidate",
+  "is_active": true,
+  "is_verified": false,
+  "created_at": "2025-12-18T10:30:00.123456"
+}
+```
+
+**💡 Note:** Password is NOT returned for security!
+
+**Possible Errors:**
+
+- **400 Bad Request** - "Email already registered" → Use different email
+- **422 Validation Error** - Invalid data format → Check JSON structure
+
+---
+
+### ✅ Test 2: User Login
+
+**Steps:**
+
+1. Find `POST /api/auth/login` (green box)
+2. Click "Try it out"
+3. Use credentials from signup:
+
+```json
+{
+  "email": "demo@example.com",
+  "password": "SecurePass123!"
+}
+```
+
+4. Click "Execute"
+
+**Expected Response (200 OK):**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzM0NTI...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzM1MTI...",
+  "token_type": "bearer"
+}
+```
+
+**⚠️ IMPORTANT:** Copy the `access_token` value - you'll need it for protected endpoints!
+
+**Possible Errors:**
+
+- **401 Unauthorized** - Wrong password
+- **404 Not Found** - Email doesn't exist
+
+---
+
+### ✅ Test 3: Authorize in Swagger UI
+
+**Before testing protected endpoints, you must authorize:**
+
+**Steps:**
+
+1. Click the **"Authorize"** button (lock icon at top right of Swagger UI)
+2. In the dialog, paste **ONLY your access token** (without "Bearer " prefix):
+   ```
+   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzM0NTI...
+   ```
+3. Click "Authorize"
+4. Click "Close"
+
+**💡 Important Notes:**
+
+- **Do NOT type "Bearer "** - Swagger UI adds it automatically
+- If you see `******` in the Value field, you're already authorized
+- Click "Logout" to clear old tokens before pasting new ones
+
+---
+
+### ✅ Test 4: Get Current User Info (Protected)
+
+**Steps:**
+
+1. Make sure you're authorized (see Test 3)
+2. Find `GET /api/auth/me` (blue box with 🔒 lock icon)
+3. Click "Try it out"
+4. Click "Execute"
+
+**Expected Response (200 OK):**
+
+```json
+{
+  "id": 1,
+  "email": "demo@example.com",
+  "username": "demouser",
+  "full_name": "Demo User",
+  "role": "candidate",
+  "is_active": true,
+  "is_verified": false,
+  "profile_image": null,
+  "bio": null,
+  "created_at": "2025-12-18T10:30:00.123456",
+  "updated_at": "2025-12-18T10:30:00.123456",
+  "last_login": "2025-12-18T10:35:00.123456"
+}
+```
+
+**Possible Errors:**
+
+- **401 Unauthorized** - "Could not validate credentials"
+  - Token expired (30 min limit) → Login again to get new token
+  - Wrong token format → Make sure you didn't include "Bearer " prefix
+  - Not authorized → Click "Authorize" button first
+
+---
+
+### ✅ Test 5: Refresh Access Token
+
+**When to use:** Your access token expired (after 30 minutes)
+
+**Steps:**
+
+1. Find `POST /api/auth/refresh` (green box)
+2. Click "Try it out"
+3. Use your refresh token from login:
+
+```json
+{
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzM1MTI..."
+}
+```
+
+4. Click "Execute"
+
+**Expected Response (200 OK):**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.NEW_TOKEN_HERE...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.NEW_REFRESH_TOKEN...",
+  "token_type": "bearer"
+}
+```
+
+**💡 Note:** You get BOTH new access and refresh tokens
+
+**After refreshing:**
+
+- Click "Authorize" → "Logout" → Paste new access token → "Authorize"
+
+---
+
+### ✅ Test 6: Logout
+
+**Steps:**
+
+1. Make sure you're authorized
+2. Find `POST /api/auth/logout` (green box with 🔒 lock icon)
+3. Click "Try it out"
+4. Click "Execute"
+
+**Expected Response (200 OK):**
+
+```json
+{
+  "message": "Successfully logged out"
+}
+```
+
+**💡 Note:** Logout is client-side - delete your stored tokens after this
+
+---
+
+### 🔧 Authentication Testing with curl
+
+**1. Signup:**
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "curl@example.com",
+    "username": "curluser",
+    "password": "SecurePass123!",
+    "full_name": "Curl User",
+    "role": "candidate"
+  }'
+```
+
+**2. Login:**
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "curl@example.com",
+    "password": "SecurePass123!"
+  }'
+```
+
+**3. Get Current User (with token):**
+
+```bash
+# Save token first
+TOKEN="your_access_token_here"
+
+curl -X GET http://127.0.0.1:8000/api/auth/me \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+**4. Refresh Token:**
+
+```bash
+REFRESH_TOKEN="your_refresh_token_here"
+
+curl -X POST http://127.0.0.1:8000/api/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d "{\"refresh_token\": \"$REFRESH_TOKEN\"}"
+```
+
+---
+
+### 🔍 Check Users in Database
+
+**See all registered users:**
+
+```bash
+cd /home/monika/Desktop/Projects/ai-portfolio-assistant/AIVA/backend
+source venv/bin/activate
+python -c "
+from app.db.session import SessionLocal
+from app.models.user import User
+
+db = SessionLocal()
+users = db.query(User).all()
+print(f'Found {len(users)} users:')
+for user in users:
+    print(f'  - Email: {user.email}, Username: {user.username}, Role: {user.role}')
+db.close()
+"
+```
+
+**Expected Output:**
+
+```
+Found 2 users:
+  - Email: demo@example.com, Username: demouser, Role: UserRole.CANDIDATE
+  - Email: curl@example.com, Username: curluser, Role: UserRole.CANDIDATE
+```
+
+---
+
+## 4. API Testing Methods
 
 You have 4 ways to test your backend:
 
@@ -128,7 +426,7 @@ You have 4 ways to test your backend:
 
 ---
 
-## 4. Testing with Swagger UI (Interactive)
+## 5. Testing with Swagger UI (Interactive)
 
 **💡 This is the EASIEST way to test!**
 
@@ -174,7 +472,9 @@ You have 4 ways to test your backend:
 
 ---
 
-## 5. Testing with curl (Terminal)
+---
+
+## 6. Testing with curl (Terminal)
 
 **💡 Great for quick tests from command line**
 
@@ -228,7 +528,7 @@ curl http://127.0.0.1:8000/ | jq
 
 ---
 
-## 6. Testing with Python
+## 7. Testing with Python
 
 **💡 Programmatic testing - useful for automation**
 
@@ -354,7 +654,7 @@ Response: {
 
 ---
 
-## 7. Database Inspection
+## 8. Database Inspection
 
 ### ✅ Check Database Connection
 

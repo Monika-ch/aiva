@@ -83,9 +83,11 @@ async def health_check():
 
 
 # Import and include routers
-# NOTE: Routers will be created in the next step
-# from app.api.routes import auth, users, portfolios, projects, chat, shares
-# app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+from app.api.routes import auth
+
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+
+# NOTE: Additional routers will be added as we build them
 # app.include_router(users.router, prefix="/api/users", tags=["Users"])
 # app.include_router(portfolios.router, prefix="/api/portfolios", tags=["Portfolios"])
 # app.include_router(projects.router, prefix="/api/projects", tags=["Projects"])
