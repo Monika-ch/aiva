@@ -83,9 +83,10 @@ async def health_check():
 
 
 # Import and include routers
-from app.api.routes import auth
+from app.api.routes import auth, upload
 
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(upload.router, prefix="/api/upload", tags=["Upload"])
 
 # NOTE: Additional routers will be added as we build them
 # app.include_router(users.router, prefix="/api/users", tags=["Users"])
